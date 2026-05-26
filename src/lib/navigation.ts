@@ -145,34 +145,6 @@ export const FAQ_NAV: FaqNavSection[] = [
         ],
       },
       {
-        id: "bcl-pago-con-credito",
-        audience: "cliente",
-        title: "BCL — Pago con crédito (app)",
-        badge: "Préstamo app",
-        flatSidebar: true,
-        description:
-          "Cupo de crédito Punto Pago en la app para pagar facturas de operadores (luz, cable, telefonía, etc.) en cuotas.",
-        articleRefs: [
-          {
-            categorySlug: "bcl-pago-con-credito",
-            articleSlug: "bcl-pago-con-credito-en-la-app",
-          },
-          {
-            categorySlug: "bcl-pago-con-credito",
-            articleSlug: "tres-servicios-de-cuotas",
-            navTitle: "Tipos de cuotas en Punto Pago",
-          },
-          {
-            categorySlug: "terminos-y-condiciones",
-            articleSlug: "terminos-y-condiciones-a-cuotas",
-            navTitle: "Términos y condiciones",
-          },
-        ],
-        links: [
-          { title: "Descargar app Punto Pago", href: "https://puntopago.net/", external: true },
-        ],
-      },
-      {
         id: "recarga-billetera",
         audience: "cliente",
         title: "Recarga y billetera",
@@ -256,16 +228,6 @@ export const FAQ_NAV: FaqNavSection[] = [
         description:
           "Compra ahora y paga después en tu local: Punto Pago financia al cliente y te paga a ti. Guía completa en comercios.puntopago.net.",
         subgroups: [
-          {
-            id: "cuotas-diferencia",
-            title: "Antes de empezar",
-            articleRefs: [
-              {
-                categorySlug: "bcl-pago-con-credito",
-                articleSlug: "tres-servicios-de-cuotas",
-              },
-            ],
-          },
           { id: "cuotas-intro", title: "Introducción", categorySlugs: ["cuotas-inicio"] },
           { id: "cuotas-comenzar", title: "Comenzando", categorySlugs: ["cuotas-comenzando"] },
           {
@@ -510,7 +472,6 @@ export function getNavGroupById(id: string): FaqNavGroupResolved | undefined {
 
 const CLIENTE_FEATURED_IDS = [
   "productos-credito",
-  "bcl-pago-con-credito",
   "recarga-billetera",
   "preguntas-frecuentes",
 ] as const;

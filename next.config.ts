@@ -19,12 +19,17 @@ const nextConfig: NextConfig = {
     return [
       {
         source: "/articulo/pago-a-cuotas-app/pago-a-cuotas-en-la-app",
-        destination: "/articulo/bcl-pago-con-credito/bcl-pago-con-credito-en-la-app",
+        destination: "/articulo/linea-credito/linea-de-credito",
         permanent: true,
       },
       {
         source: "/articulo/pago-a-cuotas-app/diferencia-cuotas-app-vs-comercios",
-        destination: "/articulo/bcl-pago-con-credito/tres-servicios-de-cuotas",
+        destination: "/articulo/cuotas-debito/pago-con-cuotas",
+        permanent: true,
+      },
+      {
+        source: "/articulo/bcl-pago-con-credito/:path*",
+        destination: "/articulo/linea-credito/linea-de-credito",
         permanent: true,
       },
       {

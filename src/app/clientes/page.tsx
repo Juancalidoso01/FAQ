@@ -7,14 +7,13 @@ import { getCreditProducts, getNavGroupById } from "@/lib/navigation";
 export const metadata: Metadata = {
   title: "Para clientes",
   description:
-    "Productos de crédito, BCL, recargas y preguntas frecuentes de la app Punto Pago.",
+    "Productos de crédito, recargas y preguntas frecuentes de la app Punto Pago.",
   alternates: { canonical: "/clientes" },
 };
 
 export default function ClientesPage() {
   const creditProducts = getCreditProducts();
   const creditSection = getNavGroupById("productos-credito");
-  const bcl = getNavGroupById("bcl-pago-con-credito");
   const recarga = getNavGroupById("recarga-billetera");
   const faq = getNavGroupById("preguntas-frecuentes");
 
@@ -24,7 +23,7 @@ export default function ClientesPage() {
         Punto Pago para clientes
       </h1>
       <p className="mt-2 text-slate-600">
-        Guías oficiales de productos de crédito, préstamo en la app, recargas y soporte.
+        Guías oficiales de productos de crédito, recargas y soporte.
       </p>
 
       <section aria-labelledby="creditos-heading" className="mt-8">
@@ -41,15 +40,16 @@ export default function ClientesPage() {
         </div>
       </section>
 
-      <section aria-labelledby="otros-heading" className="mt-10">
-        <h2 id="otros-heading" className="text-sm font-semibold uppercase tracking-wide text-slate-500">
-          Otros servicios
-        </h2>
-        <div className="mt-4 grid gap-4 sm:grid-cols-2">
-          {bcl && <ProductCard product={bcl} />}
-          {recarga && <ProductCard product={recarga} />}
-        </div>
-      </section>
+      {recarga && (
+        <section aria-labelledby="otros-heading" className="mt-10">
+          <h2 id="otros-heading" className="text-sm font-semibold uppercase tracking-wide text-slate-500">
+            Recarga y billetera
+          </h2>
+          <div className="mt-4">
+            <ProductCard product={recarga} />
+          </div>
+        </section>
+      )}
 
       {faq && (
         <section aria-labelledby="faq-heading" className="mt-10">
