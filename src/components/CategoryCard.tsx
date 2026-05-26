@@ -55,10 +55,10 @@ export function ArticleListItem({
     <li>
       <Link
         href={`/articulo/${categorySlug}/${slug}`}
-        className="group block rounded-xl border border-slate-200/80 bg-white/90 px-4 py-4 shadow-sm transition hover:border-[#4749B6]/30 hover:shadow-md"
+        className="group block rounded-lg px-2 py-3 transition hover:bg-slate-50"
       >
-        <h3 className="font-semibold text-[#0B0B13] group-hover:text-[#4749B6]">{title}</h3>
-        <p className="mt-1.5 text-sm text-slate-600">{excerpt(description, 140)}</p>
+        <h3 className="font-medium text-slate-900 group-hover:text-[#4749B6]">{title}</h3>
+        <p className="mt-1 text-sm text-slate-600">{excerpt(description, 140)}</p>
       </Link>
     </li>
   );

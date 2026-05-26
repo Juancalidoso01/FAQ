@@ -2,11 +2,9 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { ArticleContent } from "@/components/ArticleContent";
-import { Breadcrumbs, JsonLd } from "@/components/FaqUi";
+import { JsonLd } from "@/components/FaqUi";
 import {
   articlePath,
-  categoryPath,
-  excerpt,
   getAllCategories,
   getArticle,
 } from "@/lib/faq";
@@ -29,7 +27,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   if (!result) return {};
 
   const { article } = result;
-  const description = article.description || excerpt(article.content, 160);
+  const description = article.description || article.content.slice(0, 160);
 
   return {
     title: article.title,
@@ -61,26 +59,16 @@ export default async function ArticlePage({ params }: Props) {
           articleJsonLd(category, article),
           breadcrumbJsonLd([
             { name: "Inicio", url: "/" },
-            { name: category.title, url: categoryPath(category.slug) },
+            { name: category.title, url: `/categoria/${category.slug}` },
             { name: article.title, url: articlePath(category.slug, article.slug) },
           ]),
         ]}
       />
 
-      <Breadcrumbs
-        items={[
-          { label: "Inicio", href: "/" },
-          { label: category.title, href: categoryPath(category.slug) },
-          { label: article.title },
-        ]}
-      />
-
       <article itemScope itemType="https://schema.org/Article">
-        <header className="mb-8">
-          <p className="text-sm font-medium uppercase tracking-wide text-[#4749B6]">
-            {category.title}
-          </p>
-          <h1 itemProp="headline" className="mt-2 text-2xl font-bold tracking-tight text-[#0B0B13] sm:text-3xl">
+        <header className="mb-8 border-b border-slate-200 pb-6">
+          <p className="text-sm text-slate-500">{category.title}</p>
+          <h1 itemProp="headline" className="mt-1 text-2xl font-semibold tracking-tight text-slate-900 sm:text-3xl">
             {article.title}
           </h1>
           {article.updatedAt && (
@@ -102,8 +90,8 @@ export default async function ArticlePage({ params }: Props) {
         </div>
 
         {(article.sourceUrl || article.intercomUrl) && (
-          <p className="mt-8 text-xs text-slate-400">
-            Fuente original:{" "}
+          <p className="mt-10 border-t border-slate-200 pt-6 text-xs text-slate-400">
+            Fuente:{" "}
             <a
               href={article.sourceUrl ?? article.intercomUrl}
               target="_blank"
@@ -119,9 +107,9 @@ export default async function ArticlePage({ params }: Props) {
       </article>
 
       {related.length > 0 && (
-        <aside className="mt-12 border-t border-slate-200 pt-8">
-          <h2 className="mb-4 text-lg font-semibold text-[#0B0B13]">
-            Artículos relacionados
+        <aside className="mt-10 border-t border-slate-200 pt-8">
+          <h2 className="mb-3 text-sm font-semibold uppercase tracking-wide text-slate-500">
+            En esta sección
           </h2>
           <ul className="space-y-2">
             {related.map((item) => (

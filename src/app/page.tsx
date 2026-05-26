@@ -1,11 +1,11 @@
 import type { Metadata } from "next";
-import { CategoryCard } from "@/components/CategoryCard";
-import { SearchBox } from "@/components/SearchBox";
+import Link from "next/link";
 import { JsonLd } from "@/components/FaqUi";
 import {
   SITE_DESCRIPTION,
   SITE_NAME,
   articlePath,
+  categoryPath,
   excerpt,
   getAllCategories,
 } from "@/lib/faq";
@@ -23,7 +23,7 @@ export default function HomePage() {
     .flatMap((category) =>
       category.articles.slice(0, 1).map((article) => ({ category, article })),
     )
-    .slice(0, 8);
+    .slice(0, 6);
 
   const faqItems = featuredArticles.map(({ category, article }) => ({
     question: article.title,
@@ -35,50 +35,50 @@ export default function HomePage() {
     <>
       <JsonLd data={faqPageJsonLd(faqItems)} />
 
-      <section className="mb-10 text-center">
-        <h1 className="text-3xl font-bold tracking-tight text-[#0B0B13] sm:text-4xl">
-          <span className="pp-brand-sheen">Centro de ayuda</span>
-        </h1>
-        <p className="mx-auto mt-4 max-w-2xl text-base text-slate-600 sm:text-lg">
-          {SITE_DESCRIPTION}
-        </p>
-        <div className="mt-8">
-          <SearchBox large />
-        </div>
-      </section>
+      <h1 className="text-3xl font-semibold tracking-tight text-slate-900 sm:text-4xl">
+        Centro de ayuda
+      </h1>
+      <p className="mt-3 text-base leading-relaxed text-slate-600">{SITE_DESCRIPTION}</p>
 
-      <section aria-labelledby="categories-heading" className="mb-12">
-        <h2 id="categories-heading" className="mb-5 text-lg font-semibold text-[#0B0B13]">
-          Explorar por categoría
+      <section aria-labelledby="start-heading" className="mt-10">
+        <h2 id="start-heading" className="text-sm font-semibold uppercase tracking-wide text-slate-500">
+          Empezar aquí
         </h2>
-        <div className="grid gap-4 sm:grid-cols-2">
-          {categories.map((category) => (
-            <CategoryCard key={category.slug} category={category} />
+        <ul className="mt-4 divide-y divide-slate-200 border-y border-slate-200">
+          {categories.slice(0, 8).map((category) => (
+            <li key={category.slug}>
+              <Link
+                href={categoryPath(category.slug)}
+                className="group flex items-center justify-between gap-4 py-3.5 transition hover:text-[#4749B6]"
+              >
+                <span>
+                  <span className="block font-medium text-slate-900 group-hover:text-[#4749B6]">
+                    {category.title}
+                  </span>
+                  <span className="mt-0.5 block text-sm text-slate-500">{category.description}</span>
+                </span>
+                <span className="shrink-0 text-xs text-slate-400">
+                  {category.articles.length} artículos →
+                </span>
+              </Link>
+            </li>
           ))}
-        </div>
+        </ul>
       </section>
 
-      <section aria-labelledby="popular-heading">
-        <h2 id="popular-heading" className="mb-5 text-lg font-semibold text-[#0B0B13]">
-          Artículos destacados
+      <section aria-labelledby="popular-heading" className="mt-10">
+        <h2 id="popular-heading" className="text-sm font-semibold uppercase tracking-wide text-slate-500">
+          Artículos populares
         </h2>
-        <ul className="space-y-3">
+        <ul className="mt-4 space-y-2">
           {featuredArticles.map(({ category, article }) => (
             <li key={`${category.slug}-${article.slug}`}>
-              <a
+              <Link
                 href={articlePath(category.slug, article.slug)}
-                className="group block rounded-xl border border-slate-200/80 bg-white/90 px-4 py-4 shadow-sm transition hover:border-[#4749B6]/30 hover:shadow-md"
+                className="text-[15px] font-medium text-[#4749B6] underline-offset-2 hover:underline"
               >
-                <p className="text-xs font-medium uppercase tracking-wide text-[#4749B6]">
-                  {category.title}
-                </p>
-                <h3 className="mt-1 font-semibold text-[#0B0B13] group-hover:text-[#4749B6]">
-                  {article.title}
-                </h3>
-                <p className="mt-1.5 text-sm text-slate-600">
-                  {excerpt(article.description || article.content, 120)}
-                </p>
-              </a>
+                {article.title}
+              </Link>
             </li>
           ))}
         </ul>

@@ -1,8 +1,8 @@
 @import "tailwindcss";
 
 :root {
-  --background: #f4f5fb;
-  --foreground: #0b0b13;
+  --background: #ffffff;
+  --foreground: #0f172a;
 }
 
 @theme inline {
@@ -14,12 +14,27 @@
   --color-brand-dark: #3b3da6;
   --color-brand-ink: #0b0b13;
   --color-brand-muted: #e8e9f7;
-  --color-surface: #f4f5fb;
+  --color-surface: #ffffff;
 }
 
 body {
   background: var(--background);
   color: var(--foreground);
+}
+
+.faq-shell {
+  min-height: 100dvh;
+}
+
+.faq-sidebar {
+  height: 100dvh;
+}
+
+@media (min-width: 1024px) {
+  .faq-sidebar {
+    width: 18.5rem;
+    flex-shrink: 0;
+  }
 }
 
 ::selection {

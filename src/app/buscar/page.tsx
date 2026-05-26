@@ -17,14 +17,11 @@ export default async function SearchPage({ searchParams }: Props) {
 
   return (
     <>
-      <header className="mb-8">
-        <h1 className="text-2xl font-bold tracking-tight text-[#0B0B13] sm:text-3xl">
-          Buscar en el centro de ayuda
+      <header className="mb-8 border-b border-slate-200 pb-6">
+        <h1 className="text-2xl font-semibold tracking-tight text-slate-900 sm:text-3xl">
+          Buscar
         </h1>
-        <p className="mt-2 text-slate-600">
-          Escribe tu pregunta para encontrar guías y respuestas.
-        </p>
-        <div className="mt-6">
+        <div className="mt-4">
           <SearchBox defaultValue={q} large />
         </div>
       </header>
@@ -36,25 +33,21 @@ export default async function SearchPage({ searchParams }: Props) {
             {results.length === 1 ? "resultado" : "resultados"} para &ldquo;{q}&rdquo;
           </p>
           {results.length === 0 ? (
-            <p className="rounded-xl border border-slate-200 bg-white/90 px-4 py-6 text-slate-600">
+            <p className="text-slate-600">
               No encontramos artículos con ese término. Prueba con otras palabras como
               &ldquo;recarga&rdquo;, &ldquo;Mastercard&rdquo; o &ldquo;pago no reflejado&rdquo;.
             </p>
           ) : (
-            <ul className="space-y-3">
+            <ul className="divide-y divide-slate-200 border-y border-slate-200">
               {results.map((article) => (
                 <li key={`${article.categorySlug}-${article.slug}`}>
                   <Link
                     href={articlePath(article.categorySlug, article.slug)}
-                    className="group block rounded-xl border border-slate-200/80 bg-white/90 px-4 py-4 shadow-sm transition hover:border-[#4749B6]/30 hover:shadow-md"
+                    className="block py-4 transition hover:bg-slate-50"
                   >
-                    <p className="text-xs font-medium uppercase tracking-wide text-[#4749B6]">
-                      {article.categoryTitle}
-                    </p>
-                    <h2 className="mt-1 font-semibold text-[#0B0B13] group-hover:text-[#4749B6]">
-                      {article.title}
-                    </h2>
-                    <p className="mt-1.5 text-sm text-slate-600">
+                    <p className="text-xs font-medium text-slate-500">{article.categoryTitle}</p>
+                    <h2 className="mt-0.5 font-medium text-[#4749B6]">{article.title}</h2>
+                    <p className="mt-1 text-sm text-slate-600">
                       {excerpt(article.description || article.content, 160)}
                     </p>
                   </Link>
@@ -64,9 +57,7 @@ export default async function SearchPage({ searchParams }: Props) {
           )}
         </>
       ) : (
-        <p className="text-sm text-slate-500">
-          Ingresa un término de búsqueda para comenzar.
-        </p>
+        <p className="text-sm text-slate-500">Ingresa un término de búsqueda para comenzar.</p>
       )}
     </>
   );
