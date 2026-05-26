@@ -28,15 +28,12 @@ body {
 
 .faq-sidebar {
   height: 100dvh;
+  max-height: 100dvh;
 }
 
 @media (min-width: 1024px) {
   .faq-sidebar {
     width: 17.5rem;
-    flex-shrink: 0;
-    position: sticky;
-    top: 0;
-    max-height: 100dvh;
   }
 }
 

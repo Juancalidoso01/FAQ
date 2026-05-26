@@ -38,6 +38,7 @@ export function FaqChrome({ children }: { children: ReactNode }) {
 
         <main className="faq-main flex-1 px-4 py-6 sm:px-8 sm:py-8 lg:px-10 lg:py-10">
           <div
+            key={pathname}
             className={`faq-main-inner mx-auto w-full ${isWideHub ? "max-w-6xl" : "max-w-3xl"}`}
           >
             {children}

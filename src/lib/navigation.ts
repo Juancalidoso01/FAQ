@@ -792,6 +792,20 @@ export function getClienteHubHref(groupId: string): string {
   return anchor ? `/clientes#${anchor}` : "/clientes";
 }
 
+/** Anclas en /empresas para cada sección del hub. */
+export const EMPRESA_HUB_ANCHORS: Record<(typeof EMPRESA_FEATURED_IDS)[number], string> = {
+  "cuotas-merchant": "cuotas-merchant",
+  "kioscos-local": "kioscos-local",
+  "agente-corresponsal": "agente-corresponsal",
+  "servicios-corporativos": "servicios-corporativos",
+  "faq-empresas": "faq",
+};
+
+export function getEmpresaHubHref(groupId: string): string {
+  const anchor = EMPRESA_HUB_ANCHORS[groupId as keyof typeof EMPRESA_HUB_ANCHORS];
+  return anchor ? `/empresas#${anchor}` : "/empresas";
+}
+
 export function getNavGroupIdForArticle(
   categorySlug: string,
   articleSlug: string,
@@ -803,6 +817,17 @@ export function getNavGroupIdForArticle(
       (item) => item.categorySlug === categorySlug && item.articleSlug === articleSlug,
     );
     if (match) return id;
+  }
+  for (const id of EMPRESA_FEATURED_IDS) {
+    const group = getNavGroupById(id);
+    if (!group) continue;
+    const match = group.items.some(
+      (item) => item.categorySlug === categorySlug && item.articleSlug === articleSlug,
+    );
+    if (match) return id;
+  }
+  if (isCuotasMerchantCategory(categorySlug)) {
+    return "cuotas-merchant";
   }
   return undefined;
 }
@@ -862,6 +887,13 @@ export type SidebarEntry =
   | { type: "heading"; label: string }
   | { type: "link"; title: string; href: string; external?: boolean; hubId?: string };
 
+const HOME_SIDEBAR_NAV: SidebarEntry[] = [
+  { type: "link", title: "Inicio", href: "/", hubId: "home" },
+  { type: "heading", label: "Centro de ayuda" },
+  { type: "link", title: "Clientes", href: "/clientes", hubId: "cliente-portal" },
+  { type: "link", title: "Empresas", href: "/empresas", hubId: "empresa-portal" },
+];
+
 function isCreditProductArticle(categorySlug: string, articleSlug: string) {
   return CREDIT_PRODUCT_REFS.some(
     (ref) => ref.categorySlug === categorySlug && ref.articleSlug === articleSlug,
@@ -913,7 +945,12 @@ export function getSidebarNav(
   audience: FaqAudience,
   activeCategorySlug: string | null,
   activeArticleSlug: string | null = null,
+  pathname = "",
 ): SidebarEntry[] {
+  if (pathname === "/" || pathname.startsWith("/buscar")) {
+    return HOME_SIDEBAR_NAV;
+  }
+
   if (audience === "cliente") {
     return [
       { type: "link", title: "Resumen clientes", href: "/clientes", hubId: "hub" },
@@ -959,19 +996,16 @@ export function getSidebarNav(
     return entries;
   }
 
-  const section = FAQ_NAV.find((s) => s.id === "empresa");
-  const entries: SidebarEntry[] = [{ type: "link", title: "Resumen empresas", href: "/empresas" }];
-
-  if (section) {
-    entries.push({ type: "heading", label: "Soluciones" });
-    for (const group of section.groups) {
-      const resolved = resolveNavGroup(group);
-      const href = resolved.items[0]?.href ?? "/empresas";
-      entries.push({ type: "link", title: group.title, href });
-    }
-  }
-
-  return entries;
+  return [
+    { type: "link", title: "Resumen empresas", href: "/empresas", hubId: "hub" },
+    { type: "heading", label: "Soluciones" },
+    ...getFeaturedGroups("empresa").map((group) => ({
+      type: "link" as const,
+      title: group.title,
+      href: getEmpresaHubHref(group.id),
+      hubId: group.id,
+    })),
+  ];
 }
 
 export type BreadcrumbItem = { label: string; href: string };

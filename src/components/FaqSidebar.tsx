@@ -2,10 +2,11 @@
 
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
-import { useCallback, useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { SearchBox } from "@/components/SearchBox";
 import {
   CLIENTE_HUB_ANCHORS,
+  EMPRESA_HUB_ANCHORS,
   getAudienceForCategory,
   getNavGroupIdForArticle,
   getSidebarNav,
@@ -17,7 +18,7 @@ function AudienceTabs({
   active,
   onSelect,
 }: {
-  active: FaqAudience;
+  active: FaqAudience | null;
   onSelect: (audience: FaqAudience) => void;
 }) {
   const tabs: { id: FaqAudience; label: string }[] = [
@@ -50,6 +51,11 @@ function AudienceTabs({
   );
 }
 
+function sidebarEntryKey(entry: SidebarEntry, index: number) {
+  if (entry.type === "heading") return `heading-${entry.label}-${index}`;
+  return `link-${entry.hubId ?? entry.href}-${entry.title}-${index}`;
+}
+
 function SidebarLink({
   entry,
   pathname,
@@ -61,8 +67,14 @@ function SidebarLink({
 }) {
   const isHubActive =
     entry.hubId === "hub"
-      ? pathname === "/clientes" && !activeHubId
-      : entry.hubId != null && activeHubId === entry.hubId;
+      ? (pathname === "/clientes" || pathname === "/empresas") && !activeHubId
+      : entry.hubId === "home"
+        ? pathname === "/"
+        : entry.hubId === "cliente-portal"
+          ? pathname === "/clientes" && !activeHubId
+          : entry.hubId === "empresa-portal"
+            ? pathname === "/empresas" && !activeHubId
+            : entry.hubId != null && activeHubId === entry.hubId;
 
   const isArticleActive =
     !entry.external &&
@@ -122,11 +134,19 @@ export function FaqSidebar({
     return match?.[1] ?? null;
   }, [pathname]);
 
-  const audience = useMemo((): FaqAudience => {
+  const contentAudience = useMemo((): FaqAudience => {
     if (pathname === "/empresas") return "empresa";
     if (pathname === "/clientes") return "cliente";
     if (activeCategorySlug) return getAudienceForCategory(activeCategorySlug);
     return "cliente";
+  }, [pathname, activeCategorySlug]);
+
+  const tabAudience = useMemo((): FaqAudience | null => {
+    if (pathname === "/empresas") return "empresa";
+    if (pathname === "/clientes") return "cliente";
+    if (pathname === "/" || pathname.startsWith("/buscar")) return null;
+    if (activeCategorySlug) return getAudienceForCategory(activeCategorySlug);
+    return null;
   }, [pathname, activeCategorySlug]);
 
   useEffect(() => {
@@ -144,6 +164,10 @@ export function FaqSidebar({
       const match = Object.entries(CLIENTE_HUB_ANCHORS).find(([, anchor]) => anchor === hashAnchor);
       return match?.[0] ?? null;
     }
+    if (pathname === "/empresas" && hashAnchor) {
+      const match = Object.entries(EMPRESA_HUB_ANCHORS).find(([, anchor]) => anchor === hashAnchor);
+      return match?.[0] ?? null;
+    }
     if (activeCategorySlug && activeArticleSlug) {
       return getNavGroupIdForArticle(activeCategorySlug, activeArticleSlug) ?? null;
     }
@@ -151,9 +175,17 @@ export function FaqSidebar({
   }, [pathname, hashAnchor, activeCategorySlug, activeArticleSlug]);
 
   const navEntries = useMemo(
-    () => getSidebarNav(audience, activeCategorySlug, activeArticleSlug),
-    [audience, activeCategorySlug, activeArticleSlug],
+    () => getSidebarNav(contentAudience, activeCategorySlug, activeArticleSlug, pathname),
+    [contentAudience, activeCategorySlug, activeArticleSlug, pathname],
   );
+
+  const handleAudienceSelect = (audience: FaqAudience) => {
+    const href = audience === "cliente" ? "/clientes" : "/empresas";
+    if (pathname !== href) {
+      router.push(href);
+    }
+    window.scrollTo({ top: 0, behavior: "instant" });
+  };
 
   useEffect(() => {
     onClose();
@@ -170,7 +202,7 @@ export function FaqSidebar({
       />
 
       <aside
-        className={`faq-sidebar fixed inset-y-0 left-0 z-50 flex w-[min(100vw,17.5rem)] flex-col border-r border-slate-200 bg-white transition-transform lg:sticky lg:top-0 lg:z-20 lg:translate-x-0 lg:self-start ${
+        className={`faq-sidebar fixed inset-y-0 left-0 z-50 flex w-[min(100vw,17.5rem)] flex-col border-r border-slate-200 bg-white transition-transform lg:relative lg:sticky lg:top-0 lg:z-20 lg:shrink-0 lg:translate-x-0 lg:self-start ${
           open ? "translate-x-0 shadow-xl" : "-translate-x-full lg:shadow-none"
         }`}
         aria-label="Navegación del centro de ayuda"
@@ -186,19 +218,16 @@ export function FaqSidebar({
         </div>
 
         <div className="border-b border-slate-100 px-3 py-3">
-          <AudienceTabs
-            active={audience}
-            onSelect={(id) => router.push(id === "cliente" ? "/clientes" : "/empresas")}
-          />
+          <AudienceTabs active={tabAudience} onSelect={handleAudienceSelect} />
         </div>
 
-        <nav className="flex-1 overflow-y-auto px-2 py-3">
+        <nav key={`${pathname}-${contentAudience}`} className="min-h-0 flex-1 overflow-y-auto px-2 py-3">
           <ul className="space-y-0.5">
             {navEntries.map((entry, index) => {
               if (entry.type === "heading") {
                 return (
                   <li
-                    key={`${entry.label}-${index}`}
+                    key={sidebarEntryKey(entry, index)}
                     className="px-3 pb-1 pt-4 text-[11px] font-semibold uppercase tracking-wide text-slate-400 first:pt-1"
                   >
                     {entry.label}
@@ -206,7 +235,7 @@ export function FaqSidebar({
                 );
               }
               return (
-                <li key={entry.href}>
+                <li key={sidebarEntryKey(entry, index)}>
                   <SidebarLink entry={entry} pathname={pathname} activeHubId={activeHubId} />
                 </li>
               );
