@@ -1,0 +1,30 @@
+{
+  "categories": [
+    {
+      "slug": "pago-a-cuotas-app",
+      "title": "Pago a cuotas (app)",
+      "description": "Financia el pago de facturas de operadores desde la app Punto Pago. Distinto de Cuotas para comercios.",
+      "icon": "wallet",
+      "articles": [
+        {
+          "id": "pago-a-cuotas-en-la-app",
+          "slug": "pago-a-cuotas-en-la-app",
+          "title": "Pago a cuotas en la app",
+          "description": "Paga facturas de luz, cable, telefonía y otros operadores en cuotas desde la app Punto Pago, con aprobación digital y $0 de pago inicial.",
+          "content": "# Pago a cuotas en la app\n\n**Pago a cuotas** es un servicio para **clientes** de Punto Pago que permite financiar el pago de **facturas de servicios** (operadores) directamente desde la **app móvil**, sin salir de casa.\n\n> **No confundir con Cuotas para comercios:** ese otro producto es para **negocios** que quieren ofrecer “compra ahora y paga después” en su local. Aquí el préstamo es solo para **pagar servicios** como luz, cable o telefonía en la app.\n\n---\n\n## ¿Para qué sirve?\n\nSi necesitas pagar una factura de un operador afiliado y no tienes el monto completo hoy, Punto Pago puede aprobar un préstamo para cubrir ese pago y tú lo devuelves en cuotas fijas.\n\n**Ejemplos de uso:** pagar Cable Onda, ENSA, Tigo, Naturgy u otros operadores disponibles en la app.\n\n---\n\n## Condiciones generales\n\n| Concepto | Detalle |\n| --- | --- |\n| Monto del préstamo | Desde **USD 10** hasta **USD 250** |\n| Plazo | **2, 4 o 6 meses** (según monto y perfil) |\n| Pago inicial al contratar | **USD 0** — el monto se divide en las cuotas |\n| Fechas de pago | **2 y 17** de cada mes |\n| Tasa (APR referencial) | **78,45 %** anual |\n| Canal | **Solo app Punto Pago** |\n\nLos planes exactos se muestran en la app al momento de solicitar el servicio.\n\n---\n\n## Planes de pago (referencia)\n\n| Plazo | N.º de pagos | Pago inicial | Monto máximo |\n| --- | --- | --- | --- |\n| 2 meses | 2 | $0 | $250 |\n| 4 meses | 4 | $0 | $250 |\n| 6 meses | 6 | $0 | $250 |\n\n---\n\n## Operadores compatibles\n\nEl servicio aplica a pagos de servicios de operadores afiliados en Punto Pago, por ejemplo:\n\n- Cable Onda\n- ENACorp\n- YaPaYa\n- ENA CHAT\n- Tigo\n- Cable and Wireless\n- Cable and Wireless (Business)\n\nLa lista puede actualizarse en la app. Si un operador no aparece, no aplica Pago a cuotas para ese servicio.\n\n---\n\n## Cómo funciona (paso a paso)\n\n1. Abre la **app Punto Pago** e inicia sesión.\n2. Elige el **operador** y el servicio o factura que quieres pagar.\n3. Selecciona **Pago a cuotas** como forma de pago.\n4. Revisa el **plan de cuotas** (monto, plazo y fechas 2 y 17).\n5. Confirma la solicitud; Punto Pago evalúa tu perfil **en línea**.\n6. Si se aprueba, se paga la factura y tú reembolsas a Punto Pago según el calendario acordado.\n\n---\n\n## Preguntas frecuentes\n\n**¿Es lo mismo que “Cuotas” en una tienda?**  \nNo. En una tienda, el comercio usa **Cuotas para comercios** (BNPL): financia la compra en el local y Punto Pago paga al negocio. **Pago a cuotas en la app** es un préstamo tuyo solo para **pagar facturas de operadores** dentro de la app.\n\n**¿Puedo usarlo para comprar en cualquier comercio?**  \nNo. Aplica únicamente al pago de **servicios de operadores** habilitados en la app, no a compras generales en comercios físicos.\n\n**¿Cuándo pago?**  \nEn las fechas fijas **2 y 17** de cada mes, según el plan elegido.\n\n**¿Necesito pago inicial?**  \nNo. El pago inicial al contratar es **$0**; el monto se reparte en las cuotas.\n\n---\n\n## Soporte\n\nTeléfono: +507 399-3999  \nWhatsApp: +507 6825-2816\n\nFuente: guía de producto Punto Pago (Pago a cuotas).",
+          "updatedAt": "2026-05-26T00:00:00Z",
+          "sourceUrl": "https://puntopago.net/"
+        },
+        {
+          "id": "diferencia-cuotas-app-vs-comercios",
+          "slug": "diferencia-cuotas-app-vs-comercios",
+          "title": "¿Cuotas en comercio o Pago a cuotas en la app?",
+          "description": "Dos productos distintos de Punto Pago que suenan parecido pero son para públicos y usos diferentes.",
+          "content": "# ¿Cuotas en comercio o Pago a cuotas en la app?\n\nPunto Pago tiene **dos productos** cuyos nombres incluyen “cuotas”. Son complementarios pero **no son lo mismo**.\n\n---\n\n## Pago a cuotas (app) — para clientes\n\n- **Quién lo usa:** persona con la app Punto Pago.\n- **Para qué:** pagar **facturas de operadores** (luz, cable, telefonía, etc.).\n- **Dónde:** solo dentro de la **app móvil**.\n- **Cómo funciona:** Punto Pago te presta para cubrir esa factura; tú devuelves en cuotas (fechas 2 y 17).\n- **Montos orientativos:** USD 10 a USD 250.\n\n---\n\n## Cuotas para comercios (BNPL) — para empresas\n\n- **Quién lo usa:** **comercios** afiliados (tiendas, locales).\n- **Para qué:** que sus **clientes compren productos o servicios** en el local y paguen después.\n- **Dónde:** en el **punto de venta** (QR / portal comercios).\n- **Cómo funciona:** el comercio crea un pedido; el cliente escanea y elige cuotas; **Punto Pago financia al cliente y paga al comercio**.\n- **Riesgo:** lo asume Punto Pago, no el comercio.\n\n---\n\n## Comparación rápida\n\n| | Pago a cuotas (app) | Cuotas para comercios |\n| --- | --- | --- |\n| Usuario | Cliente final | Comercio + su cliente |\n| Uso | Pagar facturas de operadores | Comprar en un local |\n| Canal | App Punto Pago | Tienda / QR comercio |\n| Financiamiento | Préstamo al usuario | BNPL en punto de venta |\n\n---\n\n## ¿Cuál necesito?\n\n- Si eres **usuario** y quieres **financiar el pago de tu factura de luz, cable o similar** → **Pago a cuotas en la app**.\n- Si tienes un **negocio** y quieres **vender a crédito sin asumir riesgo** → **Cuotas para comercios**.\n\nPara comercios, consulta la guía en la sección **Para empresas → Cuotas para comercios**.",
+          "updatedAt": "2026-05-26T00:00:00Z"
+        }
+      ]
+    }
+  ],
+  "source": "Guía de producto Punto Pago (Pago a cuotas — app)"
+}

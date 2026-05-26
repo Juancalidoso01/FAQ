@@ -5,7 +5,7 @@ import { getNavGroupById, getNavSections } from "@/lib/navigation";
 
 export const metadata: Metadata = {
   title: "Para clientes",
-  description: "Ayuda sobre tarjeta de crédito, adelantos, línea de crédito, cuotas y la app Punto Pago.",
+  description: "Ayuda sobre tarjeta de crédito, adelantos, línea de crédito, pago a cuotas de servicios y la app Punto Pago.",
   alternates: { canonical: "/clientes" },
 };
 

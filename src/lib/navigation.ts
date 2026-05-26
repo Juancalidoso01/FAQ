@@ -28,6 +28,8 @@ export type FaqNavGroup = {
   audience: FaqAudience;
   title: string;
   description: string;
+  /** Etiqueta corta para distinguir productos similares (ej. "App", "Comercios"). */
+  badge?: string;
   /** Subsecciones dentro del producto (preferido). */
   subgroups?: FaqNavSubgroup[];
   /** Fallback plano si no hay subgroups. */
@@ -168,15 +170,30 @@ export const FAQ_NAV: FaqNavSection[] = [
         ],
       },
       {
-        id: "pago-cuotas-cliente",
+        id: "pago-a-cuotas-servicios",
         audience: "cliente",
-        title: "Pago con cuotas",
+        title: "Pago a cuotas (servicios en la app)",
+        badge: "Solo app",
         description:
-          "Compra con tu tarjeta de débito o virtual, incluso cuando no tienes saldo disponible.",
+          "Préstamo en la app Punto Pago para pagar facturas de operadores (luz, cable, telefonía, etc.) en cuotas. No es Cuotas para comercios.",
         subgroups: [
           {
+            id: "pc-guia",
+            title: "Cómo funciona",
+            articleRefs: [
+              {
+                categorySlug: "pago-a-cuotas-app",
+                articleSlug: "pago-a-cuotas-en-la-app",
+              },
+              {
+                categorySlug: "pago-a-cuotas-app",
+                articleSlug: "diferencia-cuotas-app-vs-comercios",
+              },
+            ],
+          },
+          {
             id: "pc-condiciones",
-            title: "Condiciones del producto",
+            title: "Condiciones legales",
             articleRefs: [
               {
                 categorySlug: "terminos-y-condiciones",
@@ -184,6 +201,9 @@ export const FAQ_NAV: FaqNavSection[] = [
               },
             ],
           },
+        ],
+        links: [
+          { title: "Descargar app Punto Pago", href: "https://puntopago.net/", external: true },
         ],
       },
       {
@@ -298,12 +318,23 @@ export const FAQ_NAV: FaqNavSection[] = [
     description: "Soluciones para comercios, corresponsales y empresas en Panamá.",
     groups: [
       {
-        id: "cuotas-local",
+        id: "cuotas-comercios-bnpl",
         audience: "empresa",
-        title: "Cuotas en su local",
+        title: "Cuotas para comercios (BNPL)",
+        badge: "Comercios",
         description:
-          "Financia a tus clientes para que compren en tu negocio. Cuotas al 0 % con aprobación digital.",
+          "Compra ahora y paga después en tu local: Punto Pago financia al cliente de tu tienda y te paga a ti. Distinto del Pago a cuotas de servicios en la app.",
         subgroups: [
+          {
+            id: "cuotas-diferencia",
+            title: "Antes de empezar",
+            articleRefs: [
+              {
+                categorySlug: "pago-a-cuotas-app",
+                articleSlug: "diferencia-cuotas-app-vs-comercios",
+              },
+            ],
+          },
           { id: "cuotas-intro", title: "Introducción", categorySlugs: ["cuotas-inicio"] },
           { id: "cuotas-comenzar", title: "Comenzando", categorySlugs: ["cuotas-comenzando"] },
           {
@@ -550,12 +581,12 @@ const CLIENTE_FEATURED_IDS = [
   "tarjeta-credito",
   "adelantos-saldo",
   "linea-credito",
-  "pago-cuotas-cliente",
+  "pago-a-cuotas-servicios",
   "preguntas-frecuentes",
 ] as const;
 
 const EMPRESA_FEATURED_IDS = [
-  "cuotas-local",
+  "cuotas-comercios-bnpl",
   "kioscos-local",
   "agente-corresponsal",
   "servicios-corporativos",

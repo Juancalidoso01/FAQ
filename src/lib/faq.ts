@@ -1,5 +1,6 @@
 import faqData from "../../content/faq-data.json";
 import gitbookData from "../../content/gitbook-comercios.json";
+import pagoACuotasAppData from "../../content/pago-a-cuotas-app.json";
 
 export type FaqArticle = {
   id: string;
@@ -41,7 +42,8 @@ export function getSiteUrl() {
 export function getAllCategories(): FaqCategory[] {
   const intercom = (faqData as FaqData).categories;
   const gitbook = (gitbookData as FaqData).categories;
-  return [...intercom, ...gitbook];
+  const pagoCuotasApp = (pagoACuotasAppData as FaqData).categories;
+  return [...intercom, ...pagoCuotasApp, ...gitbook];
 }
 
 export function getCategory(slug: string): FaqCategory | undefined {

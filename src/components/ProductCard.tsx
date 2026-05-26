@@ -21,7 +21,14 @@ export function ProductCard({
           : "border-slate-200 bg-white hover:border-slate-300"
       }`}
     >
-      <h3 className="text-base font-semibold text-slate-900">{product.title}</h3>
+      <div className="flex items-start justify-between gap-2">
+        <h3 className="text-base font-semibold text-slate-900">{product.title}</h3>
+        {product.badge && (
+          <span className="shrink-0 rounded-md bg-slate-100 px-2 py-0.5 text-[10px] font-semibold uppercase tracking-wide text-slate-600">
+            {product.badge}
+          </span>
+        )}
+      </div>
       <p className="mt-2 flex-1 text-sm leading-relaxed text-slate-600">{product.description}</p>
 
       {product.subgroups.length > 1 && (
