@@ -26,26 +26,32 @@ export function SearchBox({
       <label htmlFor="faq-search" className="sr-only">
         Buscar artículos
       </label>
-      <div className={`relative ${large ? "mx-auto max-w-2xl" : ""}`}>
+      <div
+        className={`relative ${large ? "mx-auto max-w-xl" : ""} ${!compact && !large ? "" : ""}`}
+      >
         <input
           id="faq-search"
           type="search"
           name="q"
           value={query}
           onChange={(e) => setQuery(e.target.value)}
-          placeholder="Buscar…"
-          className={`w-full border border-slate-200 bg-white text-slate-900 placeholder:text-slate-400 focus:border-[#4749B6]/50 focus:outline-none focus:ring-2 focus:ring-[#4749B6]/15 ${
+          placeholder={large ? "Buscar en el centro de ayuda…" : "Buscar…"}
+          className={`w-full border border-slate-200/90 bg-white/95 text-[#0B0B13] shadow-sm placeholder:text-slate-400 focus:border-[#4749B6]/50 focus:outline-none focus:ring-2 focus:ring-[#4749B6]/20 ${
             compact
-              ? "rounded-lg py-2 pl-3 pr-9 text-sm"
+              ? "rounded-xl py-2 pl-3 pr-9 text-sm"
               : large
-                ? "rounded-xl px-5 py-3.5 text-base sm:text-lg"
-                : "rounded-xl px-4 py-2.5 text-sm"
+                ? "rounded-2xl py-4 pl-5 pr-28 text-base sm:text-lg"
+                : "rounded-xl px-4 py-2.5 pr-24 text-sm"
           }`}
         />
         <button
           type="submit"
-          className={`absolute right-1.5 top-1/2 -translate-y-1/2 rounded-md font-medium text-[#4749B6] transition hover:bg-slate-100 ${
-            compact ? "px-2 py-1 text-xs" : large ? "px-3 py-1.5 text-sm" : "px-2.5 py-1 text-xs"
+          className={`absolute top-1/2 -translate-y-1/2 font-semibold transition ${
+            compact
+              ? "right-1.5 rounded-lg px-2 py-1 text-[#4749B6] hover:bg-slate-100"
+              : large
+                ? "pp-btn-primary right-2 px-5 py-2.5 text-sm"
+                : "pp-btn-primary right-1.5 px-4 py-1.5 text-xs"
           }`}
           aria-label="Buscar"
         >

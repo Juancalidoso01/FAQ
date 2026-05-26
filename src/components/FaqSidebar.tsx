@@ -189,19 +189,19 @@ export function FaqSidebar({
       />
 
       <aside
-        className={`faq-sidebar fixed inset-y-0 left-0 z-50 flex w-[min(100vw,19rem)] flex-col border-r border-slate-200 bg-white transition-transform lg:static lg:z-0 lg:translate-x-0 ${
+        className={`faq-sidebar fixed inset-y-0 left-0 z-50 flex w-[min(100vw,19rem)] flex-col border-r border-white/70 bg-white/80 shadow-xl shadow-slate-900/[0.06] backdrop-blur-xl transition-transform lg:static lg:z-20 lg:translate-x-0 lg:shadow-none ${
           open ? "translate-x-0" : "-translate-x-full"
         }`}
         aria-label="Navegación del centro de ayuda"
       >
-        <div className="flex h-14 shrink-0 items-center border-b border-slate-200 px-4">
-          <Link href="/" className="text-sm font-semibold text-slate-900">
+        <div className="flex h-14 shrink-0 items-center border-b border-slate-200/70 px-4">
+          <Link href="/" className="text-sm font-bold text-[#0B0B13]">
             Centro de ayuda
           </Link>
           <span className="ml-1 text-sm text-slate-500">· Punto Pago</span>
         </div>
 
-        <div className="border-b border-slate-100 px-3 py-3">
+        <div className="border-b border-slate-100/80 px-3 py-3">
           <SearchBox compact />
         </div>
 

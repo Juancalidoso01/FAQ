@@ -3,21 +3,23 @@
 import type { ReactNode } from "react";
 import { useCallback, useState } from "react";
 import { FaqSidebar } from "@/components/FaqSidebar";
+import { PpAmbient } from "@/components/PpAmbient";
 
 export function FaqChrome({ children }: { children: ReactNode }) {
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const closeSidebar = useCallback(() => setSidebarOpen(false), []);
 
   return (
-    <div className="faq-shell flex min-h-screen bg-white text-slate-900">
+    <div className="pp-page-bg faq-shell relative flex min-h-screen text-[#0B0B13]">
+      <PpAmbient />
       <FaqSidebar open={sidebarOpen} onClose={closeSidebar} />
 
-      <div className="flex min-w-0 flex-1 flex-col">
-        <div className="sticky top-0 z-30 flex h-14 shrink-0 items-center gap-3 border-b border-slate-200 bg-white px-4 lg:hidden">
+      <div className="relative z-10 flex min-w-0 flex-1 flex-col">
+        <div className="sticky top-0 z-30 flex h-14 shrink-0 items-center gap-3 border-b border-white/70 bg-white/75 px-4 backdrop-blur-xl lg:hidden">
           <button
             type="button"
             onClick={() => setSidebarOpen(true)}
-            className="inline-flex h-9 w-9 items-center justify-center rounded-lg border border-slate-200 text-slate-600 hover:bg-slate-50"
+            className="inline-flex h-9 w-9 items-center justify-center rounded-xl border border-slate-200/80 bg-white/90 text-slate-600 shadow-sm hover:bg-white"
             aria-label="Abrir menú de navegación"
           >
             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" className="h-5 w-5">
@@ -28,10 +30,10 @@ export function FaqChrome({ children }: { children: ReactNode }) {
               />
             </svg>
           </button>
-          <span className="text-sm font-semibold text-slate-900">Centro de ayuda</span>
+          <span className="text-sm font-semibold text-[#0B0B13]">Centro de ayuda</span>
         </div>
 
-        <main className="faq-main flex-1 px-5 py-8 sm:px-8 lg:px-10 lg:py-10">
+        <main className="faq-main flex-1 px-4 py-8 sm:px-8 sm:py-10 lg:px-12 lg:py-12">
           <div className="mx-auto max-w-3xl">{children}</div>
         </main>
       </div>

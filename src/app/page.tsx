@@ -1,6 +1,9 @@
 import type { Metadata } from "next";
 import Link from "next/link";
+import { FaqAccordion } from "@/components/FaqAccordion";
+import { ContentPanel, SectionHeading } from "@/components/FaqLayout";
 import { JsonLd } from "@/components/FaqUi";
+import { SearchBox } from "@/components/SearchBox";
 import { ProductCard } from "@/components/ProductCard";
 import {
   SITE_DESCRIPTION,
@@ -17,6 +20,12 @@ export const metadata: Metadata = {
   alternates: { canonical: "/" },
 };
 
+const STEPS = [
+  { n: "1", title: "Busca tu duda", text: "Usa el buscador o el menú lateral por producto." },
+  { n: "2", title: "Elige tu guía", text: "Cliente, empresa o preguntas frecuentes." },
+  { n: "3", title: "Sigue los pasos", text: "Instrucciones claras como en puntopago.net." },
+];
+
 export default function HomePage() {
   const clienteProducts = getFeaturedGroups("cliente").filter(
     (g) => g.id !== "preguntas-frecuentes",
@@ -24,34 +33,65 @@ export default function HomePage() {
   const faqCliente = getNavGroupById("preguntas-frecuentes");
   const empresaProducts = getFeaturedGroups("empresa").filter((g) => g.id !== "faq-empresas");
 
-  const featuredArticles = faqCliente?.items.slice(0, 4) ?? [];
-  const faqItems = featuredArticles.map((item) => {
-    const result = getArticle(item.categorySlug, item.articleSlug);
-    return {
-      question: item.title,
-      answer: excerpt(result?.article.description || result?.article.content || item.title, 120),
-      url: item.href,
-    };
-  });
+  const faqPreview =
+    faqCliente?.items.slice(0, 5).map((item) => {
+      const result = getArticle(item.categorySlug, item.articleSlug);
+      return {
+        question: item.title,
+        answer: excerpt(result?.article.description || result?.article.content || item.title, 180),
+        href: item.href,
+      };
+    }) ?? [];
+
+  const faqItems = faqPreview.map((item) => ({
+    question: item.question,
+    answer: item.answer,
+    url: item.href ?? "/",
+  }));
 
   return (
     <>
       <JsonLd data={faqPageJsonLd(faqItems)} />
 
-      <h1 className="text-3xl font-semibold tracking-tight text-slate-900 sm:text-4xl">
-        Centro de ayuda
-      </h1>
-      <p className="mt-3 max-w-2xl text-base leading-relaxed text-slate-600">{SITE_DESCRIPTION}</p>
-
-      <section aria-labelledby="clientes-heading" className="mt-10">
-        <div className="mb-4 flex items-baseline justify-between gap-4">
-          <h2 id="clientes-heading" className="text-lg font-semibold text-slate-900">
-            Punto Pago para clientes
-          </h2>
-          <Link href="/clientes" className="text-sm font-medium text-[#4749B6] hover:underline">
-            Ver todo →
-          </Link>
+      <section className="pp-hero mb-10 text-center sm:mb-12">
+        <p className="text-xs font-semibold uppercase tracking-[0.16em] text-[#4749B6]">Centro de ayuda</p>
+        <h1 className="mt-3 text-3xl font-bold tracking-tight sm:text-4xl lg:text-[2.65rem] lg:leading-tight">
+          <span className="pp-brand-sheen">¿En qué te podemos ayudar?</span>
+        </h1>
+        <p className="mx-auto mt-4 max-w-xl text-base leading-relaxed text-slate-600">{SITE_DESCRIPTION}</p>
+        <div className="mx-auto mt-8 max-w-xl">
+          <SearchBox large />
         </div>
+      </section>
+
+      <section aria-labelledby="steps-heading" className="mb-12">
+        <SectionHeading eyebrow="Cómo funciona" title="Encuentra respuestas en minutos" id="steps-heading" />
+        <div className="grid gap-4 sm:grid-cols-3">
+          {STEPS.map((step) => (
+            <div
+              key={step.n}
+              className="pp-step-card rounded-2xl border border-white/80 bg-white/80 p-5 shadow-sm backdrop-blur-sm"
+            >
+              <span className="inline-flex h-8 w-8 items-center justify-center rounded-full bg-[#4749B6] text-sm font-bold text-white">
+                {step.n}
+              </span>
+              <h3 className="mt-3 font-semibold text-[#0B0B13]">{step.title}</h3>
+              <p className="mt-1.5 text-sm leading-relaxed text-slate-600">{step.text}</p>
+            </div>
+          ))}
+        </div>
+      </section>
+
+      <section aria-labelledby="clientes-heading" className="mb-12">
+        <SectionHeading
+          eyebrow="Para clientes"
+          title="Productos y servicios"
+          action={
+            <Link href="/clientes" className="pp-btn-ghost text-sm">
+              Ver todo →
+            </Link>
+          }
+        />
         <div className="grid gap-4 sm:grid-cols-2">
           {clienteProducts.map((product) => (
             <ProductCard key={product.id} product={product} />
@@ -64,21 +104,33 @@ export default function HomePage() {
         )}
       </section>
 
-      <section aria-labelledby="empresas-heading" className="mt-12">
-        <div className="mb-4 flex items-baseline justify-between gap-4">
-          <h2 id="empresas-heading" className="text-lg font-semibold text-slate-900">
-            Punto Pago para empresas
-          </h2>
-          <Link href="/empresas" className="text-sm font-medium text-[#4749B6] hover:underline">
-            Ver todo →
-          </Link>
-        </div>
+      <section aria-labelledby="empresas-heading" className="mb-12">
+        <SectionHeading
+          eyebrow="Para empresas"
+          title="Soluciones para comercios"
+          action={
+            <Link href="/empresas" className="pp-btn-ghost text-sm">
+              Ver todo →
+            </Link>
+          }
+        />
         <div className="grid gap-4 sm:grid-cols-2">
           {empresaProducts.map((product) => (
             <ProductCard key={product.id} product={product} />
           ))}
         </div>
       </section>
+
+      {faqPreview.length > 0 && (
+        <section aria-labelledby="faq-heading" className="mb-4">
+          <SectionHeading
+            eyebrow="Saber más"
+            title="Preguntas frecuentes"
+            description="Hemos respondido las dudas más comunes de nuestros clientes."
+          />
+          <FaqAccordion items={faqPreview} />
+        </section>
+      )}
     </>
   );
 }

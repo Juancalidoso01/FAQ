@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { ArticleContent } from "@/components/ArticleContent";
+import { ContentPanel } from "@/components/FaqLayout";
 import { JsonLd } from "@/components/FaqUi";
 import {
   articlePath,
@@ -65,66 +66,73 @@ export default async function ArticlePage({ params }: Props) {
         ]}
       />
 
-      <article itemScope itemType="https://schema.org/Article">
-        <header className="mb-8 border-b border-slate-200 pb-6">
-          <p className="text-sm text-slate-500">{category.title}</p>
-          <h1 itemProp="headline" className="mt-1 text-2xl font-semibold tracking-tight text-slate-900 sm:text-3xl">
-            {article.title}
-          </h1>
-          {article.updatedAt && (
-            <p className="mt-3 text-sm text-slate-500">
-              Actualizado:{" "}
-              <time itemProp="dateModified" dateTime={article.updatedAt}>
-                {new Date(article.updatedAt).toLocaleDateString("es-PA", {
-                  year: "numeric",
-                  month: "long",
-                  day: "numeric",
-                })}
-              </time>
+      <ContentPanel>
+        <article itemScope itemType="https://schema.org/Article">
+          <header className="mb-8 border-b border-slate-200/80 pb-6">
+            <p className="text-xs font-semibold uppercase tracking-[0.12em] text-[#4749B6]">
+              {category.title}
+            </p>
+            <h1
+              itemProp="headline"
+              className="mt-2 text-2xl font-bold tracking-tight text-[#0B0B13] sm:text-3xl"
+            >
+              {article.title}
+            </h1>
+            {article.updatedAt && (
+              <p className="mt-3 text-sm text-slate-500">
+                Actualizado:{" "}
+                <time itemProp="dateModified" dateTime={article.updatedAt}>
+                  {new Date(article.updatedAt).toLocaleDateString("es-PA", {
+                    year: "numeric",
+                    month: "long",
+                    day: "numeric",
+                  })}
+                </time>
+              </p>
+            )}
+          </header>
+
+          <div itemProp="articleBody">
+            <ArticleContent content={article.content} />
+          </div>
+
+          {(article.sourceUrl || article.intercomUrl) && (
+            <p className="mt-10 border-t border-slate-200/80 pt-6 text-xs text-slate-400">
+              Fuente:{" "}
+              <a
+                href={article.sourceUrl ?? article.intercomUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-[#4749B6] hover:underline"
+              >
+                {article.sourceUrl?.includes("comercios.puntopago.net")
+                  ? "GitBook Comercios"
+                  : "Intercom Help Center"}
+              </a>
             </p>
           )}
-        </header>
+        </article>
 
-        <div itemProp="articleBody">
-          <ArticleContent content={article.content} />
-        </div>
-
-        {(article.sourceUrl || article.intercomUrl) && (
-          <p className="mt-10 border-t border-slate-200 pt-6 text-xs text-slate-400">
-            Fuente:{" "}
-            <a
-              href={article.sourceUrl ?? article.intercomUrl}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="text-[#4749B6] hover:underline"
-            >
-              {article.sourceUrl?.includes("comercios.puntopago.net")
-                ? "GitBook Comercios"
-                : "Intercom Help Center"}
-            </a>
-          </p>
+        {related.length > 0 && (
+          <aside className="mt-10 border-t border-slate-200/80 pt-8">
+            <h2 className="mb-3 text-xs font-semibold uppercase tracking-[0.12em] text-[#4749B6]">
+              En esta sección
+            </h2>
+            <ul className="space-y-2">
+              {related.map((item) => (
+                <li key={item.slug}>
+                  <Link
+                    href={articlePath(category.slug, item.slug)}
+                    className="text-sm font-semibold text-[#4749B6] underline-offset-2 hover:underline"
+                  >
+                    {item.title}
+                  </Link>
+                </li>
+              ))}
+            </ul>
+          </aside>
         )}
-      </article>
-
-      {related.length > 0 && (
-        <aside className="mt-10 border-t border-slate-200 pt-8">
-          <h2 className="mb-3 text-sm font-semibold uppercase tracking-wide text-slate-500">
-            En esta sección
-          </h2>
-          <ul className="space-y-2">
-            {related.map((item) => (
-              <li key={item.slug}>
-                <Link
-                  href={articlePath(category.slug, item.slug)}
-                  className="text-sm font-medium text-[#4749B6] underline-offset-2 hover:underline"
-                >
-                  {item.title}
-                </Link>
-              </li>
-            ))}
-          </ul>
-        </aside>
-      )}
+      </ContentPanel>
     </>
   );
 }

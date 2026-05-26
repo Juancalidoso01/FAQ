@@ -1,8 +1,8 @@
 @import "tailwindcss";
 
 :root {
-  --background: #ffffff;
-  --foreground: #0f172a;
+  --background: #f4f5fb;
+  --foreground: #0b0b13;
 }
 
 @theme inline {
@@ -14,7 +14,7 @@
   --color-brand-dark: #3b3da6;
   --color-brand-ink: #0b0b13;
   --color-brand-muted: #e8e9f7;
-  --color-surface: #ffffff;
+  --color-surface: #f4f5fb;
 }
 
 body {
@@ -32,9 +32,54 @@ body {
 
 @media (min-width: 1024px) {
   .faq-sidebar {
-    width: 18.5rem;
+    width: 19rem;
     flex-shrink: 0;
   }
+}
+
+.pp-btn-primary {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 9999px;
+  background: linear-gradient(135deg, #4749b6 0%, #3b3da6 100%);
+  color: #fff;
+  font-weight: 600;
+  padding: 0.625rem 1.25rem;
+  box-shadow: 0 4px 14px color-mix(in srgb, #4749b6 35%, transparent);
+  transition: transform 0.15s ease, box-shadow 0.15s ease, background 0.15s ease;
+}
+
+.pp-btn-primary:hover {
+  background: linear-gradient(135deg, #3b3da6 0%, #3234a0 100%);
+  box-shadow: 0 6px 18px color-mix(in srgb, #4749b6 40%, transparent);
+  transform: translateY(-1px);
+}
+
+.pp-btn-ghost {
+  display: inline-flex;
+  align-items: center;
+  font-weight: 600;
+  color: #4749b6;
+  transition: opacity 0.15s ease;
+}
+
+.pp-btn-ghost:hover {
+  opacity: 0.85;
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+
+.pp-content-panel {
+  backdrop-filter: blur(8px);
+}
+
+.pp-hero {
+  position: relative;
+}
+
+.pp-step-card {
+  backdrop-filter: blur(6px);
 }
 
 ::selection {
