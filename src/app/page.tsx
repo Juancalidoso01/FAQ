@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import Image from "next/image";
 import Link from "next/link";
 import { FaqAccordion } from "@/components/FaqAccordion";
 import { ContentPanel, SectionHeading } from "@/components/FaqLayout";
@@ -13,6 +14,7 @@ import {
 } from "@/lib/faq";
 import { getFeaturedGroups, getNavGroupById } from "@/lib/navigation";
 import { faqPageJsonLd } from "@/lib/seo";
+import { HERO_PRODUCTS_IMAGE } from "@/lib/site-images";
 
 export const metadata: Metadata = {
   title: SITE_NAME,
@@ -53,14 +55,32 @@ export default function HomePage() {
     <>
       <JsonLd data={faqPageJsonLd(faqItems)} />
 
-      <section className="pp-hero mb-10 text-center sm:mb-12">
-        <p className="text-xs font-semibold uppercase tracking-[0.16em] text-[#4749B6]">Centro de ayuda</p>
-        <h1 className="mt-3 text-3xl font-bold tracking-tight sm:text-4xl lg:text-[2.65rem] lg:leading-tight">
-          <span className="pp-brand-sheen">¿En qué te podemos ayudar?</span>
-        </h1>
-        <p className="mx-auto mt-4 max-w-xl text-base leading-relaxed text-slate-600">{SITE_DESCRIPTION}</p>
-        <div className="mx-auto mt-8 max-w-xl">
-          <SearchBox large />
+      <section className="pp-hero mb-10 sm:mb-12">
+        <div className="grid items-center gap-8 lg:grid-cols-[minmax(0,1fr)_minmax(0,1.1fr)] lg:gap-10 lg:text-left">
+          <div className="text-center lg:text-left">
+            <p className="text-xs font-semibold uppercase tracking-[0.16em] text-[#4749B6]">Centro de ayuda</p>
+            <h1 className="mt-3 text-3xl font-bold tracking-tight sm:text-4xl lg:text-[2.65rem] lg:leading-tight">
+              <span className="pp-brand-sheen">¿En qué te podemos ayudar?</span>
+            </h1>
+            <p className="mx-auto mt-4 max-w-xl text-base leading-relaxed text-slate-600 lg:mx-0">
+              {SITE_DESCRIPTION}
+            </p>
+            <div className="mx-auto mt-8 max-w-xl lg:mx-0">
+              <SearchBox large />
+            </div>
+          </div>
+
+          <div className="relative mx-auto w-full max-w-md lg:max-w-none">
+            <Image
+              src={HERO_PRODUCTS_IMAGE}
+              alt="Productos Punto Pago: tarjeta de crédito, adelantos de saldo, línea de crédito y pago con cuotas"
+              width={1248}
+              height={832}
+              priority
+              sizes="(max-width: 1024px) 100vw, 50vw"
+              className="w-full rounded-2xl border border-white/80 bg-white/60 shadow-lg shadow-slate-900/[0.08]"
+            />
+          </div>
         </div>
       </section>
 
