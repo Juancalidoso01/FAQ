@@ -17,6 +17,8 @@ BASE = "https://comercios.puntopago.net"
 ROOT = Path(__file__).resolve().parents[1]
 OUT = ROOT / "content" / "gitbook-comercios.json"
 IMAGE_MAP_OUT = ROOT / "content" / "gitbook-image-map.json"
+IMAGE_OVERRIDES_OUT = ROOT / "content" / "gitbook-image-overrides.json"
+ARTICLE_IMAGES_OUT = ROOT / "content" / "gitbook-article-images.json"
 GITBOOK_SPACE = "d8RE1C5dzBxrh52rnK1o"
 
 CATEGORY_META = {
@@ -220,13 +222,83 @@ def clean_gitbook_markdown(raw: str) -> str:
     text = re.sub(r"<table[^>]*>.*?</table>", replace_table, text, flags=re.S | re.I)
     text = re.sub(r"<br\s*/?>", "\n", text, flags=re.I)
     text = re.sub(r"\*\*\*", "---", text)
-    text = re.sub(
-        r"\n---\n# Agent Instructions: Querying This Documentation[\s\S]*$",
-        "",
-        text,
-    )
+    text = strip_agent_instructions(text)
+    text = re.sub(r"&#x20;", "", text)
     text = re.sub(r"\n{3,}", "\n\n", text)
     return text.strip()
+
+
+def strip_agent_instructions(text: str) -> str:
+    return re.sub(r"\n# Agent Instructions: Querying This Documentation[\s\S]*$", "", text)
+
+
+def load_json(path: Path) -> dict:
+    if not path.exists():
+        return {}
+    return json.loads(path.read_text(encoding="utf-8"))
+
+
+def insert_image_after_heading(content: str, heading: str, image_url: str) -> str:
+    marker = f"![]({image_url})"
+    if marker in content:
+        return content
+
+    needle = heading.strip()
+    index = content.find(needle)
+    if index == -1:
+        return f"{content}\n\n{marker}\n"
+
+    line_end = content.find("\n", index)
+    if line_end == -1:
+        return f"{content}\n\n{marker}\n"
+
+    return f"{content[: line_end + 1]}\n{marker}\n{content[line_end + 1:]}"
+
+
+def apply_manual_images(
+    categories: list[dict],
+    overrides: dict[str, dict],
+    placements: dict[str, list[dict]],
+) -> dict[str, str]:
+    image_map: dict[str, str] = {}
+
+    for override_id, meta in overrides.items():
+        image_map[override_id] = meta["url"]
+
+    for category in categories:
+        for article in category["articles"]:
+            slug = article["slug"]
+            placements_for_article = placements.get(slug, [])
+            if not placements_for_article:
+                continue
+
+            article_images = list(article.get("images") or [])
+            content = strip_agent_instructions(article["content"])
+
+            for placement in placements_for_article:
+                upload_id = placement["uploadId"]
+                meta = overrides.get(upload_id)
+                if not meta:
+                    continue
+
+                content = insert_image_after_heading(
+                    content,
+                    placement["after"],
+                    meta["url"],
+                )
+                article_images.append(
+                    {
+                        "fileId": upload_id,
+                        "url": meta["url"],
+                        "sourceUrl": meta.get("sourceUrl", meta["url"]),
+                        "label": meta.get("label", upload_id),
+                    }
+                )
+
+            article["content"] = content.strip()
+            article["images"] = article_images
+
+    return image_map
 
 
 def markdown_path(page: dict) -> str:
@@ -346,6 +418,11 @@ def main() -> None:
         if category["articles"]:
             result_categories.append(category)
 
+    overrides = load_json(IMAGE_OVERRIDES_OUT)
+    placements = load_json(ARTICLE_IMAGES_OUT)
+    manual_map = apply_manual_images(result_categories, overrides, placements)
+    image_map.update(manual_map)
+
     data = {
         "categories": result_categories,
         "scrapedAt": datetime.now(timezone.utc).isoformat().replace("+00:00", "Z"),
@@ -358,7 +435,11 @@ def main() -> None:
     IMAGE_MAP_OUT.write_text(json.dumps(image_map, ensure_ascii=False, indent=2), encoding="utf-8")
 
     total = sum(len(category["articles"]) for category in result_categories)
-    print(f"Guardado en {OUT} ({total} artículos, {len(image_map)} imágenes mapeadas)")
+    manual_count = sum(len(v) for v in placements.values())
+    print(
+        f"Guardado en {OUT} ({total} artículos, "
+        f"{len(image_map)} imágenes mapeadas, {manual_count} inserciones manuales)"
+    )
 
 
 if __name__ == "__main__":

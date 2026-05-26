@@ -1,0 +1,21 @@
+{
+  "decision-de-aprobacion-de-credito": [
+    { "uploadId": "zbYxaFwEhOtU65hnrc2m", "after": "### ¿Cómo se toma la decisión?" },
+    { "uploadId": "0DtAfHF4OPceG6pE2Owa", "after": "### Importante para comerciantes" }
+  ],
+  "como-puedo-usar-el-dinero-en-punto-pago": [
+    { "uploadId": "WS6VHqwb2xQXtH6vje61", "after": "### Qué es la Cartera de la Empresa" }
+  ],
+  "eleccion-de-las-opciones-de-pago": [
+    { "uploadId": "xYAvd5wB88831ZVXyO0K", "after": "### Escanear el código QR" },
+    { "uploadId": "84PLiPwZDe9akljVhVaN", "after": "### Revisar los detalles del pedido" },
+    { "uploadId": "kTxLjJnMMwWDFid0RCvL", "after": "### Elegir una opción de pago" },
+    { "uploadId": "BK11x5KpsjssgVr6dtpc", "after": "### Revisar los términos de las cuotas" }
+  ],
+  "registro": [
+    { "uploadId": "0cZaIe7T9fzwOgtZ9gxe", "after": "### Iniciar el proceso de registro" }
+  ],
+  "documentos-que-necesita-el-cliente": [
+    { "uploadId": "KMrCqF2jRbRZDbBIb3Tf", "after": "### Lista de documentos" }
+  ]
+}
