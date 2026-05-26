@@ -1,0 +1,284 @@
+@import "tailwindcss";
+
+:root {
+  --background: #f4f5fb;
+  --foreground: #0b0b13;
+}
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --font-sans: var(--font-pp), ui-sans-serif, system-ui, sans-serif;
+  --font-mono: var(--font-geist-mono), ui-monospace, monospace;
+  --color-brand: #4749b6;
+  --color-brand-dark: #3b3da6;
+  --color-brand-ink: #0b0b13;
+  --color-brand-muted: #e8e9f7;
+  --color-surface: #f4f5fb;
+}
+
+body {
+  background: var(--background);
+  color: var(--foreground);
+}
+
+::selection {
+  background: color-mix(in srgb, var(--color-brand) 22%, transparent);
+  color: var(--color-brand-ink);
+}
+
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border-width: 0;
+}
+
+.pp-page-bg {
+  position: relative;
+  background-color: var(--color-surface);
+  isolation: isolate;
+}
+
+.pp-blob {
+  position: absolute;
+  border-radius: 50%;
+  filter: blur(72px);
+  will-change: transform;
+  opacity: 0.55;
+}
+
+.pp-blob-a {
+  width: min(90vw, 480px);
+  height: min(90vw, 480px);
+  top: -8%;
+  left: -5%;
+  background: color-mix(in srgb, var(--color-brand) 42%, transparent);
+  animation: pp-float-a 22s ease-in-out infinite;
+}
+
+.pp-blob-b {
+  width: min(70vw, 380px);
+  height: min(70vw, 380px);
+  top: 35%;
+  right: -8%;
+  background: color-mix(in srgb, #6366f1 32%, transparent);
+  animation: pp-float-b 26s ease-in-out infinite;
+}
+
+.pp-blob-c {
+  width: min(60vw, 320px);
+  height: min(60vw, 320px);
+  bottom: 5%;
+  left: 20%;
+  background: color-mix(in srgb, var(--color-brand) 28%, #a5b4fc 12%, transparent);
+  animation: pp-float-c 19s ease-in-out infinite;
+}
+
+@keyframes pp-float-a {
+  0%,
+  100% {
+    transform: translate(0, 0) scale(1);
+  }
+  33% {
+    transform: translate(36px, -28px) scale(1.06);
+  }
+  66% {
+    transform: translate(-22px, 18px) scale(0.96);
+  }
+}
+
+@keyframes pp-float-b {
+  0%,
+  100% {
+    transform: translate(0, 0) scale(1);
+  }
+  40% {
+    transform: translate(-40px, 32px) scale(1.08);
+  }
+  70% {
+    transform: translate(24px, -16px) scale(0.94);
+  }
+}
+
+@keyframes pp-float-c {
+  0%,
+  100% {
+    transform: translate(0, 0) scale(1);
+  }
+  50% {
+    transform: translate(18px, -22px) scale(1.04);
+  }
+}
+
+.pp-grid-mask {
+  position: absolute;
+  inset: 0;
+  background-image:
+    linear-gradient(
+      to bottom,
+      color-mix(in srgb, white 82%, transparent),
+      transparent 28%,
+      color-mix(in srgb, var(--color-surface) 90%, transparent) 100%
+    ),
+    linear-gradient(90deg, rgba(15, 23, 42, 0.03) 1px, transparent 1px) 0 0 / 48px 48px,
+    linear-gradient(rgba(15, 23, 42, 0.03) 1px, transparent 1px) 0 0 / 48px 48px;
+  opacity: 0.85;
+  animation: pp-grid-drift 80s linear infinite;
+}
+
+@keyframes pp-grid-drift {
+  0% {
+    background-position: 0 0, 0 0, 0 0;
+  }
+  100% {
+    background-position: 0 0, 48px 48px, 48px 48px;
+  }
+}
+
+.pp-cursor-glow {
+  position: absolute;
+  width: 560px;
+  height: 560px;
+  border-radius: 50%;
+  background: radial-gradient(
+    circle,
+    color-mix(in srgb, var(--color-brand) 22%, transparent) 0%,
+    transparent 68%
+  );
+  pointer-events: none;
+  will-change: transform;
+  top: 0;
+  left: 0;
+}
+
+.pp-cursor-ring {
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  border: 1.5px solid color-mix(in srgb, var(--color-brand) 92%, #fff);
+  box-shadow:
+    0 0 0 1px color-mix(in srgb, var(--color-brand) 25%, transparent),
+    inset 0 0 0 1px rgba(255, 255, 255, 0.12);
+  background: transparent;
+  opacity: 0;
+  will-change: transform;
+  transition: opacity 0.12s ease-out;
+}
+
+@keyframes pp-brand-gradient-x {
+  0%,
+  100% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+}
+
+.pp-brand-sheen {
+  background-image: linear-gradient(
+    105deg,
+    #4749b6 0%,
+    #5b5dd4 22%,
+    #6366f1 48%,
+    #4749b6 72%,
+    #3b3da6 100%
+  );
+  background-size: 220% auto;
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  -webkit-text-fill-color: transparent;
+  animation: pp-brand-gradient-x 5.5s ease-in-out infinite;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .pp-grid-mask,
+  .pp-blob-a,
+  .pp-blob-b,
+  .pp-blob-c,
+  .pp-brand-sheen {
+    animation: none !important;
+  }
+
+  .pp-brand-sheen {
+    background: none;
+    color: #4749b6;
+    -webkit-text-fill-color: #4749b6;
+  }
+}
+
+.faq-article p {
+  margin: 0 0 1rem;
+  line-height: 1.75;
+  color: #334155;
+}
+
+.faq-article h2 {
+  margin: 2rem 0 0.75rem;
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: #0b0b13;
+}
+
+.faq-article ul {
+  margin: 0 0 1rem 1.25rem;
+  list-style: disc;
+  color: #334155;
+}
+
+.faq-article li {
+  margin-bottom: 0.35rem;
+  line-height: 1.65;
+}
+
+.faq-article a {
+  color: #4749b6;
+  font-weight: 500;
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+
+.faq-article blockquote {
+  margin: 1rem 0;
+  border-left: 3px solid #4749b6;
+  padding-left: 1rem;
+  color: #475569;
+}
+
+.faq-article strong {
+  color: #0b0b13;
+  font-weight: 600;
+}
+
+.faq-article .faq-table-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.75rem;
+  padding: 0.65rem 0.85rem;
+  margin-bottom: 0.35rem;
+  border: 1px solid #e2e8f0;
+  border-radius: 0.65rem;
+  background: #f8fafc;
+  font-size: 0.95rem;
+}
+
+.faq-article .faq-table-sep {
+  display: none;
+}
+
+@media (max-width: 640px) {
+  .faq-article .faq-table-row {
+    grid-template-columns: 1fr;
+  }
+
+  .faq-article .faq-table-sep {
+    display: none;
+  }
+}
