@@ -14,7 +14,12 @@ export type FaqNavLink = {
   external?: boolean;
 };
 
-export type FaqNavArticleRef = { categorySlug: string; articleSlug: string };
+export type FaqNavArticleRef = {
+  categorySlug: string;
+  articleSlug: string;
+  /** Etiqueta corta en el menú lateral (evita títulos largos de Intercom/GitBook). */
+  navTitle?: string;
+};
 
 export type FaqNavSubgroup = {
   id: string;
@@ -32,6 +37,8 @@ export type FaqNavGroup = {
   badge?: string;
   /** Subsecciones dentro del producto (preferido). */
   subgroups?: FaqNavSubgroup[];
+  /** En el sidebar: lista plana sin encabezados de subsección. */
+  flatSidebar?: boolean;
   /** Fallback plano si no hay subgroups. */
   categorySlugs?: string[];
   articleRefs?: FaqNavArticleRef[];
@@ -71,60 +78,29 @@ export const FAQ_NAV: FaqNavSection[] = [
         id: "tarjeta-credito",
         audience: "cliente",
         title: "Tarjeta de crédito",
+        flatSidebar: true,
         description:
           "Comienza a construir tu historial crediticio con la tarjeta de crédito Punto Pago, sin anualidad de por vida.",
-        subgroups: [
+        articleRefs: [
           {
-            id: "tc-guia",
-            title: "Guía oficial",
-            articleRefs: [
-              {
-                categorySlug: "tarjeta-de-credito",
-                articleSlug: "tarjeta-de-credito",
-              },
-            ],
+            categorySlug: "tarjeta-de-credito",
+            articleSlug: "tarjeta-de-credito",
+            navTitle: "Guía completa",
           },
           {
-            id: "tc-info",
-            title: "Sobre la tarjeta",
-            articleRefs: [
-              {
-                categorySlug: "adquiere-tu-mastercard",
-                articleSlug: "dreamcard-la-tarjeta-de-credito-de-punto-pago",
-              },
-              {
-                categorySlug: "adquiere-tu-mastercard",
-                articleSlug: "confirmacion-y-modificacion-del-perfil",
-              },
-            ],
+            categorySlug: "adquiere-tu-mastercard",
+            articleSlug: "dreamcard-la-tarjeta-de-credito-de-punto-pago",
+            navTitle: "Solicitar tarjeta",
           },
           {
-            id: "tc-donde",
-            title: "Dónde obtenerla",
-            articleRefs: [
-              {
-                categorySlug: "adquiere-tu-mastercard",
-                articleSlug: "ubicaciones-de-maquinas-dispensadoras",
-              },
-            ],
+            categorySlug: "adquiere-tu-mastercard",
+            articleSlug: "ubicaciones-de-maquinas-dispensadoras",
+            navTitle: "Dónde retirarla",
           },
           {
-            id: "tc-limites",
-            title: "Límites y condiciones",
-            articleRefs: [
-              {
-                categorySlug: "terminos-y-condiciones",
-                articleSlug: "limites-de-tu-tarjeta-punto-pago",
-              },
-              {
-                categorySlug: "terminos-y-condiciones",
-                articleSlug: "tarjeta-mastercard-punto-pago",
-              },
-              {
-                categorySlug: "terminos-y-condiciones",
-                articleSlug: "terminos-y-condiciones-tarjeta-prepago",
-              },
-            ],
+            categorySlug: "terminos-y-condiciones",
+            articleSlug: "limites-de-tu-tarjeta-punto-pago",
+            navTitle: "Límites de la tarjeta",
           },
         ],
       },
@@ -132,28 +108,14 @@ export const FAQ_NAV: FaqNavSection[] = [
         id: "adelantos-saldo",
         audience: "cliente",
         title: "Adelantos de saldo",
+        flatSidebar: true,
         description:
           "Paga y recarga tus servicios con un adelanto de saldo hoy y devuélvelo en 15 días.",
-        subgroups: [
+        articleRefs: [
           {
-            id: "as-guia",
-            title: "Guía oficial",
-            articleRefs: [
-              {
-                categorySlug: "adelanto-de-saldo",
-                articleSlug: "adelanto-de-saldo",
-              },
-            ],
-          },
-          {
-            id: "as-mas",
-            title: "Más información",
-            articleRefs: [
-              {
-                categorySlug: "nuestros-servicios",
-                articleSlug: "links-para-interactuar-con-nuestra-app",
-              },
-            ],
+            categorySlug: "adelanto-de-saldo",
+            articleSlug: "adelanto-de-saldo",
+            navTitle: "Guía completa",
           },
         ],
         links: [
@@ -164,38 +126,24 @@ export const FAQ_NAV: FaqNavSection[] = [
         id: "linea-credito",
         audience: "cliente",
         title: "Línea de crédito",
+        flatSidebar: true,
         description:
           "Usa tu línea de crédito para pagar facturas y servicios en Punto Pago.",
-        subgroups: [
+        articleRefs: [
           {
-            id: "lc-guia",
-            title: "Guía oficial",
-            articleRefs: [
-              {
-                categorySlug: "linea-credito",
-                articleSlug: "linea-de-credito",
-              },
-            ],
+            categorySlug: "linea-credito",
+            articleSlug: "linea-de-credito",
+            navTitle: "Guía completa",
           },
           {
-            id: "lc-solicitud",
-            title: "Solicitar o aumentar",
-            articleRefs: [
-              {
-                categorySlug: "aumento-de-credito",
-                articleSlug: "solicitud-de-aumento-de-limite-de-credito",
-              },
-            ],
+            categorySlug: "aumento-de-credito",
+            articleSlug: "solicitud-de-aumento-de-limite-de-credito",
+            navTitle: "Aumentar límite",
           },
           {
-            id: "lc-condiciones",
-            title: "Condiciones",
-            articleRefs: [
-              {
-                categorySlug: "terminos-y-condiciones",
-                articleSlug: "terminos-y-condiciones-prestamos",
-              },
-            ],
+            categorySlug: "terminos-y-condiciones",
+            articleSlug: "terminos-y-condiciones-prestamos",
+            navTitle: "Términos y condiciones",
           },
         ],
       },
@@ -204,22 +152,19 @@ export const FAQ_NAV: FaqNavSection[] = [
         audience: "cliente",
         title: "Cuotas débito",
         badge: "Tarjeta débito",
+        flatSidebar: true,
         description:
           "Paga en cuotas con tu tarjeta de débito o virtual Punto Pago, incluso sin saldo completo al momento.",
-        subgroups: [
+        articleRefs: [
           {
-            id: "cd-guia",
-            title: "Cómo funciona",
-            articleRefs: [
-              {
-                categorySlug: "cuotas-debito",
-                articleSlug: "pago-con-cuotas",
-              },
-              {
-                categorySlug: "bcl-pago-con-credito",
-                articleSlug: "tres-servicios-de-cuotas",
-              },
-            ],
+            categorySlug: "cuotas-debito",
+            articleSlug: "pago-con-cuotas",
+            navTitle: "Pago con cuotas",
+          },
+          {
+            categorySlug: "bcl-pago-con-credito",
+            articleSlug: "tres-servicios-de-cuotas",
+            navTitle: "Tipos de cuotas en Punto Pago",
           },
         ],
         links: [
@@ -231,32 +176,24 @@ export const FAQ_NAV: FaqNavSection[] = [
         audience: "cliente",
         title: "BCL — Pago con crédito (app)",
         badge: "Préstamo app",
+        flatSidebar: true,
         description:
           "Cupo de crédito Punto Pago en la app para pagar facturas de operadores (luz, cable, telefonía, etc.) en cuotas.",
-        subgroups: [
+        articleRefs: [
           {
-            id: "bcl-guia",
-            title: "Cómo funciona",
-            articleRefs: [
-              {
-                categorySlug: "bcl-pago-con-credito",
-                articleSlug: "bcl-pago-con-credito-en-la-app",
-              },
-              {
-                categorySlug: "bcl-pago-con-credito",
-                articleSlug: "tres-servicios-de-cuotas",
-              },
-            ],
+            categorySlug: "bcl-pago-con-credito",
+            articleSlug: "bcl-pago-con-credito-en-la-app",
+            navTitle: "Guía completa",
           },
           {
-            id: "bcl-condiciones",
-            title: "Condiciones legales",
-            articleRefs: [
-              {
-                categorySlug: "terminos-y-condiciones",
-                articleSlug: "terminos-y-condiciones-a-cuotas",
-              },
-            ],
+            categorySlug: "bcl-pago-con-credito",
+            articleSlug: "tres-servicios-de-cuotas",
+            navTitle: "Tipos de cuotas en Punto Pago",
+          },
+          {
+            categorySlug: "terminos-y-condiciones",
+            articleSlug: "terminos-y-condiciones-a-cuotas",
+            navTitle: "Términos y condiciones",
           },
         ],
         links: [
@@ -267,26 +204,28 @@ export const FAQ_NAV: FaqNavSection[] = [
         id: "recarga-billetera",
         audience: "cliente",
         title: "Recarga y billetera",
+        flatSidebar: true,
         description: "Formas de recargar saldo en tu wallet Punto Pago.",
-        subgroups: [
+        articleRefs: [
           {
-            id: "rb-como",
-            title: "Cómo recargar",
-            articleRefs: [
-              { categorySlug: "recarga-tu-app", articleSlug: "recarga-tu-app" },
-              { categorySlug: "recarga-tu-app", articleSlug: "recargar-tu-billetera" },
-            ],
+            categorySlug: "recarga-tu-app",
+            articleSlug: "recarga-tu-app",
+            navTitle: "Cómo recargar",
           },
           {
-            id: "rb-metodos",
-            title: "Métodos de pago",
-            articleRefs: [
-              { categorySlug: "recarga-tu-app", articleSlug: "transferencia-bancaria-ach" },
-              {
-                categorySlug: "terminos-y-condiciones",
-                articleSlug: "paypal-nuevo-metodo-de-recarga",
-              },
-            ],
+            categorySlug: "recarga-tu-app",
+            articleSlug: "recargar-tu-billetera",
+            navTitle: "Recargar billetera",
+          },
+          {
+            categorySlug: "recarga-tu-app",
+            articleSlug: "transferencia-bancaria-ach",
+            navTitle: "Transferencia ACH",
+          },
+          {
+            categorySlug: "terminos-y-condiciones",
+            articleSlug: "paypal-nuevo-metodo-de-recarga",
+            navTitle: "Recargar con PayPal",
           },
         ],
       },
@@ -294,76 +233,39 @@ export const FAQ_NAV: FaqNavSection[] = [
         id: "preguntas-frecuentes",
         audience: "cliente",
         title: "Preguntas frecuentes",
+        flatSidebar: true,
         description:
           "Respuestas rápidas sobre la app, pagos, cuenta y problemas comunes que suelen tener los clientes.",
-        subgroups: [
+        articleRefs: [
           {
-            id: "faq-general",
-            title: "Lo más consultado",
-            articleRefs: [
-              {
-                categorySlug: "nuestros-servicios",
-                articleSlug: "preguntas-frecuentes-faq",
-              },
-              { categorySlug: "nuestros-servicios", articleSlug: "nuestros-servicios" },
-              {
-                categorySlug: "nuestros-servicios",
-                articleSlug: "links-para-interactuar-con-nuestra-app",
-              },
-            ],
+            categorySlug: "nuestros-servicios",
+            articleSlug: "preguntas-frecuentes-faq",
+            navTitle: "Preguntas frecuentes",
           },
           {
-            id: "faq-pagos",
-            title: "Pagos y transacciones",
-            articleRefs: [
-              {
-                categorySlug: "nuestros-servicios",
-                articleSlug: "revisar-pago-o-transaccion",
-              },
-              { categorySlug: "pago-no-reflejado", articleSlug: "pago-no-reflejado" },
-            ],
+            categorySlug: "nuestros-servicios",
+            articleSlug: "revisar-pago-o-transaccion",
+            navTitle: "Revisar un pago",
           },
           {
-            id: "faq-cuenta",
-            title: "Tu cuenta",
-            articleRefs: [
-              {
-                categorySlug: "cambio-de-numero-de-telefono",
-                articleSlug: "cambio-de-numero-de-telefono",
-              },
-              {
-                categorySlug: "adquiere-tu-mastercard",
-                articleSlug: "confirmacion-y-modificacion-del-perfil",
-              },
-            ],
+            categorySlug: "pago-no-reflejado",
+            articleSlug: "pago-no-reflejado",
+            navTitle: "Pago no reflejado",
           },
           {
-            id: "faq-servicios",
-            title: "Otros servicios",
-            articleRefs: [
-              {
-                categorySlug: "nuestros-servicios",
-                articleSlug: "envio-de-giros-y-remesas-al-exterior",
-              },
-              {
-                categorySlug: "nuestros-servicios",
-                articleSlug: "listado-de-nuestros-kioscos",
-              },
-              {
-                categorySlug: "nuestros-servicios",
-                articleSlug: "zelle-el-sistema-de-pagos-que-conquista-a-latinoamerica",
-              },
-            ],
+            categorySlug: "cambio-de-numero-de-telefono",
+            articleSlug: "cambio-de-numero-de-telefono",
+            navTitle: "Cambiar número de teléfono",
           },
           {
-            id: "faq-soporte",
-            title: "Soporte y contacto",
-            articleRefs: [
-              {
-                categorySlug: "contacto-de-operadores",
-                articleSlug: "contacto-de-operadores-punto-pago",
-              },
-            ],
+            categorySlug: "nuestros-servicios",
+            articleSlug: "links-para-interactuar-con-nuestra-app",
+            navTitle: "Contacto y canales",
+          },
+          {
+            categorySlug: "contacto-de-operadores",
+            articleSlug: "contacto-de-operadores-punto-pago",
+            navTitle: "Contacto de operadores",
           },
         ],
       },
@@ -558,7 +460,7 @@ function resolveArticleRefs(refs: FaqNavArticleRef[]): FaqNavItem[] {
     const result = getArticle(ref.categorySlug, ref.articleSlug);
     if (!result) continue;
     items.push({
-      title: result.article.title,
+      title: ref.navTitle ?? result.article.title,
       href: articlePath(result.category.slug, result.article.slug),
       categorySlug: result.category.slug,
       articleSlug: result.article.slug,

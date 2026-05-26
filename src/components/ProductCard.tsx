@@ -47,7 +47,7 @@ export function ProductCard({
       <div className="mt-5 flex flex-wrap items-center gap-3">
         {firstArticle ? (
           <Link href={href} className="pp-btn-primary text-sm">
-            {variant === "highlight" ? "Ver preguntas frecuentes" : "Ver guías"}
+            {variant === "highlight" ? "Ver preguntas frecuentes" : "Ver guía"}
           </Link>
         ) : isExternal ? (
           <a href={href} target="_blank" rel="noopener noreferrer" className="pp-btn-primary text-sm">

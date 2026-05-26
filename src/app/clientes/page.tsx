@@ -43,24 +43,19 @@ export default function ClientesPage() {
           <div className="mt-4">
             <ProductCard product={faq} variant="highlight" />
           </div>
-          <div className="mt-6 space-y-6">
-            {faq.subgroups.map((subgroup) => (
-              <div key={subgroup.id}>
-                <h3 className="text-sm font-semibold text-slate-900">{subgroup.title}</h3>
-                <ul className="mt-2 divide-y divide-slate-200 border-y border-slate-200">
-                  {subgroup.items.map((item) => (
-                    <li key={item.href}>
-                      <Link
-                        href={item.href}
-                        className="block py-3 text-sm font-medium text-[#4749B6] hover:underline"
-                      >
-                        {item.title}
-                      </Link>
-                    </li>
-                  ))}
-                </ul>
-              </div>
-            ))}
+          <div className="mt-6">
+            <ul className="divide-y divide-slate-200 border-y border-slate-200">
+              {faq.items.map((item) => (
+                <li key={item.href}>
+                  <Link
+                    href={item.href}
+                    className="block py-3 text-sm font-medium text-[#4749B6] hover:underline"
+                  >
+                    {item.title}
+                  </Link>
+                </li>
+              ))}
+            </ul>
           </div>
         </section>
       )}
