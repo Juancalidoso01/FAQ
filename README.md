@@ -1,6 +1,6 @@
 # Punto Pago — Centro de Ayuda (FAQ)
 
-Sitio de preguntas frecuentes importado desde [Intercom Help Center](https://intercom.help/punto-pago/es), con diseño alineado a puntopago.net y el formulario de afiliación.
+Sitio de preguntas frecuentes importado desde [Intercom](https://intercom.help/punto-pago/es) y [GitBook Comercios](https://comercios.puntopago.net/), con diseño alineado a puntopago.net.
 
 ## Desarrollo
 
