@@ -10,10 +10,10 @@ export function FaqChrome({ children }: { children: ReactNode }) {
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const closeSidebar = useCallback(() => setSidebarOpen(false), []);
   const pathname = usePathname();
-  const isHome = pathname === "/";
+  const isWideHub = pathname === "/" || pathname === "/clientes" || pathname === "/empresas";
 
   return (
-    <div className="pp-page-bg faq-shell relative flex min-h-screen bg-[#fafafa] text-[#0B0B13]">
+    <div className="pp-page-bg faq-shell relative flex min-h-screen items-start bg-[#fafafa] text-[#0B0B13]">
       <PpAmbient subtle={pathname !== "/"} />
       <FaqSidebar open={sidebarOpen} onClose={closeSidebar} />
 
@@ -38,7 +38,7 @@ export function FaqChrome({ children }: { children: ReactNode }) {
 
         <main className="faq-main flex-1 px-4 py-6 sm:px-8 sm:py-8 lg:px-10 lg:py-10">
           <div
-            className={`faq-main-inner mx-auto w-full ${isHome ? "max-w-6xl" : "max-w-3xl"}`}
+            className={`faq-main-inner mx-auto w-full ${isWideHub ? "max-w-6xl" : "max-w-3xl"}`}
           >
             {children}
           </div>

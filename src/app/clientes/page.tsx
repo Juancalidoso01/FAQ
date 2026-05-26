@@ -1,174 +1,79 @@
 import type { Metadata } from "next";
-import Link from "next/link";
-import { CreditProductCard } from "@/components/CreditProductCard";
 import { ProductCard } from "@/components/ProductCard";
+import { SearchBox } from "@/components/SearchBox";
+import { SectionAccordion } from "@/components/SectionAccordion";
 import {
-  getCreditProducts,
-  getDebitProducts,
-  getMarketplaceProducts,
-  getMastercardProducts,
-  getNavGroupById,
-  getRecargaAppProducts,
-  getRecargaKioscosProducts,
-  getRemesasProducts,
+  CLIENTE_HUB_ANCHORS,
+  getClienteHubHref,
+  getFeaturedGroups,
 } from "@/lib/navigation";
 
 export const metadata: Metadata = {
   title: "Para clientes",
   description:
-    "Productos de crédito, débito, Marketplace, remesas, recargas kioscos y recarga app de Punto Pago.",
+    "Hub de ayuda para clientes Punto Pago: crédito, débito, tarjetas Mastercard, recargas, Marketplace y remesas.",
   alternates: { canonical: "/clientes" },
 };
 
 export default function ClientesPage() {
-  const creditProducts = getCreditProducts();
-  const debitProducts = getDebitProducts();
-  const mastercardProducts = getMastercardProducts();
-  const marketplaceProducts = getMarketplaceProducts();
-  const remesasProducts = getRemesasProducts();
-  const recargaKioscosProducts = getRecargaKioscosProducts();
-  const recargaAppProducts = getRecargaAppProducts();
-  const creditSection = getNavGroupById("productos-credito");
-  const debitoSection = getNavGroupById("productos-debito");
-  const mastercardSection = getNavGroupById("tarjetas-mastercard");
-  const marketplaceSection = getNavGroupById("marketplace");
-  const remesasSection = getNavGroupById("remesas-internacionales");
-  const recargaKioscosSection = getNavGroupById("recarga-kioscos");
-  const recargaAppSection = getNavGroupById("recarga-app");
-  const faq = getNavGroupById("preguntas-frecuentes");
+  const topicGroups = getFeaturedGroups("cliente");
+
+  const accordionSections = topicGroups.map((group) => ({
+    id: CLIENTE_HUB_ANCHORS[group.id as keyof typeof CLIENTE_HUB_ANCHORS],
+    title: group.title,
+    description: group.description,
+    items: group.items.map((item) => ({
+      title: item.title,
+      href: item.href,
+    })),
+  }));
 
   return (
     <>
       <h1 className="text-2xl font-semibold tracking-tight text-slate-900 sm:text-3xl">
         Punto Pago para clientes
       </h1>
-      <p className="mt-2 text-slate-600">
-        Guías de crédito, débito, Marketplace, remesas, recargas y soporte de la app.
+      <p className="mt-2 max-w-2xl text-slate-600">
+        Elige un tema para ver las guías. Usa la búsqueda si ya sabes qué necesitas.
       </p>
 
-      <section id="creditos" aria-labelledby="creditos-heading" className="mt-8 scroll-mt-8">
-        <h2 id="creditos-heading" className="text-sm font-semibold uppercase tracking-wide text-slate-500">
-          Productos de crédito
+      <div className="mt-6 max-w-xl">
+        <SearchBox compact placeholder="Buscar en el centro de ayuda…" />
+      </div>
+
+      <section aria-labelledby="temas-heading" className="mt-10">
+        <h2
+          id="temas-heading"
+          className="text-sm font-semibold uppercase tracking-wide text-slate-500"
+        >
+          Temas
         </h2>
-        {creditSection && (
-          <p className="mt-1 text-sm text-slate-600">{creditSection.description}</p>
-        )}
         <div className="mt-4 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-          {creditProducts.map((product) => (
-            <CreditProductCard key={product.href} product={product} />
+          {topicGroups.map((group) => (
+            <ProductCard
+              key={group.id}
+              product={group}
+              hubHref={getClienteHubHref(group.id)}
+              variant={group.id === "preguntas-frecuentes" ? "highlight" : "default"}
+            />
           ))}
         </div>
       </section>
 
-      <section id="debito" aria-labelledby="debito-heading" className="mt-10 scroll-mt-8">
-        <h2 id="debito-heading" className="text-sm font-semibold uppercase tracking-wide text-slate-500">
-          Productos débito
+      <section aria-labelledby="guias-heading" className="mt-12">
+        <h2
+          id="guias-heading"
+          className="text-sm font-semibold uppercase tracking-wide text-slate-500"
+        >
+          Todas las guías por tema
         </h2>
-        {debitoSection && (
-          <p className="mt-1 text-sm text-slate-600">{debitoSection.description}</p>
-        )}
-        <div className="mt-4 grid gap-4 sm:grid-cols-2">
-          {debitProducts.map((product) => (
-            <CreditProductCard key={product.href} product={product} />
-          ))}
+        <p className="mt-1 text-sm text-slate-600">
+          Expande un tema para ver cada artículo. Los enlaces del menú lateral también llevan aquí.
+        </p>
+        <div className="mt-4">
+          <SectionAccordion sections={accordionSections} />
         </div>
       </section>
-
-      <section id="tarjetas-mastercard" aria-labelledby="tarjetas-mastercard-heading" className="mt-10 scroll-mt-8">
-        <h2 id="tarjetas-mastercard-heading" className="text-sm font-semibold uppercase tracking-wide text-slate-500">
-          Tarjetas Mastercard
-        </h2>
-        {mastercardSection && (
-          <p className="mt-1 text-sm text-slate-600">{mastercardSection.description}</p>
-        )}
-        <div className="mt-4 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-          {mastercardProducts.map((product) => (
-            <CreditProductCard key={product.href} product={product} />
-          ))}
-        </div>
-      </section>
-
-      <section id="marketplace" aria-labelledby="marketplace-heading" className="mt-10 scroll-mt-8">
-        <h2 id="marketplace-heading" className="text-sm font-semibold uppercase tracking-wide text-slate-500">
-          Marketplace
-        </h2>
-        {marketplaceSection && (
-          <p className="mt-1 text-sm text-slate-600">{marketplaceSection.description}</p>
-        )}
-        <div className="mt-4 grid gap-4 sm:grid-cols-2">
-          {marketplaceProducts.map((product) => (
-            <CreditProductCard key={product.href} product={product} />
-          ))}
-        </div>
-      </section>
-
-      <section id="remesas" aria-labelledby="remesas-heading" className="mt-10 scroll-mt-8">
-        <h2 id="remesas-heading" className="text-sm font-semibold uppercase tracking-wide text-slate-500">
-          Remesas internacionales
-        </h2>
-        {remesasSection && (
-          <p className="mt-1 text-sm text-slate-600">{remesasSection.description}</p>
-        )}
-        <div className="mt-4 grid gap-4 sm:grid-cols-2">
-          {remesasProducts.map((product) => (
-            <CreditProductCard key={product.href} product={product} />
-          ))}
-        </div>
-      </section>
-
-      <section id="recarga-kioscos" aria-labelledby="recarga-kioscos-heading" className="mt-10 scroll-mt-8">
-        <h2 id="recarga-kioscos-heading" className="text-sm font-semibold uppercase tracking-wide text-slate-500">
-          Recarga kioscos
-        </h2>
-        {recargaKioscosSection && (
-          <p className="mt-1 text-sm text-slate-600">{recargaKioscosSection.description}</p>
-        )}
-        <div className="mt-4 grid gap-4 sm:grid-cols-2">
-          {recargaKioscosProducts.map((product) => (
-            <CreditProductCard key={product.href} product={product} />
-          ))}
-        </div>
-      </section>
-
-      <section id="recarga-app" aria-labelledby="recarga-app-heading" className="mt-10 scroll-mt-8">
-        <h2 id="recarga-app-heading" className="text-sm font-semibold uppercase tracking-wide text-slate-500">
-          Recarga app
-        </h2>
-        {recargaAppSection && (
-          <p className="mt-1 text-sm text-slate-600">{recargaAppSection.description}</p>
-        )}
-        <div className="mt-4 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-          {recargaAppProducts.map((product) => (
-            <CreditProductCard key={product.href} product={product} />
-          ))}
-        </div>
-      </section>
-
-      {faq && (
-        <section id="faq" aria-labelledby="faq-heading" className="mt-10 scroll-mt-8">
-          <h2 id="faq-heading" className="text-sm font-semibold uppercase tracking-wide text-slate-500">
-            Preguntas frecuentes
-          </h2>
-          <p className="mt-1 text-sm text-slate-600">{faq.description}</p>
-          <div className="mt-4">
-            <ProductCard product={faq} variant="highlight" />
-          </div>
-          <div className="mt-6">
-            <ul className="divide-y divide-slate-200 border-y border-slate-200">
-              {faq.items.map((item) => (
-                <li key={item.href}>
-                  <Link
-                    href={item.href}
-                    className="block py-3 text-sm font-medium text-[#4749B6] hover:underline"
-                  >
-                    {item.title}
-                  </Link>
-                </li>
-              ))}
-            </ul>
-          </div>
-        </section>
-      )}
     </>
   );
 }

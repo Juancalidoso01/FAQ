@@ -2,10 +2,12 @@
 
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
-import { useEffect, useMemo } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 import { SearchBox } from "@/components/SearchBox";
 import {
+  CLIENTE_HUB_ANCHORS,
   getAudienceForCategory,
+  getNavGroupIdForArticle,
   getSidebarNav,
   type FaqAudience,
   type SidebarEntry,
@@ -51,14 +53,25 @@ function AudienceTabs({
 function SidebarLink({
   entry,
   pathname,
+  activeHubId,
 }: {
   entry: Extract<SidebarEntry, { type: "link" }>;
   pathname: string;
+  activeHubId: string | null;
 }) {
-  const isActive =
+  const isHubActive =
+    entry.hubId === "hub"
+      ? pathname === "/clientes" && !activeHubId
+      : entry.hubId != null && activeHubId === entry.hubId;
+
+  const isArticleActive =
     !entry.external &&
+    !entry.hubId &&
     (pathname === entry.href ||
       (entry.href.startsWith("/articulo/") && pathname === entry.href));
+
+  const isActive = isHubActive || isArticleActive;
+
   const className = `block rounded-md px-3 py-2 text-sm leading-snug transition ${
     isActive
       ? "bg-[#4749B6]/10 font-medium text-[#4749B6]"
@@ -97,9 +110,15 @@ export function FaqSidebar({
 }) {
   const pathname = usePathname();
   const router = useRouter();
+  const [hashAnchor, setHashAnchor] = useState<string | null>(null);
 
   const activeCategorySlug = useMemo(() => {
     const match = pathname.match(/^\/(?:categoria|articulo)\/([^/]+)/);
+    return match?.[1] ?? null;
+  }, [pathname]);
+
+  const activeArticleSlug = useMemo(() => {
+    const match = pathname.match(/^\/articulo\/[^/]+\/([^/]+)/);
     return match?.[1] ?? null;
   }, [pathname]);
 
@@ -110,9 +129,30 @@ export function FaqSidebar({
     return "cliente";
   }, [pathname, activeCategorySlug]);
 
+  useEffect(() => {
+    const readHash = () => {
+      const anchor = window.location.hash.replace("#", "");
+      setHashAnchor(anchor || null);
+    };
+    readHash();
+    window.addEventListener("hashchange", readHash);
+    return () => window.removeEventListener("hashchange", readHash);
+  }, [pathname]);
+
+  const activeHubId = useMemo(() => {
+    if (pathname === "/clientes" && hashAnchor) {
+      const match = Object.entries(CLIENTE_HUB_ANCHORS).find(([, anchor]) => anchor === hashAnchor);
+      return match?.[0] ?? null;
+    }
+    if (activeCategorySlug && activeArticleSlug) {
+      return getNavGroupIdForArticle(activeCategorySlug, activeArticleSlug) ?? null;
+    }
+    return null;
+  }, [pathname, hashAnchor, activeCategorySlug, activeArticleSlug]);
+
   const navEntries = useMemo(
-    () => getSidebarNav(audience, activeCategorySlug),
-    [audience, activeCategorySlug],
+    () => getSidebarNav(audience, activeCategorySlug, activeArticleSlug),
+    [audience, activeCategorySlug, activeArticleSlug],
   );
 
   useEffect(() => {
@@ -130,7 +170,7 @@ export function FaqSidebar({
       />
 
       <aside
-        className={`faq-sidebar fixed inset-y-0 left-0 z-50 flex w-[min(100vw,17.5rem)] flex-col border-r border-slate-200 bg-white transition-transform lg:static lg:z-20 lg:translate-x-0 ${
+        className={`faq-sidebar fixed inset-y-0 left-0 z-50 flex w-[min(100vw,17.5rem)] flex-col border-r border-slate-200 bg-white transition-transform lg:sticky lg:top-0 lg:z-20 lg:translate-x-0 lg:self-start ${
           open ? "translate-x-0 shadow-xl" : "-translate-x-full lg:shadow-none"
         }`}
         aria-label="Navegación del centro de ayuda"
@@ -167,7 +207,7 @@ export function FaqSidebar({
               }
               return (
                 <li key={entry.href}>
-                  <SidebarLink entry={entry} pathname={pathname} />
+                  <SidebarLink entry={entry} pathname={pathname} activeHubId={activeHubId} />
                 </li>
               );
             })}

@@ -775,6 +775,74 @@ export function getFeaturedGroups(audience: FaqAudience): FaqNavGroupResolved[] 
     .map(resolveNavGroup);
 }
 
+/** Anclas en /clientes para cada sección del hub. */
+export const CLIENTE_HUB_ANCHORS: Record<(typeof CLIENTE_FEATURED_IDS)[number], string> = {
+  "productos-credito": "creditos",
+  "productos-debito": "debito",
+  "tarjetas-mastercard": "tarjetas-mastercard",
+  marketplace: "marketplace",
+  "remesas-internacionales": "remesas",
+  "recarga-kioscos": "recarga-kioscos",
+  "recarga-app": "recarga-app",
+  "preguntas-frecuentes": "faq",
+};
+
+export function getClienteHubHref(groupId: string): string {
+  const anchor = CLIENTE_HUB_ANCHORS[groupId as keyof typeof CLIENTE_HUB_ANCHORS];
+  return anchor ? `/clientes#${anchor}` : "/clientes";
+}
+
+export function getNavGroupIdForArticle(
+  categorySlug: string,
+  articleSlug: string,
+): string | undefined {
+  for (const id of CLIENTE_FEATURED_IDS) {
+    const group = getNavGroupById(id);
+    if (!group) continue;
+    const match = group.items.some(
+      (item) => item.categorySlug === categorySlug && item.articleSlug === articleSlug,
+    );
+    if (match) return id;
+  }
+  return undefined;
+}
+
+export function getSectionArticles(
+  categorySlug: string,
+  articleSlug: string,
+): FaqNavItem[] {
+  const groupId = getNavGroupIdForArticle(categorySlug, articleSlug);
+  if (!groupId) return [];
+  return getNavGroupById(groupId)?.items ?? [];
+}
+
+export const POPULAR_CLIENT_LINKS: Array<{ title: string; href: string }> = [
+  {
+    title: "Activar tarjeta",
+    href: "/articulo/tarjetas-mastercard/activar-tarjeta",
+  },
+  {
+    title: "Ver PIN y datos",
+    href: "/articulo/tarjetas-mastercard/ver-pin-y-datos",
+  },
+  {
+    title: "Recargar billetera",
+    href: "/articulo/recarga-app/recarga-app",
+  },
+  {
+    title: "Pago no reflejado",
+    href: "/articulo/pago-no-reflejado/pago-no-reflejado",
+  },
+  {
+    title: "Remesas internacionales",
+    href: "/articulo/remesas-internacionales/remesas-internacionales",
+  },
+  {
+    title: "Comprar en línea",
+    href: "/articulo/tarjetas-mastercard/comprar-en-linea",
+  },
+];
+
 export function getUnmappedCategories(): FaqCategory[] {
   const mapped = new Set<string>();
   for (const section of FAQ_NAV) {
@@ -792,7 +860,7 @@ export function getUnmappedCategories(): FaqCategory[] {
 
 export type SidebarEntry =
   | { type: "heading"; label: string }
-  | { type: "link"; title: string; href: string; external?: boolean };
+  | { type: "link"; title: string; href: string; external?: boolean; hubId?: string };
 
 function isCreditProductArticle(categorySlug: string, articleSlug: string) {
   return CREDIT_PRODUCT_REFS.some(
@@ -840,61 +908,22 @@ function isCuotasMerchantCategory(categorySlug: string | null) {
   return categorySlug != null && CUOTAS_MERCHANT_CATEGORY_SLUGS.has(categorySlug);
 }
 
-/** Navegación lateral plana (máx. 2 niveles), estilo help center estándar. */
+/** Navegación lateral compacta: secciones del hub, no listado completo de productos. */
 export function getSidebarNav(
   audience: FaqAudience,
   activeCategorySlug: string | null,
+  activeArticleSlug: string | null = null,
 ): SidebarEntry[] {
   if (audience === "cliente") {
-    const faq = getNavGroupById("preguntas-frecuentes");
     return [
-      { type: "link", title: "Resumen clientes", href: "/clientes" },
-      { type: "heading", label: "Productos de crédito" },
-      ...getCreditProducts().map((p) => ({
+      { type: "link", title: "Resumen clientes", href: "/clientes", hubId: "hub" },
+      { type: "heading", label: "Temas" },
+      ...getFeaturedGroups("cliente").map((group) => ({
         type: "link" as const,
-        title: p.title,
-        href: p.href,
+        title: group.title,
+        href: getClienteHubHref(group.id),
+        hubId: group.id,
       })),
-      { type: "heading", label: "Productos débito" },
-      ...getDebitProducts().map((p) => ({
-        type: "link" as const,
-        title: p.title,
-        href: p.href,
-      })),
-      { type: "heading", label: "Tarjetas Mastercard" },
-      ...getMastercardProducts().map((p) => ({
-        type: "link" as const,
-        title: p.title,
-        href: p.href,
-      })),
-      { type: "heading", label: "Marketplace" },
-      ...getMarketplaceProducts().map((p) => ({
-        type: "link" as const,
-        title: p.title,
-        href: p.href,
-      })),
-      { type: "heading", label: "Remesas internacionales" },
-      ...getRemesasProducts().map((p) => ({
-        type: "link" as const,
-        title: p.title,
-        href: p.href,
-      })),
-      { type: "heading", label: "Recarga kioscos" },
-      ...getRecargaKioscosProducts().map((p) => ({
-        type: "link" as const,
-        title: p.title,
-        href: p.href,
-      })),
-      { type: "heading", label: "Recarga app" },
-      ...getRecargaAppProducts().map((p) => ({
-        type: "link" as const,
-        title: p.title,
-        href: p.href,
-      })),
-      { type: "heading", label: "Más ayuda" },
-      ...(faq?.items[0]
-        ? [{ type: "link" as const, title: "Preguntas frecuentes", href: faq.items[0].href }]
-        : []),
     ];
   }
 

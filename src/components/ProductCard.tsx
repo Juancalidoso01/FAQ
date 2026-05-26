@@ -4,14 +4,17 @@ import type { FaqNavGroupResolved } from "@/lib/navigation";
 export function ProductCard({
   product,
   variant = "default",
+  hubHref,
 }: {
   product: FaqNavGroupResolved;
   variant?: "default" | "highlight";
+  /** Enlace al hub de sección (ej. /clientes#creditos) en lugar del primer artículo. */
+  hubHref?: string;
 }) {
   const firstArticle = product.items[0];
   const firstLink = product.links?.[0];
-  const href = firstArticle?.href ?? firstLink?.href ?? `#${product.id}`;
-  const isExternal = !firstArticle && !!firstLink?.external;
+  const href = hubHref ?? firstArticle?.href ?? firstLink?.href ?? `#${product.id}`;
+  const isExternal = !hubHref && !firstArticle && !!firstLink?.external;
 
   return (
     <article
@@ -45,9 +48,9 @@ export function ProductCard({
       )}
 
       <div className="mt-5 flex flex-wrap items-center gap-3">
-        {firstArticle ? (
+        {hubHref || firstArticle ? (
           <Link href={href} className="pp-btn-primary text-sm">
-            {variant === "highlight" ? "Ver preguntas frecuentes" : "Ver guía"}
+            {variant === "highlight" ? "Ver preguntas frecuentes" : hubHref ? "Ver tema" : "Ver guía"}
           </Link>
         ) : isExternal ? (
           <a href={href} target="_blank" rel="noopener noreferrer" className="pp-btn-primary text-sm">

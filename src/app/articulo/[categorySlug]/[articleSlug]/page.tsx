@@ -11,7 +11,7 @@ import {
   getAllCategories,
   getArticle,
 } from "@/lib/faq";
-import { getArticleBreadcrumbs } from "@/lib/navigation";
+import { getArticleBreadcrumbs, getSectionArticles } from "@/lib/navigation";
 import { articleJsonLd, breadcrumbJsonLd } from "@/lib/seo";
 
 type Props = { params: Promise<{ categorySlug: string; articleSlug: string }> };
@@ -54,7 +54,19 @@ export default async function ArticlePage({ params }: Props) {
   if (!result) notFound();
 
   const { category, article } = result;
-  const related = category.articles.filter((a) => a.slug !== article.slug).slice(0, 4);
+  const sectionArticles = getSectionArticles(categorySlug, articleSlug);
+  const sectionSiblings = sectionArticles.filter((item) => item.articleSlug !== articleSlug);
+  const categoryRelated = category.articles
+    .filter((a) => a.slug !== article.slug)
+    .slice(0, 4)
+    .map((a) => ({
+      title: a.title,
+      href: articlePath(category.slug, a.slug),
+    }));
+  const related =
+    sectionSiblings.length > 0
+      ? sectionSiblings.map((item) => ({ title: item.title, href: item.href }))
+      : categoryRelated;
   const breadcrumbs = getArticleBreadcrumbs(categorySlug, articleSlug);
   const isRemesasArticle =
     categorySlug === "remesas-internacionales" && articleSlug === "remesas-internacionales";
@@ -107,9 +119,9 @@ export default async function ArticlePage({ params }: Props) {
             </h2>
             <ul className="space-y-2">
               {related.map((item) => (
-                <li key={item.slug}>
+                <li key={item.href}>
                   <Link
-                    href={articlePath(category.slug, item.slug)}
+                    href={item.href}
                     className="text-sm font-semibold text-[#4749B6] underline-offset-2 hover:underline"
                   >
                     {item.title}

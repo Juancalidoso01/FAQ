@@ -7,10 +7,12 @@ export function SearchBox({
   defaultValue = "",
   large = false,
   compact = false,
+  placeholder,
 }: {
   defaultValue?: string;
   large?: boolean;
   compact?: boolean;
+  placeholder?: string;
 }) {
   const router = useRouter();
   const [query, setQuery] = useState(defaultValue);
@@ -35,7 +37,7 @@ export function SearchBox({
           name="q"
           value={query}
           onChange={(e) => setQuery(e.target.value)}
-          placeholder={large ? "Buscar en el centro de ayuda…" : "Buscar…"}
+          placeholder={placeholder ?? (large ? "Buscar en el centro de ayuda…" : "Buscar…")}
           className={`w-full border border-slate-200/90 bg-white/95 text-[#0B0B13] shadow-sm placeholder:text-slate-400 focus:border-[#4749B6]/50 focus:outline-none focus:ring-2 focus:ring-[#4749B6]/20 ${
             compact
               ? "rounded-xl py-2 pl-3 pr-9 text-sm"

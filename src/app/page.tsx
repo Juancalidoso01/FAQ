@@ -4,15 +4,20 @@ import { FaqAccordion } from "@/components/FaqAccordion";
 import { HeroBanner } from "@/components/HeroBanner";
 import { SectionHeading } from "@/components/FaqLayout";
 import { JsonLd } from "@/components/FaqUi";
+import { ProductCard } from "@/components/ProductCard";
 import { SearchBox } from "@/components/SearchBox";
-import { CreditProductCard } from "@/components/CreditProductCard";
 import {
   SITE_DESCRIPTION,
   SITE_NAME,
   excerpt,
   getArticle,
 } from "@/lib/faq";
-import { getCreditProducts, getNavGroupById, getDebitProducts, getMarketplaceProducts, getRemesasProducts } from "@/lib/navigation";
+import {
+  getClienteHubHref,
+  getFeaturedGroups,
+  getNavGroupById,
+  POPULAR_CLIENT_LINKS,
+} from "@/lib/navigation";
 import { faqPageJsonLd } from "@/lib/seo";
 
 export const metadata: Metadata = {
@@ -22,14 +27,11 @@ export const metadata: Metadata = {
 };
 
 export default function HomePage() {
-  const creditProducts = getCreditProducts();
-  const debitProducts = getDebitProducts();
-  const marketplaceProducts = getMarketplaceProducts();
-  const remesasProducts = getRemesasProducts();
+  const topicGroups = getFeaturedGroups("cliente");
   const faqCliente = getNavGroupById("preguntas-frecuentes");
 
   const faqPreview =
-    faqCliente?.items.slice(0, 6).map((item) => {
+    faqCliente?.items.slice(0, 5).map((item) => {
       const result = getArticle(item.categorySlug, item.articleSlug);
       return {
         question: item.title,
@@ -48,7 +50,7 @@ export default function HomePage() {
     <>
       <JsonLd data={faqPageJsonLd(faqItems)} />
 
-      <section className="pp-hero mb-12">
+      <section className="pp-hero mb-10">
         <HeroBanner />
 
         <div className="mx-auto mt-10 max-w-2xl text-center">
@@ -57,7 +59,7 @@ export default function HomePage() {
           </h1>
           <p className="mt-3 text-base leading-relaxed text-slate-600">{SITE_DESCRIPTION}</p>
           <div className="mt-8">
-            <SearchBox large />
+            <SearchBox large placeholder="Ej: activar tarjeta, recargar, remesas…" />
           </div>
         </div>
       </section>
@@ -69,7 +71,7 @@ export default function HomePage() {
         >
           <h2 className="text-lg font-semibold text-[#0B0B13]">Soy cliente</h2>
           <p className="mt-2 text-sm text-slate-600">
-            Productos de crédito, débito, Marketplace, remesas y preguntas sobre la app.
+            Tarjetas, recargas, Marketplace, remesas y soporte de la app.
           </p>
         </Link>
         <Link
@@ -83,86 +85,55 @@ export default function HomePage() {
         </Link>
       </section>
 
-      <section aria-labelledby="creditos-heading" className="mb-12">
+      <section aria-labelledby="populares-heading" className="mb-10">
         <SectionHeading
-          title="Productos de crédito"
-          description="Guías oficiales para clientes Punto Pago."
+          title="Temas populares"
+          description="Accesos directos a lo que más consultan nuestros clientes."
+          id="populares-heading"
+        />
+        <div className="flex flex-wrap gap-2">
+          {POPULAR_CLIENT_LINKS.map((link) => (
+            <Link
+              key={link.href}
+              href={link.href}
+              className="rounded-full border border-slate-200 bg-white px-4 py-2 text-sm font-medium text-[#4749B6] shadow-sm transition hover:border-[#4749B6]/30 hover:bg-[#4749B6]/5"
+            >
+              {link.title}
+            </Link>
+          ))}
+        </div>
+      </section>
+
+      <section aria-labelledby="temas-heading" className="mb-12">
+        <SectionHeading
+          title="Explorar por tema"
+          description="Elige una categoría para ver todas las guías disponibles."
           action={
-            <Link href="/clientes#creditos" className="pp-btn-ghost text-sm">
-              Ver todas →
+            <Link href="/clientes" className="pp-btn-ghost text-sm">
+              Ver hub clientes →
             </Link>
           }
-          id="creditos-heading"
+          id="temas-heading"
         />
         <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-          {creditProducts.map((product) => (
-            <CreditProductCard key={product.href} product={product} />
-          ))}
-        </div>
-      </section>
-
-      <section aria-labelledby="debito-heading" className="mb-12">
-        <SectionHeading
-          title="Productos débito"
-          description="Tarjeta prepago y Tarjeta Junior — débito prepago, no crédito."
-          action={
-            <Link href="/clientes#debito" className="pp-btn-ghost text-sm">
-              Ver todas →
-            </Link>
-          }
-          id="debito-heading"
-        />
-        <div className="grid gap-4 sm:grid-cols-2">
-          {debitProducts.map((product) => (
-            <CreditProductCard key={product.href} product={product} />
-          ))}
-        </div>
-      </section>
-
-      <section aria-labelledby="marketplace-heading" className="mb-12">
-        <SectionHeading
-          title="Marketplace"
-          description="Compra en la tienda de la app con entrega a domicilio y pago al contado."
-          action={
-            <Link href="/clientes#marketplace" className="pp-btn-ghost text-sm">
-              Ver más →
-            </Link>
-          }
-          id="marketplace-heading"
-        />
-        <div className="grid gap-4 sm:grid-cols-2">
-          {marketplaceProducts.map((product) => (
-            <CreditProductCard key={product.href} product={product} />
-          ))}
-        </div>
-      </section>
-
-      <section aria-labelledby="remesas-heading" className="mb-12">
-        <SectionHeading
-          title="Remesas internacionales"
-          description="Envía dinero a Colombia, Nicaragua y República Dominicana. Promo: 2 remesas gratis."
-          action={
-            <Link href="/clientes#remesas" className="pp-btn-ghost text-sm">
-              Ver más →
-            </Link>
-          }
-          id="remesas-heading"
-        />
-        <div className="grid gap-4 sm:grid-cols-2">
-          {remesasProducts.map((product) => (
-            <CreditProductCard key={product.href} product={product} />
+          {topicGroups.map((group) => (
+            <ProductCard
+              key={group.id}
+              product={group}
+              hubHref={getClienteHubHref(group.id)}
+            />
           ))}
         </div>
       </section>
 
       {faqPreview.length > 0 && (
-        <section aria-labelledby="faq-heading" className="mb-4">
+        <section aria-labelledby="faq-heading" className="mb-8">
           <SectionHeading
             title="Preguntas frecuentes"
-            description="Lo más consultado por nuestros usuarios."
+            description="Respuestas rápidas a dudas comunes."
             action={
               faqCliente?.items[0] ? (
-                <Link href={faqCliente.items[0].href} className="pp-btn-ghost text-sm">
+                <Link href="/clientes#faq" className="pp-btn-ghost text-sm">
                   Ver todas →
                 </Link>
               ) : undefined
@@ -172,6 +143,26 @@ export default function HomePage() {
           <FaqAccordion items={faqPreview} />
         </section>
       )}
+
+      <section className="rounded-2xl border border-slate-200 bg-white/90 px-6 py-5 text-sm text-slate-600 shadow-sm">
+        <p className="font-semibold text-[#0B0B13]">¿Necesitas más ayuda?</p>
+        <p className="mt-1">
+          Teléfono{" "}
+          <a href="tel:+5073993999" className="font-medium text-[#4749B6] hover:underline">
+            +507 399-3999
+          </a>
+          {" · "}
+          WhatsApp{" "}
+          <a
+            href="https://wa.me/50768252816"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="font-medium text-[#4749B6] hover:underline"
+          >
+            +507 6825-2816
+          </a>
+        </p>
+      </section>
     </>
   );
 }
