@@ -1,14 +1,14 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { JsonLd } from "@/components/FaqUi";
+import { ProductCard } from "@/components/ProductCard";
 import {
   SITE_DESCRIPTION,
   SITE_NAME,
-  articlePath,
-  categoryPath,
   excerpt,
-  getAllCategories,
+  getArticle,
 } from "@/lib/faq";
+import { getFeaturedGroups, getNavSections } from "@/lib/navigation";
 import { faqPageJsonLd } from "@/lib/seo";
 
 export const metadata: Metadata = {
@@ -18,18 +18,23 @@ export const metadata: Metadata = {
 };
 
 export default function HomePage() {
-  const categories = getAllCategories();
-  const featuredArticles = categories
-    .flatMap((category) =>
-      category.articles.slice(0, 1).map((article) => ({ category, article })),
-    )
+  const clienteProducts = getFeaturedGroups("cliente");
+  const empresaProducts = getFeaturedGroups("empresa");
+  const sections = getNavSections();
+
+  const featuredArticles = sections
+    .flatMap((s) => s.groups)
+    .flatMap((g) => g.items.slice(0, 1))
     .slice(0, 6);
 
-  const faqItems = featuredArticles.map(({ category, article }) => ({
-    question: article.title,
-    answer: excerpt(article.description || article.content, 280),
-    url: articlePath(category.slug, article.slug),
-  }));
+  const faqItems = featuredArticles.map((item) => {
+    const result = getArticle(item.categorySlug, item.articleSlug);
+    return {
+      question: item.title,
+      answer: excerpt(result?.article.description || result?.article.content || item.title, 120),
+      url: item.href,
+    };
+  });
 
   return (
     <>
@@ -38,50 +43,38 @@ export default function HomePage() {
       <h1 className="text-3xl font-semibold tracking-tight text-slate-900 sm:text-4xl">
         Centro de ayuda
       </h1>
-      <p className="mt-3 text-base leading-relaxed text-slate-600">{SITE_DESCRIPTION}</p>
+      <p className="mt-3 max-w-2xl text-base leading-relaxed text-slate-600">{SITE_DESCRIPTION}</p>
 
-      <section aria-labelledby="start-heading" className="mt-10">
-        <h2 id="start-heading" className="text-sm font-semibold uppercase tracking-wide text-slate-500">
-          Empezar aquí
-        </h2>
-        <ul className="mt-4 divide-y divide-slate-200 border-y border-slate-200">
-          {categories.slice(0, 8).map((category) => (
-            <li key={category.slug}>
-              <Link
-                href={categoryPath(category.slug)}
-                className="group flex items-center justify-between gap-4 py-3.5 transition hover:text-[#4749B6]"
-              >
-                <span>
-                  <span className="block font-medium text-slate-900 group-hover:text-[#4749B6]">
-                    {category.title}
-                  </span>
-                  <span className="mt-0.5 block text-sm text-slate-500">{category.description}</span>
-                </span>
-                <span className="shrink-0 text-xs text-slate-400">
-                  {category.articles.length} artículos →
-                </span>
-              </Link>
-            </li>
+      <section aria-labelledby="clientes-heading" className="mt-10">
+        <div className="mb-4 flex items-baseline justify-between gap-4">
+          <h2 id="clientes-heading" className="text-lg font-semibold text-slate-900">
+            Punto Pago para clientes
+          </h2>
+          <Link href="/clientes" className="text-sm font-medium text-[#4749B6] hover:underline">
+            Ver todo →
+          </Link>
+        </div>
+        <div className="grid gap-4 sm:grid-cols-2">
+          {clienteProducts.map((product) => (
+            <ProductCard key={product.id} product={product} />
           ))}
-        </ul>
+        </div>
       </section>
 
-      <section aria-labelledby="popular-heading" className="mt-10">
-        <h2 id="popular-heading" className="text-sm font-semibold uppercase tracking-wide text-slate-500">
-          Artículos populares
-        </h2>
-        <ul className="mt-4 space-y-2">
-          {featuredArticles.map(({ category, article }) => (
-            <li key={`${category.slug}-${article.slug}`}>
-              <Link
-                href={articlePath(category.slug, article.slug)}
-                className="text-[15px] font-medium text-[#4749B6] underline-offset-2 hover:underline"
-              >
-                {article.title}
-              </Link>
-            </li>
+      <section aria-labelledby="empresas-heading" className="mt-12">
+        <div className="mb-4 flex items-baseline justify-between gap-4">
+          <h2 id="empresas-heading" className="text-lg font-semibold text-slate-900">
+            Punto Pago para empresas
+          </h2>
+          <Link href="/empresas" className="text-sm font-medium text-[#4749B6] hover:underline">
+            Ver todo →
+          </Link>
+        </div>
+        <div className="grid gap-4 sm:grid-cols-2">
+          {empresaProducts.map((product) => (
+            <ProductCard key={product.id} product={product} />
           ))}
-        </ul>
+        </div>
       </section>
     </>
   );

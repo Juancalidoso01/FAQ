@@ -4,7 +4,12 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useEffect, useMemo, useState } from "react";
 import { SearchBox } from "@/components/SearchBox";
-import { articlePath, categoryPath, getAllCategories } from "@/lib/faq";
+import {
+  getAudienceForCategory,
+  getNavSections,
+  type FaqNavGroupResolved,
+  type FaqNavLink,
+} from "@/lib/navigation";
 
 function Chevron({ open }: { open: boolean }) {
   return (
@@ -24,6 +29,87 @@ function Chevron({ open }: { open: boolean }) {
   );
 }
 
+function NavLinks({ links }: { links: FaqNavLink[] }) {
+  return (
+    <ul className="mt-1 space-y-0.5 border-l border-slate-200 pl-3">
+      {links.map((link) => (
+        <li key={link.href}>
+          <a
+            href={link.href}
+            target={link.external ? "_blank" : undefined}
+            rel={link.external ? "noopener noreferrer" : undefined}
+            className="block rounded-md px-2 py-1.5 text-[13px] text-slate-500 transition hover:bg-slate-50 hover:text-[#4749B6]"
+          >
+            {link.title}
+            {link.external ? " ↗" : ""}
+          </a>
+        </li>
+      ))}
+    </ul>
+  );
+}
+
+function NavGroup({
+  group,
+  isOpen,
+  onToggle,
+  pathname,
+  activeCategorySlug,
+}: {
+  group: FaqNavGroupResolved;
+  isOpen: boolean;
+  onToggle: () => void;
+  pathname: string;
+  activeCategorySlug: string | null;
+}) {
+  const hasActiveArticle = group.items.some((item) => pathname === item.href);
+  const isActiveGroup = hasActiveArticle || group.items.some((i) => i.categorySlug === activeCategorySlug);
+
+  return (
+    <li>
+      <button
+        type="button"
+        onClick={onToggle}
+        className={`flex w-full items-center gap-1.5 rounded-lg px-2 py-2 text-left text-sm font-medium transition ${
+          isActiveGroup ? "bg-slate-100 text-slate-900" : "text-slate-700 hover:bg-slate-50"
+        }`}
+        aria-expanded={isOpen}
+      >
+        <Chevron open={isOpen} />
+        <span className="min-w-0 flex-1 truncate">{group.title}</span>
+      </button>
+
+      {isOpen && (
+        <div className="ml-3 pb-1">
+          {group.items.length > 0 && (
+            <ul className="mt-0.5 space-y-0.5 border-l border-slate-200 pl-3">
+              {group.items.map((item) => {
+                const isActive = pathname === item.href;
+                return (
+                  <li key={item.href}>
+                    <Link
+                      href={item.href}
+                      className={`block rounded-md px-2 py-1.5 text-[13px] leading-snug transition ${
+                        isActive
+                          ? "bg-[#4749B6]/10 font-medium text-[#4749B6]"
+                          : "text-slate-600 hover:bg-slate-50 hover:text-slate-900"
+                      }`}
+                      aria-current={isActive ? "page" : undefined}
+                    >
+                      {item.title}
+                    </Link>
+                  </li>
+                );
+              })}
+            </ul>
+          )}
+          {group.links && group.links.length > 0 && <NavLinks links={group.links} />}
+        </div>
+      )}
+    </li>
+  );
+}
+
 export function FaqSidebar({
   open,
   onClose,
@@ -32,100 +118,58 @@ export function FaqSidebar({
   onClose: () => void;
 }) {
   const pathname = usePathname();
-
-  const { intercom, comercios } = useMemo(() => {
-    const all = getAllCategories();
-    return {
-      intercom: all.filter((c) => !c.slug.startsWith("cuotas-")),
-      comercios: all.filter((c) => c.slug.startsWith("cuotas-")),
-    };
-  }, []);
+  const sections = useMemo(() => getNavSections(), []);
 
   const activeCategorySlug = useMemo(() => {
     const match = pathname.match(/^\/(?:categoria|articulo)\/([^/]+)/);
     return match?.[1] ?? null;
   }, [pathname]);
 
-  const [expanded, setExpanded] = useState<Record<string, boolean>>({});
+  const activeAudience = useMemo(() => {
+    if (pathname === "/empresas") return "empresa";
+    if (pathname === "/clientes") return "cliente";
+    if (activeCategorySlug) return getAudienceForCategory(activeCategorySlug);
+    return "cliente";
+  }, [pathname, activeCategorySlug]);
+
+  const [expandedSections, setExpandedSections] = useState<Record<string, boolean>>({
+    cliente: true,
+    empresa: false,
+  });
+  const [expandedGroups, setExpandedGroups] = useState<Record<string, boolean>>({});
 
   useEffect(() => {
-    if (activeCategorySlug) {
-      setExpanded((prev) => ({ ...prev, [activeCategorySlug]: true }));
+    setExpandedSections((prev) => ({
+      ...prev,
+      [activeAudience]: true,
+    }));
+  }, [activeAudience]);
+
+  useEffect(() => {
+    if (!activeCategorySlug) return;
+    for (const section of sections) {
+      for (const group of section.groups) {
+        const matches =
+          group.items.some((i) => i.categorySlug === activeCategorySlug) ||
+          pathname !== "/" && group.items.some((i) => i.href === pathname);
+        if (matches) {
+          setExpandedGroups((prev) => ({ ...prev, [group.id]: true }));
+        }
+      }
     }
-  }, [activeCategorySlug]);
+  }, [activeCategorySlug, pathname, sections]);
 
   useEffect(() => {
     onClose();
   }, [pathname, onClose]);
 
-  const toggle = (slug: string) => {
-    setExpanded((prev) => ({ ...prev, [slug]: !prev[slug] }));
+  const toggleSection = (id: string) => {
+    setExpandedSections((prev) => ({ ...prev, [id]: !prev[id] }));
   };
 
-  const renderGroup = (title: string, items: ReturnType<typeof getAllCategories>) => (
-    <div className="mb-6">
-      <p className="mb-2 px-3 text-[11px] font-semibold uppercase tracking-wider text-slate-400">
-        {title}
-      </p>
-      <ul className="space-y-1">
-        {items.map((category) => {
-          const isOpen = expanded[category.slug] ?? false;
-          const isActiveCategory = activeCategorySlug === category.slug;
-
-          return (
-            <li key={category.slug}>
-              <div className="flex items-center gap-0.5">
-                <button
-                  type="button"
-                  onClick={() => toggle(category.slug)}
-                  className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg text-slate-400 hover:bg-slate-100 hover:text-slate-600"
-                  aria-expanded={isOpen}
-                  aria-label={`${isOpen ? "Contraer" : "Expandir"} ${category.title}`}
-                >
-                  <Chevron open={isOpen} />
-                </button>
-                <Link
-                  href={categoryPath(category.slug)}
-                  className={`min-w-0 flex-1 truncate rounded-lg px-2 py-1.5 text-sm font-medium transition ${
-                    isActiveCategory && pathname.startsWith("/categoria/")
-                      ? "bg-slate-100 text-slate-900"
-                      : "text-slate-700 hover:bg-slate-50 hover:text-slate-900"
-                  }`}
-                >
-                  {category.title}
-                </Link>
-              </div>
-
-              {isOpen && category.articles.length > 0 && (
-                <ul className="ml-4 mt-0.5 space-y-0.5 border-l border-slate-200 pl-3">
-                  {category.articles.map((article) => {
-                    const href = articlePath(category.slug, article.slug);
-                    const isActive = pathname === href;
-
-                    return (
-                      <li key={article.slug}>
-                        <Link
-                          href={href}
-                          className={`block rounded-md px-2 py-1.5 text-[13px] leading-snug transition ${
-                            isActive
-                              ? "bg-[#4749B6]/10 font-medium text-[#4749B6]"
-                              : "text-slate-600 hover:bg-slate-50 hover:text-slate-900"
-                          }`}
-                          aria-current={isActive ? "page" : undefined}
-                        >
-                          {article.title}
-                        </Link>
-                      </li>
-                    );
-                  })}
-                </ul>
-              )}
-            </li>
-          );
-        })}
-      </ul>
-    </div>
-  );
+  const toggleGroup = (id: string) => {
+    setExpandedGroups((prev) => ({ ...prev, [id]: !prev[id] }));
+  };
 
   return (
     <>
@@ -138,25 +182,57 @@ export function FaqSidebar({
       />
 
       <aside
-        className={`faq-sidebar fixed inset-y-0 left-0 z-50 flex w-[min(100vw,18.5rem)] flex-col border-r border-slate-200 bg-white transition-transform lg:static lg:z-0 lg:translate-x-0 ${
+        className={`faq-sidebar fixed inset-y-0 left-0 z-50 flex w-[min(100vw,19rem)] flex-col border-r border-slate-200 bg-white transition-transform lg:static lg:z-0 lg:translate-x-0 ${
           open ? "translate-x-0" : "-translate-x-full"
         }`}
         aria-label="Navegación del centro de ayuda"
       >
         <div className="flex h-14 shrink-0 items-center border-b border-slate-200 px-4">
-          <Link href="/" className="min-w-0 truncate text-sm font-semibold text-slate-900">
+          <Link href="/" className="text-sm font-semibold text-slate-900">
             Centro de ayuda
           </Link>
-          <span className="ml-1 truncate text-sm text-slate-500">· Punto Pago</span>
+          <span className="ml-1 text-sm text-slate-500">· Punto Pago</span>
         </div>
 
         <div className="border-b border-slate-100 px-3 py-3">
           <SearchBox compact />
         </div>
 
-        <nav className="flex-1 overflow-y-auto px-2 py-4">
-          {renderGroup("Ayuda general", intercom)}
-          {comercios.length > 0 && renderGroup("Cuotas para comercios", comercios)}
+        <nav className="flex-1 overflow-y-auto px-2 py-3">
+          {sections.map((section) => {
+            const sectionOpen = expandedSections[section.id] ?? section.id === activeAudience;
+
+            return (
+              <div key={section.id} className="mb-4">
+                <button
+                  type="button"
+                  onClick={() => toggleSection(section.id)}
+                  className="flex w-full items-center gap-1.5 rounded-lg px-2 py-2 text-left"
+                  aria-expanded={sectionOpen}
+                >
+                  <Chevron open={sectionOpen} />
+                  <span className="text-xs font-semibold uppercase tracking-wider text-slate-500">
+                    {section.title}
+                  </span>
+                </button>
+
+                {sectionOpen && (
+                  <ul className="mt-1 space-y-0.5">
+                    {section.groups.map((group) => (
+                      <NavGroup
+                        key={group.id}
+                        group={group}
+                        isOpen={expandedGroups[group.id] ?? false}
+                        onToggle={() => toggleGroup(group.id)}
+                        pathname={pathname}
+                        activeCategorySlug={activeCategorySlug}
+                      />
+                    ))}
+                  </ul>
+                )}
+              </div>
+            );
+          })}
         </nav>
 
         <div className="shrink-0 border-t border-slate-200 px-4 py-3 text-xs text-slate-500">
