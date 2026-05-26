@@ -78,6 +78,10 @@ body {
   position: relative;
 }
 
+.pp-hero-banner {
+  box-shadow: 0 12px 40px -20px rgb(71 73 182 / 0.35);
+}
+
 .pp-step-card {
   backdrop-filter: blur(6px);
 }

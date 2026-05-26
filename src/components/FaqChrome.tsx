@@ -2,12 +2,15 @@
 
 import type { ReactNode } from "react";
 import { useCallback, useState } from "react";
+import { usePathname } from "next/navigation";
 import { FaqSidebar } from "@/components/FaqSidebar";
 import { PpAmbient } from "@/components/PpAmbient";
 
 export function FaqChrome({ children }: { children: ReactNode }) {
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const closeSidebar = useCallback(() => setSidebarOpen(false), []);
+  const pathname = usePathname();
+  const isHome = pathname === "/";
 
   return (
     <div className="pp-page-bg faq-shell relative flex min-h-screen text-[#0B0B13]">
@@ -34,7 +37,11 @@ export function FaqChrome({ children }: { children: ReactNode }) {
         </div>
 
         <main className="faq-main flex-1 px-4 py-8 sm:px-8 sm:py-10 lg:px-12 lg:py-12">
-          <div className="mx-auto max-w-3xl">{children}</div>
+          <div
+            className={`faq-main-inner mx-auto w-full ${isHome ? "max-w-none" : "max-w-3xl"}`}
+          >
+            {children}
+          </div>
         </main>
       </div>
     </div>
