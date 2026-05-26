@@ -240,10 +240,9 @@ export function RemesasCalculator() {
         {error && <p className="text-sm text-amber-700">{error}</p>}
 
         <p className="text-xs leading-relaxed text-slate-500">
-          Tasas y comisiones referenciales según{" "}
-          {selected ? `${countryFlag(selected.value)} ${selected.label}` : "el país seleccionado"}.
-          La promo de <strong>2 remesas gratis</strong> aplica de forma permanente en tus primeros
-          dos envíos. Confirma el monto final en la app antes de enviar.
+          Montos referenciales según el país seleccionado. La promo de{" "}
+          <strong>2 remesas gratis</strong> aplica en tus primeros dos envíos. Confirma el
+          monto final en la app antes de enviar.
         </p>
       </div>
     </div>

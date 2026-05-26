@@ -1,0 +1,68 @@
+{
+  "categories": [
+    {
+      "slug": "recarga-kioscos",
+      "title": "Recarga en kioscos",
+      "description": "Paga servicios y operadores en kioscos Punto Pago con efectivo. El pago se aplica al instante.",
+      "icon": "store",
+      "articles": [
+        {
+          "id": "recarga-kioscos-guia",
+          "slug": "recarga-kioscos",
+          "title": "Recarga en kioscos",
+          "description": "Ve a un kiosco Punto Pago, inserta efectivo, elige el operador o servicio a pagar y el pago se aplica de inmediato.",
+          "content": "# Recarga en kioscos\n\nEn los **kioscos Punto Pago** pagas servicios y recargas **con efectivo**. Tus pagos **se aplican de inmediato**.\n\n![](/images/recargas/instructivo-recarga-kioscos.png)\n\n---\n\n## ¿Qué puedo pagar?\n\n- **Recargas telefónicas:** prepago y postpago.\n- **Pagos de servicios:** aseo, cable, energía, internet y más.\n- **Pagos de préstamos:** bancos y financieras.\n\n---\n\n## Pasos en el kiosco\n\n1. **Selecciona el botón** del servicio que quieres pagar.\n2. **Ingresa el número de identificación** del servicio (número suscriptor, NAC, cédula u otro dato que pida el operador).\n3. **Inserta el efectivo** en la máquina (billete por billete).\n4. **Retira el comprobante** o comunícate con el call center si necesitas ayuda.\n\n---\n\n## ¿Dónde hay kioscos?\n\nPuedes ubicar kioscos Punto Pago desde la **app**, en la sección de mapa de terminales.\n\n---\n\n## Soporte\n\nTeléfono: +507 399-3999  \nWhatsApp: +507 6825-2816",
+          "updatedAt": "2026-05-26T00:00:00Z"
+        }
+      ]
+    },
+    {
+      "slug": "recarga-app",
+      "title": "Recarga app",
+      "description": "Recarga el saldo de tu billetera Punto Pago desde la aplicación móvil.",
+      "icon": "wallet",
+      "articles": [
+        {
+          "id": "recarga-app-guia",
+          "slug": "recarga-app",
+          "title": "Recarga en la app",
+          "description": "Añade saldo a tu billetera Punto Pago desde la app: efectivo en kioscos, tarjeta, Clave, PayPal o ACH.",
+          "content": "# Recarga en la app\n\n**Recarga app** es cómo añades **saldo a tu billetera** Punto Pago para pagar servicios, comprar en Marketplace, enviar remesas y más.\n\n---\n\n## Métodos disponibles\n\n| Método | Guía |\n| --- | --- |\n| Efectivo en kioscos | Efectivo en kioscos |\n| Tarjeta débito o crédito | Tarjeta débito o crédito |\n| Tarjeta Clave | Tarjeta Clave |\n| PayPal | PayPal |\n| Transferencia ACH | Transferencia ACH |\n\n---\n\n## Instructivo\n\n![](/images/recargas/instructivo-recarga-app.png)\n\nEn la app, toca el botón **RECARGAR** en tu billetera y elige el método que prefieras.\n\n---\n\n## Soporte\n\nTeléfono: +507 399-3999  \nWhatsApp: +507 6825-2816",
+          "updatedAt": "2026-05-26T00:00:00Z"
+        },
+        {
+          "id": "recarga-app-efectivo-guia",
+          "slug": "recarga-app-efectivo",
+          "title": "Efectivo en kioscos",
+          "description": "Recarga tu billetera con efectivo en un kiosco Punto Pago usando tu número celular registrado en la app.",
+          "content": "# Recarga app — Efectivo en kioscos\n\nRecarga **saldo en tu billetera** con efectivo en un kiosco Punto Pago.\n\n---\n\n## Pasos\n\n1. En el kiosco, busca el botón **Punto Pago App**.\n2. **Coloca tu número de celular** registrado en la app.\n3. **Inserta el efectivo** (billete por billete).\n4. **Retira el comprobante** o comunícate con el call center si necesitas ayuda.\n\nUsa el **mismo número** con el que te registraste. Si no coincide, el saldo no se acreditará en tu billetera.\n\n---\n\n## Soporte\n\nTeléfono: +507 399-3999  \nWhatsApp: +507 6825-2816",
+          "updatedAt": "2026-05-26T00:00:00Z"
+        },
+        {
+          "id": "recarga-app-tarjeta-guia",
+          "slug": "recarga-app-tarjeta",
+          "title": "Tarjeta débito o crédito",
+          "description": "Recarga tu billetera Punto Pago con tarjeta de banco (Visa o Mastercard) desde la app.",
+          "content": "# Recarga app — Tarjeta débito o crédito\n\nRecarga tu billetera con **tarjeta de banco** (débito o crédito) desde la app Punto Pago.\n\n---\n\n## Pasos\n\n1. **Ingresa a la aplicación** Punto Pago.\n2. Toca el botón **RECARGAR** en tu billetera.\n3. Selecciona **Tarjeta de banco**.\n4. **Ingresa los datos** de tu tarjeta y confirma el pago.\n\n---\n\n## Soporte\n\nTeléfono: +507 399-3999  \nWhatsApp: +507 6825-2816",
+          "updatedAt": "2026-05-26T00:00:00Z"
+        },
+        {
+          "id": "recarga-app-clave-guia",
+          "slug": "recarga-app-clave",
+          "title": "Tarjeta Clave",
+          "description": "Recarga tu billetera Punto Pago pagando con tarjeta Clave desde la app.",
+          "content": "# Recarga app — Tarjeta Clave\n\nRecarga tu billetera Punto Pago usando **tarjeta Clave** desde la aplicación.\n\n---\n\n## Pasos\n\n1. **Ingresa a la aplicación** Punto Pago.\n2. Toca el botón **RECARGAR**.\n3. Selecciona la opción de pago con **Clave**.\n4. Completa los datos y confirma.\n\n---\n\n## Soporte\n\nTeléfono: +507 399-3999  \nWhatsApp: +507 6825-2816",
+          "updatedAt": "2026-05-26T00:00:00Z"
+        },
+        {
+          "id": "recarga-app-ach-guia",
+          "slug": "recarga-app-ach",
+          "title": "Transferencia ACH",
+          "description": "Recarga tu billetera con transferencia bancaria ACH o depósito desde tu banca en línea.",
+          "content": "# Recarga app — Transferencia ACH\n\nRecarga tu billetera mediante **transferencia bancaria** o depósito desde tu banca en línea.\n\n---\n\n## Pasos desde la app\n\n1. **Ingresa a la aplicación** Punto Pago.\n2. Toca el botón **RECARGAR**.\n3. Selecciona **Transferencia bancaria**.\n4. Realiza la transferencia desde tu banca en línea a la cuenta de Punto Pago.\n5. **Llena el formulario** en la app con los datos de tu depósito.\n\n---\n\n## Cuenta para depósito\n\n**Banco Nacional** — Cuenta corriente **No. 10000265121**  \nA nombre de **Punto Pago Panamá S.A.**  \nMonto mínimo: **$10**.\n\nTambién puedes enviar comprobante a **depositos@puntopago.net** con:\n\n- Asunto: Recarga al app #[tu número celular registrado en la app]\n- Comprobante de pago\n- Nombre completo\n- Fecha de la transferencia\n\n---\n\n## ¿Cuándo se acredita?\n\nLos depósitos se acreditan en tu billetera cuando el movimiento **se refleja en la cuenta bancaria de Punto Pago**. El tiempo depende de la fecha y hora en que hiciste la transferencia.\n\n---\n\n## Soporte\n\nTeléfono: +507 399-3999  \nWhatsApp: +507 6825-2816",
+          "updatedAt": "2026-05-26T00:00:00Z"
+        }
+      ]
+    }
+  ]
+}

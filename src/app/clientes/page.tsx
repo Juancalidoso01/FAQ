@@ -2,25 +2,39 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { CreditProductCard } from "@/components/CreditProductCard";
 import { ProductCard } from "@/components/ProductCard";
-import { getCreditProducts, getNavGroupById, getDebitProducts, getMarketplaceProducts, getRemesasProducts } from "@/lib/navigation";
+import {
+  getCreditProducts,
+  getDebitProducts,
+  getMarketplaceProducts,
+  getMastercardProducts,
+  getNavGroupById,
+  getRecargaAppProducts,
+  getRecargaKioscosProducts,
+  getRemesasProducts,
+} from "@/lib/navigation";
 
 export const metadata: Metadata = {
   title: "Para clientes",
   description:
-    "Productos de crédito, débito, Marketplace, remesas internacionales, recargas y preguntas frecuentes de la app Punto Pago.",
+    "Productos de crédito, débito, Marketplace, remesas, recargas kioscos y recarga app de Punto Pago.",
   alternates: { canonical: "/clientes" },
 };
 
 export default function ClientesPage() {
   const creditProducts = getCreditProducts();
   const debitProducts = getDebitProducts();
+  const mastercardProducts = getMastercardProducts();
   const marketplaceProducts = getMarketplaceProducts();
   const remesasProducts = getRemesasProducts();
+  const recargaKioscosProducts = getRecargaKioscosProducts();
+  const recargaAppProducts = getRecargaAppProducts();
   const creditSection = getNavGroupById("productos-credito");
   const debitoSection = getNavGroupById("productos-debito");
+  const mastercardSection = getNavGroupById("tarjetas-mastercard");
   const marketplaceSection = getNavGroupById("marketplace");
   const remesasSection = getNavGroupById("remesas-internacionales");
-  const recarga = getNavGroupById("recarga-billetera");
+  const recargaKioscosSection = getNavGroupById("recarga-kioscos");
+  const recargaAppSection = getNavGroupById("recarga-app");
   const faq = getNavGroupById("preguntas-frecuentes");
 
   return (
@@ -29,7 +43,7 @@ export default function ClientesPage() {
         Punto Pago para clientes
       </h1>
       <p className="mt-2 text-slate-600">
-        Guías de crédito, débito, Marketplace, remesas y soporte de la app.
+        Guías de crédito, débito, Marketplace, remesas, recargas y soporte de la app.
       </p>
 
       <section id="creditos" aria-labelledby="creditos-heading" className="mt-8 scroll-mt-8">
@@ -55,6 +69,20 @@ export default function ClientesPage() {
         )}
         <div className="mt-4 grid gap-4 sm:grid-cols-2">
           {debitProducts.map((product) => (
+            <CreditProductCard key={product.href} product={product} />
+          ))}
+        </div>
+      </section>
+
+      <section id="tarjetas-mastercard" aria-labelledby="tarjetas-mastercard-heading" className="mt-10 scroll-mt-8">
+        <h2 id="tarjetas-mastercard-heading" className="text-sm font-semibold uppercase tracking-wide text-slate-500">
+          Tarjetas Mastercard
+        </h2>
+        {mastercardSection && (
+          <p className="mt-1 text-sm text-slate-600">{mastercardSection.description}</p>
+        )}
+        <div className="mt-4 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+          {mastercardProducts.map((product) => (
             <CreditProductCard key={product.href} product={product} />
           ))}
         </div>
@@ -88,19 +116,36 @@ export default function ClientesPage() {
         </div>
       </section>
 
-      {recarga && (
-        <section aria-labelledby="otros-heading" className="mt-10">
-          <h2 id="otros-heading" className="text-sm font-semibold uppercase tracking-wide text-slate-500">
-            Recarga y billetera
-          </h2>
-          <div className="mt-4">
-            <ProductCard product={recarga} />
-          </div>
-        </section>
-      )}
+      <section id="recarga-kioscos" aria-labelledby="recarga-kioscos-heading" className="mt-10 scroll-mt-8">
+        <h2 id="recarga-kioscos-heading" className="text-sm font-semibold uppercase tracking-wide text-slate-500">
+          Recarga kioscos
+        </h2>
+        {recargaKioscosSection && (
+          <p className="mt-1 text-sm text-slate-600">{recargaKioscosSection.description}</p>
+        )}
+        <div className="mt-4 grid gap-4 sm:grid-cols-2">
+          {recargaKioscosProducts.map((product) => (
+            <CreditProductCard key={product.href} product={product} />
+          ))}
+        </div>
+      </section>
+
+      <section id="recarga-app" aria-labelledby="recarga-app-heading" className="mt-10 scroll-mt-8">
+        <h2 id="recarga-app-heading" className="text-sm font-semibold uppercase tracking-wide text-slate-500">
+          Recarga app
+        </h2>
+        {recargaAppSection && (
+          <p className="mt-1 text-sm text-slate-600">{recargaAppSection.description}</p>
+        )}
+        <div className="mt-4 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+          {recargaAppProducts.map((product) => (
+            <CreditProductCard key={product.href} product={product} />
+          ))}
+        </div>
+      </section>
 
       {faq && (
-        <section aria-labelledby="faq-heading" className="mt-10">
+        <section id="faq" aria-labelledby="faq-heading" className="mt-10 scroll-mt-8">
           <h2 id="faq-heading" className="text-sm font-semibold uppercase tracking-wide text-slate-500">
             Preguntas frecuentes
           </h2>

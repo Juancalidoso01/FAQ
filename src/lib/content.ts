@@ -146,7 +146,28 @@ function renderMarkdownTable(rows: string[]): string {
 }
 
 function inlineHtml(text: string): string {
-  let out = escapeHtml(text);
+  const chunks: string[] = [];
+  const linkPattern = /\[([^\]]+)\]\(([^)]+)\)/g;
+  let lastIndex = 0;
+  let match: RegExpExecArray | null;
+
+  while ((match = linkPattern.exec(text)) !== null) {
+    chunks.push(escapeHtml(text.slice(lastIndex, match.index)));
+    const safe = sanitizeHref(match[2]);
+    if (safe) {
+      const external =
+        safe.startsWith("http") || safe.startsWith("mailto:")
+          ? ' target="_blank" rel="noopener noreferrer"'
+          : "";
+      chunks.push(`<a href="${safe}"${external}>${escapeHtml(match[1])}</a>`);
+    } else {
+      chunks.push(escapeHtml(match[0]));
+    }
+    lastIndex = match.index + match[0].length;
+  }
+
+  chunks.push(escapeHtml(text.slice(lastIndex)));
+  let out = chunks.join("");
   out = out.replace(/\*\*(.+?)\*\*/g, "<strong>$1</strong>");
   out = out.replace(/&lt;b&gt;(.*?)&lt;\/b&gt;/g, "<strong>$1</strong>");
   out = out.replace(/&lt;i&gt;(.*?)&lt;\/i&gt;/g, "<em>$1</em>");
@@ -172,8 +193,12 @@ function escapeHtml(text: string): string {
 }
 
 function sanitizeHref(href: string): string | null {
+  const trimmed = href.trim();
+  if (trimmed.startsWith("/") && !trimmed.startsWith("//")) {
+    return trimmed;
+  }
   try {
-    const url = new URL(href);
+    const url = new URL(trimmed);
     if (url.protocol === "https:" || url.protocol === "http:" || url.protocol === "mailto:") {
       return url.href;
     }

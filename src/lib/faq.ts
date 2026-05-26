@@ -6,6 +6,8 @@ import productosPrepagoCliente from "../../content/productos-prepago-cliente.jso
 import productosCreditoCliente from "../../content/productos-credito-cliente.json";
 import productosMarketplaceCliente from "../../content/productos-marketplace-cliente.json";
 import productosRemesasCliente from "../../content/productos-remesas-cliente.json";
+import productosRecargaCliente from "../../content/productos-recarga-cliente.json";
+import productosTarjetasMastercardCliente from "../../content/productos-tarjetas-mastercard-cliente.json";
 
 export type FaqArticle = {
   id: string;
@@ -53,13 +55,17 @@ export function getAllCategories(): FaqCategory[] {
   const creditoCliente = (productosCreditoCliente as FaqData).categories;
   const marketplaceCliente = (productosMarketplaceCliente as FaqData).categories;
   const remesasCliente = (productosRemesasCliente as FaqData).categories;
+  const recargaCliente = (productosRecargaCliente as FaqData).categories;
+  const tarjetasMastercardCliente = (productosTarjetasMastercardCliente as FaqData).categories;
   return [
     ...intercom,
     ...tarjetasCliente,
+    ...tarjetasMastercardCliente,
     ...prepagoCliente,
     ...creditoCliente,
     ...marketplaceCliente,
     ...remesasCliente,
+    ...recargaCliente,
     ...gitbookGuia,
     ...gitbook,
   ];

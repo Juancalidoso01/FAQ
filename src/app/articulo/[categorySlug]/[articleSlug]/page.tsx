@@ -98,24 +98,6 @@ export default async function ArticlePage({ params }: Props) {
           <div itemProp="articleBody">
             <ArticleContent content={article.content} />
           </div>
-
-          {(article.sourceUrl || article.intercomUrl) && (
-            <p className="mt-10 border-t border-slate-200/80 pt-6 text-xs text-slate-400">
-              Fuente:{" "}
-              <a
-                href={article.sourceUrl ?? article.intercomUrl}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="text-[#4749B6] hover:underline"
-              >
-                {article.sourceUrl?.includes("puntopago.net")
-                  ? "Punto Pago"
-                  : article.sourceUrl?.includes("comercios.puntopago.net")
-                    ? "GitBook Comercios"
-                    : "Intercom Help Center"}
-              </a>
-            </p>
-          )}
         </article>
 
         {related.length > 0 && (

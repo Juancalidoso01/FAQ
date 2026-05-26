@@ -150,6 +150,83 @@ export function getRemesasProducts(): CreditProduct[] {
   return products;
 }
 
+/** Recarga en kioscos físicos (pago de operadores con efectivo). */
+export const RECARGA_KIOSCOS_REFS: FaqNavArticleRef[] = [
+  {
+    categorySlug: "recarga-kioscos",
+    articleSlug: "recarga-kioscos",
+    navTitle: "Recarga en kioscos",
+  },
+];
+
+export function getRecargaKioscosProducts(): CreditProduct[] {
+  const products: CreditProduct[] = [];
+  for (const ref of RECARGA_KIOSCOS_REFS) {
+    const result = getArticle(ref.categorySlug, ref.articleSlug);
+    if (!result) continue;
+    products.push({
+      title: ref.navTitle ?? result.article.title,
+      description: result.article.description,
+      href: articlePath(result.category.slug, result.article.slug),
+      categorySlug: result.category.slug,
+      articleSlug: result.article.slug,
+      badge: ref.badge,
+    });
+  }
+  return products;
+}
+
+/** Recarga de billetera desde la app Punto Pago. */
+export const RECARGA_APP_REFS: FaqNavArticleRef[] = [
+  {
+    categorySlug: "recarga-app",
+    articleSlug: "recarga-app",
+    navTitle: "Recarga en la app",
+  },
+  {
+    categorySlug: "recarga-app",
+    articleSlug: "recarga-app-efectivo",
+    navTitle: "Efectivo en kioscos",
+  },
+  {
+    categorySlug: "recarga-app",
+    articleSlug: "recarga-app-tarjeta",
+    navTitle: "Tarjeta débito o crédito",
+  },
+  {
+    categorySlug: "recarga-app",
+    articleSlug: "recarga-app-clave",
+    navTitle: "Tarjeta Clave",
+  },
+  {
+    categorySlug: "terminos-y-condiciones",
+    articleSlug: "paypal-nuevo-metodo-de-recarga",
+    navTitle: "PayPal",
+  },
+  {
+    categorySlug: "recarga-app",
+    articleSlug: "recarga-app-ach",
+    navTitle: "Transferencia ACH",
+  },
+];
+
+export function getRecargaAppProducts(): CreditProduct[] {
+  const products: CreditProduct[] = [];
+  for (const ref of RECARGA_APP_REFS) {
+    const result = getArticle(ref.categorySlug, ref.articleSlug);
+    if (!result) continue;
+    products.push({
+      title: ref.navTitle ?? result.article.title,
+      description: result.article.description,
+      href: articlePath(result.category.slug, result.article.slug),
+      categorySlug: result.category.slug,
+      articleSlug: result.article.slug,
+      badge: ref.badge,
+    });
+  }
+  return products;
+}
+
 export type CreditProduct = {
   title: string;
   description: string;
@@ -208,6 +285,72 @@ export function getDebitProducts(): CreditProduct[] {
   return products;
 }
 
+/** Guías comunes para todas las tarjetas Mastercard Punto Pago. */
+export const MASTERCARD_PRODUCT_REFS: FaqNavArticleRef[] = [
+  {
+    categorySlug: "tarjetas-mastercard",
+    articleSlug: "tarjetas-mastercard",
+    navTitle: "Uso de tu tarjeta",
+  },
+  {
+    categorySlug: "tarjetas-mastercard",
+    articleSlug: "como-obtener-tu-tarjeta",
+    navTitle: "Cómo obtener tu tarjeta",
+  },
+  {
+    categorySlug: "tarjetas-mastercard",
+    articleSlug: "activar-tarjeta",
+    navTitle: "Activar tu tarjeta",
+  },
+  {
+    categorySlug: "tarjetas-mastercard",
+    articleSlug: "ver-pin-y-datos",
+    navTitle: "Ver PIN y datos",
+  },
+  {
+    categorySlug: "tarjetas-mastercard",
+    articleSlug: "comprar-en-linea",
+    navTitle: "Comprar en línea",
+  },
+  {
+    categorySlug: "tarjetas-mastercard",
+    articleSlug: "retirar-en-cajero",
+    navTitle: "Retirar en cajero",
+  },
+  {
+    categorySlug: "tarjetas-mastercard",
+    articleSlug: "limites-de-uso",
+    navTitle: "Límites de uso",
+  },
+  {
+    categorySlug: "tarjetas-mastercard",
+    articleSlug: "tarjeta-perdida-o-bloqueada",
+    navTitle: "Tarjeta perdida o bloqueada",
+  },
+  {
+    categorySlug: "tarjetas-mastercard",
+    articleSlug: "promociones-mastercard",
+    navTitle: "Promociones Mastercard",
+  },
+];
+
+export function getMastercardProducts(): CreditProduct[] {
+  const products: CreditProduct[] = [];
+  for (const ref of MASTERCARD_PRODUCT_REFS) {
+    const result = getArticle(ref.categorySlug, ref.articleSlug);
+    if (!result) continue;
+    products.push({
+      title: ref.navTitle ?? result.article.title,
+      description: result.article.description,
+      href: articlePath(result.category.slug, result.article.slug),
+      categorySlug: result.category.slug,
+      articleSlug: result.article.slug,
+      badge: ref.badge,
+    });
+  }
+  return products;
+}
+
 export type FaqNavSubgroupResolved = FaqNavSubgroup & {
   items: FaqNavItem[];
 };
@@ -236,6 +379,27 @@ export const FAQ_NAV: FaqNavSection[] = [
         ],
       },
       {
+        id: "productos-debito",
+        audience: "cliente",
+        title: "Productos débito",
+        flatSidebar: true,
+        description:
+          "Tarjeta prepago Mastercard y Tarjeta Junior para menores — débito prepago, no crédito.",
+        articleRefs: DEBIT_PRODUCT_REFS,
+        links: [
+          { title: "Descargar app Punto Pago", href: "https://puntopago.net/", external: true },
+        ],
+      },
+      {
+        id: "tarjetas-mastercard",
+        audience: "cliente",
+        title: "Tarjetas Mastercard",
+        flatSidebar: true,
+        description:
+          "Activar, consultar PIN, comprar en línea, retirar en cajeros y más — guías que aplican a todas las tarjetas Mastercard Punto Pago.",
+        articleRefs: MASTERCARD_PRODUCT_REFS,
+      },
+      {
         id: "marketplace",
         audience: "cliente",
         title: "Marketplace",
@@ -257,45 +421,22 @@ export const FAQ_NAV: FaqNavSection[] = [
         articleRefs: REMESAS_PRODUCT_REFS,
       },
       {
-        id: "productos-debito",
+        id: "recarga-kioscos",
         audience: "cliente",
-        title: "Productos débito",
+        title: "Recarga kioscos",
         flatSidebar: true,
         description:
-          "Tarjeta prepago Mastercard y Tarjeta Junior para menores — débito prepago, no crédito.",
-        articleRefs: DEBIT_PRODUCT_REFS,
-        links: [
-          { title: "Descargar app Punto Pago", href: "https://puntopago.net/", external: true },
-        ],
+          "Paga operadores y servicios en kioscos Punto Pago con efectivo. El pago se aplica al instante.",
+        articleRefs: RECARGA_KIOSCOS_REFS,
       },
       {
-        id: "recarga-billetera",
+        id: "recarga-app",
         audience: "cliente",
-        title: "Recarga y billetera",
+        title: "Recarga app",
         flatSidebar: true,
-        description: "Formas de recargar saldo en tu wallet Punto Pago.",
-        articleRefs: [
-          {
-            categorySlug: "recarga-tu-app",
-            articleSlug: "recarga-tu-app",
-            navTitle: "Cómo recargar",
-          },
-          {
-            categorySlug: "recarga-tu-app",
-            articleSlug: "recargar-tu-billetera",
-            navTitle: "Recargar billetera",
-          },
-          {
-            categorySlug: "recarga-tu-app",
-            articleSlug: "transferencia-bancaria-ach",
-            navTitle: "Transferencia ACH",
-          },
-          {
-            categorySlug: "terminos-y-condiciones",
-            articleSlug: "paypal-nuevo-metodo-de-recarga",
-            navTitle: "Recargar con PayPal",
-          },
-        ],
+        description:
+          "Recarga el saldo de tu billetera desde la app: efectivo, tarjeta, Clave, PayPal o ACH.",
+        articleRefs: RECARGA_APP_REFS,
       },
       {
         id: "preguntas-frecuentes",
@@ -608,9 +749,11 @@ export function getNavGroupById(id: string): FaqNavGroupResolved | undefined {
 const CLIENTE_FEATURED_IDS = [
   "productos-credito",
   "productos-debito",
+  "tarjetas-mastercard",
   "marketplace",
   "remesas-internacionales",
-  "recarga-billetera",
+  "recarga-kioscos",
+  "recarga-app",
   "preguntas-frecuentes",
 ] as const;
 
@@ -675,6 +818,24 @@ function isRemesasProductArticle(categorySlug: string, articleSlug: string) {
   );
 }
 
+function isRecargaKioscosArticle(categorySlug: string, articleSlug: string) {
+  return RECARGA_KIOSCOS_REFS.some(
+    (ref) => ref.categorySlug === categorySlug && ref.articleSlug === articleSlug,
+  );
+}
+
+function isRecargaAppArticle(categorySlug: string, articleSlug: string) {
+  return RECARGA_APP_REFS.some(
+    (ref) => ref.categorySlug === categorySlug && ref.articleSlug === articleSlug,
+  );
+}
+
+function isMastercardProductArticle(categorySlug: string, articleSlug: string) {
+  return MASTERCARD_PRODUCT_REFS.some(
+    (ref) => ref.categorySlug === categorySlug && ref.articleSlug === articleSlug,
+  );
+}
+
 function isCuotasMerchantCategory(categorySlug: string | null) {
   return categorySlug != null && CUOTAS_MERCHANT_CATEGORY_SLUGS.has(categorySlug);
 }
@@ -685,7 +846,6 @@ export function getSidebarNav(
   activeCategorySlug: string | null,
 ): SidebarEntry[] {
   if (audience === "cliente") {
-    const recarga = getNavGroupById("recarga-billetera");
     const faq = getNavGroupById("preguntas-frecuentes");
     return [
       { type: "link", title: "Resumen clientes", href: "/clientes" },
@@ -697,6 +857,12 @@ export function getSidebarNav(
       })),
       { type: "heading", label: "Productos débito" },
       ...getDebitProducts().map((p) => ({
+        type: "link" as const,
+        title: p.title,
+        href: p.href,
+      })),
+      { type: "heading", label: "Tarjetas Mastercard" },
+      ...getMastercardProducts().map((p) => ({
         type: "link" as const,
         title: p.title,
         href: p.href,
@@ -713,10 +879,19 @@ export function getSidebarNav(
         title: p.title,
         href: p.href,
       })),
+      { type: "heading", label: "Recarga kioscos" },
+      ...getRecargaKioscosProducts().map((p) => ({
+        type: "link" as const,
+        title: p.title,
+        href: p.href,
+      })),
+      { type: "heading", label: "Recarga app" },
+      ...getRecargaAppProducts().map((p) => ({
+        type: "link" as const,
+        title: p.title,
+        href: p.href,
+      })),
       { type: "heading", label: "Más ayuda" },
-      ...(recarga?.items[0]
-        ? [{ type: "link" as const, title: "Recarga y billetera", href: recarga.items[0].href }]
-        : []),
       ...(faq?.items[0]
         ? [{ type: "link" as const, title: "Preguntas frecuentes", href: faq.items[0].href }]
         : []),
@@ -792,10 +967,16 @@ export function getArticleBreadcrumbs(
     crumbs.push({ label: "Productos de crédito", href: `${hubHref}#creditos` });
   } else if (isDebitProductArticle(categorySlug, articleSlug)) {
     crumbs.push({ label: "Productos débito", href: `${hubHref}#debito` });
+  } else if (isMastercardProductArticle(categorySlug, articleSlug)) {
+    crumbs.push({ label: "Tarjetas Mastercard", href: `${hubHref}#tarjetas-mastercard` });
   } else if (isMarketplaceProductArticle(categorySlug, articleSlug)) {
     crumbs.push({ label: "Marketplace", href: `${hubHref}#marketplace` });
   } else if (isRemesasProductArticle(categorySlug, articleSlug)) {
     crumbs.push({ label: "Remesas internacionales", href: `${hubHref}#remesas` });
+  } else if (isRecargaKioscosArticle(categorySlug, articleSlug)) {
+    crumbs.push({ label: "Recarga kioscos", href: `${hubHref}#recarga-kioscos` });
+  } else if (isRecargaAppArticle(categorySlug, articleSlug)) {
+    crumbs.push({ label: "Recarga app", href: `${hubHref}#recarga-app` });
   } else if (isCuotasMerchantCategory(categorySlug)) {
     const merchant = getNavGroupById("cuotas-merchant");
     if (merchant?.items[0]) {

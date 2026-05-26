@@ -42,6 +42,21 @@ const nextConfig: NextConfig = {
         destination: "/articulo/dreamcard/dreamcard",
         permanent: true,
       },
+      {
+        source: "/articulo/recarga-tu-app/recarga-tu-app",
+        destination: "/articulo/recarga-app/recarga-app",
+        permanent: true,
+      },
+      {
+        source: "/articulo/recarga-tu-app/recargar-tu-billetera",
+        destination: "/articulo/recarga-app/recarga-app",
+        permanent: true,
+      },
+      {
+        source: "/articulo/recarga-tu-app/transferencia-bancaria-ach",
+        destination: "/articulo/recarga-app/recarga-app-ach",
+        permanent: true,
+      },
     ];
   },
 };
