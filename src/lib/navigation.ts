@@ -117,6 +117,38 @@ export function getCreditProducts(): CreditProduct[] {
   return products;
 }
 
+/** Productos débito: Tarjeta prepago y Tarjeta Junior. */
+export const DEBIT_PRODUCT_REFS: FaqNavArticleRef[] = [
+  {
+    categorySlug: "tarjeta-azul-prepago",
+    articleSlug: "tarjeta-azul-prepago",
+    navTitle: "Tarjeta prepago",
+  },
+  {
+    categorySlug: "tarjeta-junior",
+    articleSlug: "tarjeta-junior",
+    navTitle: "Tarjeta Junior",
+    badge: "Menores",
+  },
+];
+
+export function getDebitProducts(): CreditProduct[] {
+  const products: CreditProduct[] = [];
+  for (const ref of DEBIT_PRODUCT_REFS) {
+    const result = getArticle(ref.categorySlug, ref.articleSlug);
+    if (!result) continue;
+    products.push({
+      title: ref.navTitle ?? result.article.title,
+      description: result.article.description,
+      href: articlePath(result.category.slug, result.article.slug),
+      categorySlug: result.category.slug,
+      articleSlug: result.article.slug,
+      badge: ref.badge,
+    });
+  }
+  return products;
+}
+
 export type FaqNavSubgroupResolved = FaqNavSubgroup & {
   items: FaqNavItem[];
 };
@@ -142,6 +174,18 @@ export const FAQ_NAV: FaqNavSection[] = [
         articleRefs: CREDIT_PRODUCT_REFS,
         links: [
           { title: "Ver en guia.puntopago.net", href: "https://guia.puntopago.net/", external: true },
+        ],
+      },
+      {
+        id: "productos-debito",
+        audience: "cliente",
+        title: "Productos débito",
+        flatSidebar: true,
+        description:
+          "Tarjeta prepago Mastercard y Tarjeta Junior para menores — débito prepago, no crédito.",
+        articleRefs: DEBIT_PRODUCT_REFS,
+        links: [
+          { title: "Descargar app Punto Pago", href: "https://puntopago.net/", external: true },
         ],
       },
       {
@@ -472,6 +516,7 @@ export function getNavGroupById(id: string): FaqNavGroupResolved | undefined {
 
 const CLIENTE_FEATURED_IDS = [
   "productos-credito",
+  "productos-debito",
   "recarga-billetera",
   "preguntas-frecuentes",
 ] as const;
@@ -519,6 +564,12 @@ function isCreditProductArticle(categorySlug: string, articleSlug: string) {
   );
 }
 
+function isDebitProductArticle(categorySlug: string, articleSlug: string) {
+  return DEBIT_PRODUCT_REFS.some(
+    (ref) => ref.categorySlug === categorySlug && ref.articleSlug === articleSlug,
+  );
+}
+
 function isCuotasMerchantCategory(categorySlug: string | null) {
   return categorySlug?.startsWith("cuotas-") ?? false;
 }
@@ -535,6 +586,12 @@ export function getSidebarNav(
       { type: "link", title: "Resumen clientes", href: "/clientes" },
       { type: "heading", label: "Productos de crédito" },
       ...getCreditProducts().map((p) => ({
+        type: "link" as const,
+        title: p.title,
+        href: p.href,
+      })),
+      { type: "heading", label: "Productos débito" },
+      ...getDebitProducts().map((p) => ({
         type: "link" as const,
         title: p.title,
         href: p.href,
@@ -616,6 +673,8 @@ export function getArticleBreadcrumbs(
 
   if (isCreditProductArticle(categorySlug, articleSlug)) {
     crumbs.push({ label: "Productos de crédito", href: `${hubHref}#creditos` });
+  } else if (isDebitProductArticle(categorySlug, articleSlug)) {
+    crumbs.push({ label: "Productos débito", href: `${hubHref}#debito` });
   } else if (isCuotasMerchantCategory(categorySlug)) {
     const merchant = getNavGroupById("cuotas-merchant");
     if (merchant?.items[0]) {

@@ -2,6 +2,7 @@ import faqData from "../../content/faq-data.json";
 import gitbookData from "../../content/gitbook-comercios.json";
 import gitbookGuiaData from "../../content/gitbook-guia.json";
 import productosTarjetasCliente from "../../content/productos-tarjetas-cliente.json";
+import productosPrepagoCliente from "../../content/productos-prepago-cliente.json";
 
 export type FaqArticle = {
   id: string;
@@ -45,7 +46,8 @@ export function getAllCategories(): FaqCategory[] {
   const gitbook = (gitbookData as FaqData).categories;
   const gitbookGuia = (gitbookGuiaData as FaqData).categories;
   const tarjetasCliente = (productosTarjetasCliente as FaqData).categories;
-  return [...intercom, ...tarjetasCliente, ...gitbookGuia, ...gitbook];
+  const prepagoCliente = (productosPrepagoCliente as FaqData).categories;
+  return [...intercom, ...tarjetasCliente, ...prepagoCliente, ...gitbookGuia, ...gitbook];
 }
 
 export function getCategory(slug: string): FaqCategory | undefined {
