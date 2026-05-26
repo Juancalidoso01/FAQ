@@ -7,7 +7,10 @@
     "build": "next build",
     "start": "next start",
     "lint": "eslint",
-    "scrape": "python3 scripts/scrape-intercom.py"
+    "scrape": "python3 scripts/scrape-intercom.py",
+    "deploy:prod": "npx --yes vercel@latest deploy --prod --yes",
+    "vercel:whoami": "npx --yes vercel@latest whoami",
+    "vercel:env": "npx --yes vercel@latest env ls"
   },
   "dependencies": {
     "next": "^16.2.6",
