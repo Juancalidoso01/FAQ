@@ -8,7 +8,7 @@ import {
   excerpt,
   getArticle,
 } from "@/lib/faq";
-import { getFeaturedGroups, getNavSections } from "@/lib/navigation";
+import { getFeaturedGroups, getNavGroupById } from "@/lib/navigation";
 import { faqPageJsonLd } from "@/lib/seo";
 
 export const metadata: Metadata = {
@@ -18,15 +18,13 @@ export const metadata: Metadata = {
 };
 
 export default function HomePage() {
-  const clienteProducts = getFeaturedGroups("cliente");
-  const empresaProducts = getFeaturedGroups("empresa");
-  const sections = getNavSections();
+  const clienteProducts = getFeaturedGroups("cliente").filter(
+    (g) => g.id !== "preguntas-frecuentes",
+  );
+  const faqCliente = getNavGroupById("preguntas-frecuentes");
+  const empresaProducts = getFeaturedGroups("empresa").filter((g) => g.id !== "faq-empresas");
 
-  const featuredArticles = sections
-    .flatMap((s) => s.groups)
-    .flatMap((g) => g.items.slice(0, 1))
-    .slice(0, 6);
-
+  const featuredArticles = faqCliente?.items.slice(0, 4) ?? [];
   const faqItems = featuredArticles.map((item) => {
     const result = getArticle(item.categorySlug, item.articleSlug);
     return {
@@ -59,6 +57,11 @@ export default function HomePage() {
             <ProductCard key={product.id} product={product} />
           ))}
         </div>
+        {faqCliente && (
+          <div className="mt-4">
+            <ProductCard product={faqCliente} variant="highlight" />
+          </div>
+        )}
       </section>
 
       <section aria-labelledby="empresas-heading" className="mt-12">

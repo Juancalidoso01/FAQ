@@ -1,6 +1,5 @@
 import {
   articlePath,
-  categoryPath,
   getAllCategories,
   getArticle,
   getCategory,
@@ -15,16 +14,25 @@ export type FaqNavLink = {
   external?: boolean;
 };
 
+export type FaqNavArticleRef = { categorySlug: string; articleSlug: string };
+
+export type FaqNavSubgroup = {
+  id: string;
+  title: string;
+  categorySlugs?: string[];
+  articleRefs?: FaqNavArticleRef[];
+};
+
 export type FaqNavGroup = {
   id: string;
   audience: FaqAudience;
   title: string;
   description: string;
-  /** Incluye todos los artículos de estas categorías existentes. */
+  /** Subsecciones dentro del producto (preferido). */
+  subgroups?: FaqNavSubgroup[];
+  /** Fallback plano si no hay subgroups. */
   categorySlugs?: string[];
-  /** Artículos puntuales (categorySlug + articleSlug). */
-  articleRefs?: Array<{ categorySlug: string; articleSlug: string }>;
-  /** Enlaces externos cuando aún no hay artículos en el FAQ. */
+  articleRefs?: FaqNavArticleRef[];
   links?: FaqNavLink[];
 };
 
@@ -42,8 +50,13 @@ export type FaqNavItem = {
   articleSlug: string;
 };
 
-export type FaqNavGroupResolved = FaqNavGroup & {
+export type FaqNavSubgroupResolved = FaqNavSubgroup & {
   items: FaqNavItem[];
+};
+
+export type FaqNavGroupResolved = Omit<FaqNavGroup, "subgroups"> & {
+  items: FaqNavItem[];
+  subgroups: FaqNavSubgroupResolved[];
 };
 
 export const FAQ_NAV: FaqNavSection[] = [
@@ -58,11 +71,49 @@ export const FAQ_NAV: FaqNavSection[] = [
         title: "Tarjeta de crédito",
         description:
           "Comienza a construir tu historial crediticio con la tarjeta de crédito Punto Pago, sin anualidad de por vida.",
-        categorySlugs: ["adquiere-tu-mastercard"],
-        articleRefs: [
-          { categorySlug: "aumento-de-credito", articleSlug: "solicitud-de-aumento-de-limite-de-credito" },
-          { categorySlug: "terminos-y-condiciones", articleSlug: "tarjeta-mastercard-punto-pago" },
-          { categorySlug: "terminos-y-condiciones", articleSlug: "limites-de-tu-tarjeta-punto-pago" },
+        subgroups: [
+          {
+            id: "tc-info",
+            title: "Sobre la tarjeta",
+            articleRefs: [
+              {
+                categorySlug: "adquiere-tu-mastercard",
+                articleSlug: "dreamcard-la-tarjeta-de-credito-de-punto-pago",
+              },
+              {
+                categorySlug: "adquiere-tu-mastercard",
+                articleSlug: "confirmacion-y-modificacion-del-perfil",
+              },
+            ],
+          },
+          {
+            id: "tc-donde",
+            title: "Dónde obtenerla",
+            articleRefs: [
+              {
+                categorySlug: "adquiere-tu-mastercard",
+                articleSlug: "ubicaciones-de-maquinas-dispensadoras",
+              },
+            ],
+          },
+          {
+            id: "tc-limites",
+            title: "Límites y condiciones",
+            articleRefs: [
+              {
+                categorySlug: "terminos-y-condiciones",
+                articleSlug: "limites-de-tu-tarjeta-punto-pago",
+              },
+              {
+                categorySlug: "terminos-y-condiciones",
+                articleSlug: "tarjeta-mastercard-punto-pago",
+              },
+              {
+                categorySlug: "terminos-y-condiciones",
+                articleSlug: "terminos-y-condiciones-tarjeta-prepago",
+              },
+            ],
+          },
         ],
       },
       {
@@ -71,9 +122,17 @@ export const FAQ_NAV: FaqNavSection[] = [
         title: "Adelantos de saldo",
         description:
           "Paga y recarga tus servicios con un adelanto de saldo hoy y devuélvelo en 15 días.",
-        articleRefs: [
-          { categorySlug: "nuestros-servicios", articleSlug: "preguntas-frecuentes-faq" },
-          { categorySlug: "nuestros-servicios", articleSlug: "links-para-interactuar-con-nuestra-app" },
+        subgroups: [
+          {
+            id: "as-guias",
+            title: "Cómo funciona",
+            articleRefs: [
+              {
+                categorySlug: "nuestros-servicios",
+                articleSlug: "links-para-interactuar-con-nuestra-app",
+              },
+            ],
+          },
         ],
         links: [
           { title: "Descargar app Punto Pago", href: "https://puntopago.net/", external: true },
@@ -85,9 +144,27 @@ export const FAQ_NAV: FaqNavSection[] = [
         title: "Línea de crédito",
         description:
           "Usa tu línea de crédito para pagar facturas y servicios en Punto Pago.",
-        categorySlugs: ["aumento-de-credito"],
-        articleRefs: [
-          { categorySlug: "terminos-y-condiciones", articleSlug: "terminos-y-condiciones-prestamos" },
+        subgroups: [
+          {
+            id: "lc-solicitud",
+            title: "Solicitar o aumentar",
+            articleRefs: [
+              {
+                categorySlug: "aumento-de-credito",
+                articleSlug: "solicitud-de-aumento-de-limite-de-credito",
+              },
+            ],
+          },
+          {
+            id: "lc-condiciones",
+            title: "Condiciones",
+            articleRefs: [
+              {
+                categorySlug: "terminos-y-condiciones",
+                articleSlug: "terminos-y-condiciones-prestamos",
+              },
+            ],
+          },
         ],
       },
       {
@@ -96,8 +173,17 @@ export const FAQ_NAV: FaqNavSection[] = [
         title: "Pago con cuotas",
         description:
           "Compra con tu tarjeta de débito o virtual, incluso cuando no tienes saldo disponible.",
-        articleRefs: [
-          { categorySlug: "terminos-y-condiciones", articleSlug: "terminos-y-condiciones-a-cuotas" },
+        subgroups: [
+          {
+            id: "pc-condiciones",
+            title: "Condiciones del producto",
+            articleRefs: [
+              {
+                categorySlug: "terminos-y-condiciones",
+                articleSlug: "terminos-y-condiciones-a-cuotas",
+              },
+            ],
+          },
         ],
       },
       {
@@ -105,34 +191,103 @@ export const FAQ_NAV: FaqNavSection[] = [
         audience: "cliente",
         title: "Recarga y billetera",
         description: "Formas de recargar saldo en tu wallet Punto Pago.",
-        categorySlugs: ["recarga-tu-app"],
-      },
-      {
-        id: "app-servicios",
-        audience: "cliente",
-        title: "App y servicios",
-        description: "Kioscos, pagos, giros y funciones de la app.",
-        categorySlugs: ["nuestros-servicios"],
-      },
-      {
-        id: "terminos-cliente",
-        audience: "cliente",
-        title: "Términos y condiciones",
-        description: "Políticas legales de productos para usuarios.",
-        articleRefs: [
-          { categorySlug: "terminos-y-condiciones", articleSlug: "terminos-y-condiciones-tarjeta-prepago" },
-          { categorySlug: "terminos-y-condiciones", articleSlug: "paypal-nuevo-metodo-de-recarga" },
+        subgroups: [
+          {
+            id: "rb-como",
+            title: "Cómo recargar",
+            articleRefs: [
+              { categorySlug: "recarga-tu-app", articleSlug: "recarga-tu-app" },
+              { categorySlug: "recarga-tu-app", articleSlug: "recargar-tu-billetera" },
+            ],
+          },
+          {
+            id: "rb-metodos",
+            title: "Métodos de pago",
+            articleRefs: [
+              { categorySlug: "recarga-tu-app", articleSlug: "transferencia-bancaria-ach" },
+              {
+                categorySlug: "terminos-y-condiciones",
+                articleSlug: "paypal-nuevo-metodo-de-recarga",
+              },
+            ],
+          },
         ],
       },
       {
-        id: "soporte-cliente",
+        id: "preguntas-frecuentes",
         audience: "cliente",
-        title: "Soporte",
-        description: "Contacto, cambio de número y pagos no reflejados.",
-        categorySlugs: [
-          "contacto-de-operadores",
-          "cambio-de-numero-de-telefono",
-          "pago-no-reflejado",
+        title: "Preguntas frecuentes",
+        description:
+          "Respuestas rápidas sobre la app, pagos, cuenta y problemas comunes que suelen tener los clientes.",
+        subgroups: [
+          {
+            id: "faq-general",
+            title: "Lo más consultado",
+            articleRefs: [
+              {
+                categorySlug: "nuestros-servicios",
+                articleSlug: "preguntas-frecuentes-faq",
+              },
+              { categorySlug: "nuestros-servicios", articleSlug: "nuestros-servicios" },
+              {
+                categorySlug: "nuestros-servicios",
+                articleSlug: "links-para-interactuar-con-nuestra-app",
+              },
+            ],
+          },
+          {
+            id: "faq-pagos",
+            title: "Pagos y transacciones",
+            articleRefs: [
+              {
+                categorySlug: "nuestros-servicios",
+                articleSlug: "revisar-pago-o-transaccion",
+              },
+              { categorySlug: "pago-no-reflejado", articleSlug: "pago-no-reflejado" },
+            ],
+          },
+          {
+            id: "faq-cuenta",
+            title: "Tu cuenta",
+            articleRefs: [
+              {
+                categorySlug: "cambio-de-numero-de-telefono",
+                articleSlug: "cambio-de-numero-de-telefono",
+              },
+              {
+                categorySlug: "adquiere-tu-mastercard",
+                articleSlug: "confirmacion-y-modificacion-del-perfil",
+              },
+            ],
+          },
+          {
+            id: "faq-servicios",
+            title: "Otros servicios",
+            articleRefs: [
+              {
+                categorySlug: "nuestros-servicios",
+                articleSlug: "envio-de-giros-y-remesas-al-exterior",
+              },
+              {
+                categorySlug: "nuestros-servicios",
+                articleSlug: "listado-de-nuestros-kioscos",
+              },
+              {
+                categorySlug: "nuestros-servicios",
+                articleSlug: "zelle-el-sistema-de-pagos-que-conquista-a-latinoamerica",
+              },
+            ],
+          },
+          {
+            id: "faq-soporte",
+            title: "Soporte y contacto",
+            articleRefs: [
+              {
+                categorySlug: "contacto-de-operadores",
+                articleSlug: "contacto-de-operadores-punto-pago",
+              },
+            ],
+          },
         ],
       },
     ],
@@ -148,14 +303,26 @@ export const FAQ_NAV: FaqNavSection[] = [
         title: "Cuotas en su local",
         description:
           "Financia a tus clientes para que compren en tu negocio. Cuotas al 0 % con aprobación digital.",
-        categorySlugs: [
-          "cuotas-inicio",
-          "cuotas-comenzando",
-          "cuotas-registro-contrato",
-          "cuotas-cliente",
-          "cuotas-empleados",
-          "cuotas-comisiones-pagos",
-          "cuotas-devoluciones-disputas",
+        subgroups: [
+          { id: "cuotas-intro", title: "Introducción", categorySlugs: ["cuotas-inicio"] },
+          { id: "cuotas-comenzar", title: "Comenzando", categorySlugs: ["cuotas-comenzando"] },
+          {
+            id: "cuotas-registro",
+            title: "Registro y contrato",
+            categorySlugs: ["cuotas-registro-contrato"],
+          },
+          { id: "cuotas-cliente", title: "Qué hace el cliente", categorySlugs: ["cuotas-cliente"] },
+          { id: "cuotas-empleados", title: "Acceso empleados", categorySlugs: ["cuotas-empleados"] },
+          {
+            id: "cuotas-pagos",
+            title: "Comisiones y pagos",
+            categorySlugs: ["cuotas-comisiones-pagos"],
+          },
+          {
+            id: "cuotas-devoluciones",
+            title: "Devoluciones y disputas",
+            categorySlugs: ["cuotas-devoluciones-disputas"],
+          },
         ],
         links: [
           { title: "Portal comercios", href: "https://comercios.puntopago.net/", external: true },
@@ -167,7 +334,26 @@ export const FAQ_NAV: FaqNavSection[] = [
         title: "Kioscos en local comercial",
         description:
           "Instala un kiosco Punto Pago en tu comercio para recargas y pagos de servicios.",
-        categorySlugs: ["aumenta-tus-ventas-con-punto-pago", "reporte-de-terminal"],
+        subgroups: [
+          {
+            id: "kioscos-afiliacion",
+            title: "Afiliación",
+            articleRefs: [
+              {
+                categorySlug: "aumenta-tus-ventas-con-punto-pago",
+                articleSlug: "registrar-mi-negocio",
+              },
+            ],
+          },
+          {
+            id: "kioscos-soporte",
+            title: "Soporte técnico",
+            articleRefs: [
+              { categorySlug: "reporte-de-terminal", articleSlug: "reporte-de-maquina" },
+              { categorySlug: "reporte-de-terminal", articleSlug: "solicitud-de-comisiones" },
+            ],
+          },
+        ],
         links: [
           {
             title: "Afiliarse — kioscos",
@@ -182,8 +368,17 @@ export const FAQ_NAV: FaqNavSection[] = [
         title: "Agente corresponsal",
         description:
           "Opera como corresponsal Punto Pago en tu comunidad: cobros, recargas y servicios.",
-        articleRefs: [
-          { categorySlug: "aumenta-tus-ventas-con-punto-pago", articleSlug: "registrar-mi-negocio" },
+        subgroups: [
+          {
+            id: "agente-registro",
+            title: "Registro",
+            articleRefs: [
+              {
+                categorySlug: "aumenta-tus-ventas-con-punto-pago",
+                articleSlug: "registrar-mi-negocio",
+              },
+            ],
+          },
         ],
         links: [
           {
@@ -216,12 +411,41 @@ export const FAQ_NAV: FaqNavSection[] = [
           },
         ],
       },
+      {
+        id: "faq-empresas",
+        audience: "empresa",
+        title: "Preguntas frecuentes",
+        description: "Dudas comunes de comercios sobre afiliación, terminales y comisiones.",
+        subgroups: [
+          {
+            id: "faq-emp-afiliacion",
+            title: "Afiliación y registro",
+            articleRefs: [
+              {
+                categorySlug: "aumenta-tus-ventas-con-punto-pago",
+                articleSlug: "registrar-mi-negocio",
+              },
+            ],
+          },
+          {
+            id: "faq-emp-terminal",
+            title: "Terminales y comisiones",
+            articleRefs: [
+              { categorySlug: "reporte-de-terminal", articleSlug: "reporte-de-maquina" },
+              { categorySlug: "reporte-de-terminal", articleSlug: "solicitud-de-comisiones" },
+            ],
+          },
+        ],
+      },
     ],
   },
 ];
 
 const EMPRESA_CATEGORY_SLUGS = new Set(
-  FAQ_NAV.find((s) => s.id === "empresa")?.groups.flatMap((g) => g.categorySlugs ?? []) ?? [],
+  FAQ_NAV.find((s) => s.id === "empresa")?.groups.flatMap((g) => [
+    ...(g.categorySlugs ?? []),
+    ...(g.subgroups?.flatMap((sg) => sg.categorySlugs ?? []) ?? []),
+  ]) ?? [],
 );
 
 export function getAudienceForCategory(categorySlug: string): FaqAudience {
@@ -234,17 +458,30 @@ export function getAudienceForCategory(categorySlug: string): FaqAudience {
 function dedupeItems(items: FaqNavItem[]): FaqNavItem[] {
   const seen = new Set<string>();
   return items.filter((item) => {
-    const key = item.href;
-    if (seen.has(key)) return false;
-    seen.add(key);
+    if (seen.has(item.href)) return false;
+    seen.add(item.href);
     return true;
   });
 }
 
-export function resolveNavGroup(group: FaqNavGroup): FaqNavGroupResolved {
+function resolveArticleRefs(refs: FaqNavArticleRef[]): FaqNavItem[] {
   const items: FaqNavItem[] = [];
+  for (const ref of refs) {
+    const result = getArticle(ref.categorySlug, ref.articleSlug);
+    if (!result) continue;
+    items.push({
+      title: result.article.title,
+      href: articlePath(result.category.slug, result.article.slug),
+      categorySlug: result.category.slug,
+      articleSlug: result.article.slug,
+    });
+  }
+  return items;
+}
 
-  for (const categorySlug of group.categorySlugs ?? []) {
+function resolveCategorySlugs(slugs: string[]): FaqNavItem[] {
+  const items: FaqNavItem[] = [];
+  for (const categorySlug of slugs) {
     const category = getCategory(categorySlug);
     if (!category) continue;
     for (const article of category.articles) {
@@ -256,19 +493,38 @@ export function resolveNavGroup(group: FaqNavGroup): FaqNavGroupResolved {
       });
     }
   }
+  return items;
+}
 
-  for (const ref of group.articleRefs ?? []) {
-    const result = getArticle(ref.categorySlug, ref.articleSlug);
-    if (!result) continue;
-    items.push({
-      title: result.article.title,
-      href: articlePath(result.category.slug, result.article.slug),
-      categorySlug: result.category.slug,
-      articleSlug: result.article.slug,
-    });
+function resolveSubgroup(subgroup: FaqNavSubgroup): FaqNavSubgroupResolved {
+  const fromCategories = resolveCategorySlugs(subgroup.categorySlugs ?? []);
+  const fromRefs = resolveArticleRefs(subgroup.articleRefs ?? []);
+  return {
+    ...subgroup,
+    items: dedupeItems([...fromCategories, ...fromRefs]),
+  };
+}
+
+export function resolveNavGroup(group: FaqNavGroup): FaqNavGroupResolved {
+  let subgroups: FaqNavSubgroupResolved[] = [];
+
+  if (group.subgroups?.length) {
+    subgroups = group.subgroups.map(resolveSubgroup);
+  } else {
+    const flatItems = dedupeItems([
+      ...resolveCategorySlugs(group.categorySlugs ?? []),
+      ...resolveArticleRefs(group.articleRefs ?? []),
+    ]);
+    if (flatItems.length > 0) {
+      subgroups = [{ id: `${group.id}-all`, title: "Guías", items: flatItems }];
+    }
   }
 
-  return { ...group, items: dedupeItems(items) };
+  return {
+    ...group,
+    subgroups,
+    items: dedupeItems(subgroups.flatMap((sg) => sg.items)),
+  };
 }
 
 export type FaqNavSectionResolved = Omit<FaqNavSection, "groups"> & {
@@ -290,24 +546,42 @@ export function getNavGroupById(id: string): FaqNavGroupResolved | undefined {
   return undefined;
 }
 
+const CLIENTE_FEATURED_IDS = [
+  "tarjeta-credito",
+  "adelantos-saldo",
+  "linea-credito",
+  "pago-cuotas-cliente",
+  "preguntas-frecuentes",
+] as const;
+
+const EMPRESA_FEATURED_IDS = [
+  "cuotas-local",
+  "kioscos-local",
+  "agente-corresponsal",
+  "servicios-corporativos",
+  "faq-empresas",
+] as const;
+
 export function getFeaturedGroups(audience: FaqAudience): FaqNavGroupResolved[] {
   const section = FAQ_NAV.find((s) => s.id === audience);
   if (!section) return [];
-  return section.groups
-    .filter((g) =>
-      ["tarjeta-credito", "adelantos-saldo", "linea-credito", "pago-cuotas-cliente"].includes(g.id) ||
-      ["cuotas-local", "kioscos-local", "agente-corresponsal", "servicios-corporativos"].includes(g.id),
-    )
+  const ids = audience === "cliente" ? CLIENTE_FEATURED_IDS : EMPRESA_FEATURED_IDS;
+  return ids
+    .map((id) => section.groups.find((g) => g.id === id))
+    .filter((g): g is FaqNavGroup => !!g)
     .map(resolveNavGroup);
 }
 
-/** Categorías no asignadas explícitamente (fallback en búsqueda). */
 export function getUnmappedCategories(): FaqCategory[] {
   const mapped = new Set<string>();
   for (const section of FAQ_NAV) {
     for (const group of section.groups) {
       for (const slug of group.categorySlugs ?? []) mapped.add(slug);
       for (const ref of group.articleRefs ?? []) mapped.add(ref.categorySlug);
+      for (const sg of group.subgroups ?? []) {
+        for (const slug of sg.categorySlugs ?? []) mapped.add(slug);
+        for (const ref of sg.articleRefs ?? []) mapped.add(ref.categorySlug);
+      }
     }
   }
   return getAllCategories().filter((c) => !mapped.has(c.slug));

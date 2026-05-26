@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { ProductCard } from "@/components/ProductCard";
-import { getNavSections } from "@/lib/navigation";
+import { getNavGroupById, getNavSections } from "@/lib/navigation";
 
 export const metadata: Metadata = {
   title: "Para clientes",
@@ -11,7 +11,8 @@ export const metadata: Metadata = {
 
 export default function ClientesPage() {
   const section = getNavSections().find((s) => s.id === "cliente");
-  const groups = section?.groups ?? [];
+  const products = section?.groups.filter((g) => g.id !== "preguntas-frecuentes") ?? [];
+  const faq = getNavGroupById("preguntas-frecuentes");
 
   return (
     <>
@@ -22,35 +23,45 @@ export default function ClientesPage() {
         Productos financieros, recargas y soporte de la app para usuarios finales.
       </p>
 
-      <div className="mt-8 grid gap-4 sm:grid-cols-2">
-        {groups.map((group) => (
-          <ProductCard key={group.id} product={group} />
-        ))}
-      </div>
+      <section aria-labelledby="productos-heading" className="mt-8">
+        <h2 id="productos-heading" className="text-sm font-semibold uppercase tracking-wide text-slate-500">
+          Productos
+        </h2>
+        <div className="mt-4 grid gap-4 sm:grid-cols-2">
+          {products.map((product) => (
+            <ProductCard key={product.id} product={product} />
+          ))}
+        </div>
+      </section>
 
-      {groups.some((g) => g.items.length > 0) && (
-        <section className="mt-10 border-t border-slate-200 pt-8">
-          <h2 className="text-sm font-semibold uppercase tracking-wide text-slate-500">
-            Todas las guías
+      {faq && (
+        <section aria-labelledby="faq-heading" className="mt-10">
+          <h2 id="faq-heading" className="text-sm font-semibold uppercase tracking-wide text-slate-500">
+            Preguntas frecuentes
           </h2>
-          <ul className="mt-4 divide-y divide-slate-200">
-            {groups.flatMap((group) =>
-              group.items.map((item) => (
-                <li key={item.href}>
-                  <Link
-                    href={item.href}
-                    className="flex items-center justify-between gap-4 py-3 text-sm transition hover:text-[#4749B6]"
-                  >
-                    <span>
-                      <span className="block font-medium text-slate-900">{item.title}</span>
-                      <span className="text-xs text-slate-500">{group.title}</span>
-                    </span>
-                    <span className="text-slate-400">→</span>
-                  </Link>
-                </li>
-              )),
-            )}
-          </ul>
+          <p className="mt-1 text-sm text-slate-600">{faq.description}</p>
+          <div className="mt-4">
+            <ProductCard product={faq} variant="highlight" />
+          </div>
+          <div className="mt-6 space-y-6">
+            {faq.subgroups.map((subgroup) => (
+              <div key={subgroup.id}>
+                <h3 className="text-sm font-semibold text-slate-900">{subgroup.title}</h3>
+                <ul className="mt-2 divide-y divide-slate-200 border-y border-slate-200">
+                  {subgroup.items.map((item) => (
+                    <li key={item.href}>
+                      <Link
+                        href={item.href}
+                        className="block py-3 text-sm font-medium text-[#4749B6] hover:underline"
+                      >
+                        {item.title}
+                      </Link>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            ))}
+          </div>
         </section>
       )}
     </>

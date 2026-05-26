@@ -80,28 +80,35 @@ function NavGroup({
       </button>
 
       {isOpen && (
-        <div className="ml-3 pb-1">
-          {group.items.length > 0 && (
-            <ul className="mt-0.5 space-y-0.5 border-l border-slate-200 pl-3">
-              {group.items.map((item) => {
-                const isActive = pathname === item.href;
-                return (
-                  <li key={item.href}>
-                    <Link
-                      href={item.href}
-                      className={`block rounded-md px-2 py-1.5 text-[13px] leading-snug transition ${
-                        isActive
-                          ? "bg-[#4749B6]/10 font-medium text-[#4749B6]"
-                          : "text-slate-600 hover:bg-slate-50 hover:text-slate-900"
-                      }`}
-                      aria-current={isActive ? "page" : undefined}
-                    >
-                      {item.title}
-                    </Link>
-                  </li>
-                );
-              })}
-            </ul>
+        <div className="ml-3 space-y-2 pb-1">
+          {group.subgroups.map((subgroup) =>
+            subgroup.items.length > 0 ? (
+              <div key={subgroup.id}>
+                <p className="px-2 py-1 text-[10px] font-semibold uppercase tracking-wider text-slate-400">
+                  {subgroup.title}
+                </p>
+                <ul className="space-y-0.5 border-l border-slate-200 pl-3">
+                  {subgroup.items.map((item) => {
+                    const isActive = pathname === item.href;
+                    return (
+                      <li key={item.href}>
+                        <Link
+                          href={item.href}
+                          className={`block rounded-md px-2 py-1.5 text-[13px] leading-snug transition ${
+                            isActive
+                              ? "bg-[#4749B6]/10 font-medium text-[#4749B6]"
+                              : "text-slate-600 hover:bg-slate-50 hover:text-slate-900"
+                          }`}
+                          aria-current={isActive ? "page" : undefined}
+                        >
+                          {item.title}
+                        </Link>
+                      </li>
+                    );
+                  })}
+                </ul>
+              </div>
+            ) : null,
           )}
           {group.links && group.links.length > 0 && <NavLinks links={group.links} />}
         </div>
