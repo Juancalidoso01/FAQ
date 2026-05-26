@@ -5,6 +5,7 @@ import { ArticleContent } from "@/components/ArticleContent";
 import { Breadcrumbs } from "@/components/Breadcrumbs";
 import { ContentPanel } from "@/components/FaqLayout";
 import { JsonLd } from "@/components/FaqUi";
+import { RemesasCalculator } from "@/components/RemesasCalculator";
 import {
   articlePath,
   getAllCategories,
@@ -55,6 +56,8 @@ export default async function ArticlePage({ params }: Props) {
   const { category, article } = result;
   const related = category.articles.filter((a) => a.slug !== article.slug).slice(0, 4);
   const breadcrumbs = getArticleBreadcrumbs(categorySlug, articleSlug);
+  const isRemesasArticle =
+    categorySlug === "remesas-internacionales" && articleSlug === "remesas-internacionales";
 
   return (
     <>
@@ -90,6 +93,8 @@ export default async function ArticlePage({ params }: Props) {
             )}
           </header>
 
+          {isRemesasArticle && <RemesasCalculator />}
+
           <div itemProp="articleBody">
             <ArticleContent content={article.content} />
           </div>
@@ -103,9 +108,11 @@ export default async function ArticlePage({ params }: Props) {
                 rel="noopener noreferrer"
                 className="text-[#4749B6] hover:underline"
               >
-                {article.sourceUrl?.includes("comercios.puntopago.net")
-                  ? "GitBook Comercios"
-                  : "Intercom Help Center"}
+                {article.sourceUrl?.includes("puntopago.net")
+                  ? "Punto Pago"
+                  : article.sourceUrl?.includes("comercios.puntopago.net")
+                    ? "GitBook Comercios"
+                    : "Intercom Help Center"}
               </a>
             </p>
           )}

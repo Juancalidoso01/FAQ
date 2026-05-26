@@ -129,7 +129,7 @@ export const REMESAS_PRODUCT_REFS: FaqNavArticleRef[] = [
     categorySlug: "remesas-internacionales",
     articleSlug: "remesas-internacionales",
     navTitle: "Remesas internacionales",
-    badge: "Primeros 2 gratis",
+    badge: "2 remesas gratis",
   },
 ];
 
@@ -253,7 +253,7 @@ export const FAQ_NAV: FaqNavSection[] = [
         title: "Remesas internacionales",
         flatSidebar: true,
         description:
-          "Envía dinero desde Panamá a Colombia, Nicaragua y República Dominicana desde la app, sin comisiones en tus primeros 2 envíos.",
+          "Envía dinero desde Panamá a Colombia, Nicaragua y República Dominicana. Promo permanente: 2 remesas gratis.",
         articleRefs: REMESAS_PRODUCT_REFS,
       },
       {
@@ -489,6 +489,17 @@ export const FAQ_NAV: FaqNavSection[] = [
   },
 ];
 
+/** Categorías GitBook de Cuotas merchant (comercios). No incluye cuotas-debito (cliente). */
+const CUOTAS_MERCHANT_CATEGORY_SLUGS = new Set([
+  "cuotas-inicio",
+  "cuotas-comenzando",
+  "cuotas-registro-contrato",
+  "cuotas-cliente",
+  "cuotas-empleados",
+  "cuotas-comisiones-pagos",
+  "cuotas-devoluciones-disputas",
+]);
+
 const EMPRESA_CATEGORY_SLUGS = new Set(
   FAQ_NAV.find((s) => s.id === "empresa")?.groups.flatMap((g) => [
     ...(g.categorySlugs ?? []),
@@ -497,7 +508,7 @@ const EMPRESA_CATEGORY_SLUGS = new Set(
 );
 
 export function getAudienceForCategory(categorySlug: string): FaqAudience {
-  if (categorySlug.startsWith("cuotas-") || EMPRESA_CATEGORY_SLUGS.has(categorySlug)) {
+  if (CUOTAS_MERCHANT_CATEGORY_SLUGS.has(categorySlug) || EMPRESA_CATEGORY_SLUGS.has(categorySlug)) {
     return "empresa";
   }
   return "cliente";
@@ -665,7 +676,7 @@ function isRemesasProductArticle(categorySlug: string, articleSlug: string) {
 }
 
 function isCuotasMerchantCategory(categorySlug: string | null) {
-  return categorySlug?.startsWith("cuotas-") ?? false;
+  return categorySlug != null && CUOTAS_MERCHANT_CATEGORY_SLUGS.has(categorySlug);
 }
 
 /** Navegación lateral plana (máx. 2 niveles), estilo help center estándar. */

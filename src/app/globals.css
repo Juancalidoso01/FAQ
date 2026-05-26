@@ -389,6 +389,12 @@ body {
   box-shadow: 0 8px 24px rgba(15, 23, 42, 0.08);
 }
 
+.faq-article .faq-figure img[src*="crossborder/clouth"] {
+  max-width: 11rem;
+  box-shadow: none;
+  border: none;
+}
+
 .faq-article hr {
   margin: 1.5rem 0;
   border: 0;

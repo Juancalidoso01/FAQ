@@ -140,7 +140,7 @@ export default function HomePage() {
       <section aria-labelledby="remesas-heading" className="mb-12">
         <SectionHeading
           title="Remesas internacionales"
-          description="Envía dinero a Colombia, Nicaragua y República Dominicana desde la app."
+          description="Envía dinero a Colombia, Nicaragua y República Dominicana. Promo: 2 remesas gratis."
           action={
             <Link href="/clientes#remesas" className="pp-btn-ghost text-sm">
               Ver más →
