@@ -6,7 +6,7 @@ import { getNavGroupById, getNavSections } from "@/lib/navigation";
 export const metadata: Metadata = {
   title: "Para empresas",
   description:
-    "Ayuda para comercios: Cuotas BNPL, kioscos, agente corresponsal y servicios corporativos Punto Pago.",
+    "Ayuda para comercios: Pago en cuotas merchant, kioscos, agente corresponsal y servicios corporativos.",
   alternates: { canonical: "/empresas" },
 };
 

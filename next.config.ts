@@ -13,6 +13,20 @@ const nextConfig: NextConfig = {
       { protocol: "https", hostname: "3686210280-files.gitbook.io" },
     ],
   },
+  async redirects() {
+    return [
+      {
+        source: "/articulo/pago-a-cuotas-app/pago-a-cuotas-en-la-app",
+        destination: "/articulo/bcl-pago-con-credito/bcl-pago-con-credito-en-la-app",
+        permanent: true,
+      },
+      {
+        source: "/articulo/pago-a-cuotas-app/diferencia-cuotas-app-vs-comercios",
+        destination: "/articulo/bcl-pago-con-credito/tres-servicios-de-cuotas",
+        permanent: true,
+      },
+    ];
+  },
 };
 
 export default nextConfig;

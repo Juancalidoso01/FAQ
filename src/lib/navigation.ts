@@ -170,29 +170,56 @@ export const FAQ_NAV: FaqNavSection[] = [
         ],
       },
       {
-        id: "pago-a-cuotas-servicios",
+        id: "cuotas-debito",
         audience: "cliente",
-        title: "Pago a cuotas (servicios en la app)",
-        badge: "Solo app",
+        title: "Cuotas débito",
+        badge: "Tarjeta débito",
         description:
-          "Préstamo en la app Punto Pago para pagar facturas de operadores (luz, cable, telefonía, etc.) en cuotas. No es Cuotas para comercios.",
+          "Paga en cuotas con tu tarjeta de débito o virtual Punto Pago, incluso sin saldo completo al momento.",
         subgroups: [
           {
-            id: "pc-guia",
+            id: "cd-guia",
             title: "Cómo funciona",
             articleRefs: [
               {
-                categorySlug: "pago-a-cuotas-app",
-                articleSlug: "pago-a-cuotas-en-la-app",
+                categorySlug: "cuotas-debito",
+                articleSlug: "cuotas-con-tarjeta-debito",
               },
               {
-                categorySlug: "pago-a-cuotas-app",
-                articleSlug: "diferencia-cuotas-app-vs-comercios",
+                categorySlug: "bcl-pago-con-credito",
+                articleSlug: "tres-servicios-de-cuotas",
+              },
+            ],
+          },
+        ],
+        links: [
+          { title: "Descargar app Punto Pago", href: "https://puntopago.net/", external: true },
+        ],
+      },
+      {
+        id: "bcl-pago-con-credito",
+        audience: "cliente",
+        title: "BCL — Pago con crédito (app)",
+        badge: "Préstamo app",
+        description:
+          "Cupo de crédito Punto Pago en la app para pagar facturas de operadores (luz, cable, telefonía, etc.) en cuotas.",
+        subgroups: [
+          {
+            id: "bcl-guia",
+            title: "Cómo funciona",
+            articleRefs: [
+              {
+                categorySlug: "bcl-pago-con-credito",
+                articleSlug: "bcl-pago-con-credito-en-la-app",
+              },
+              {
+                categorySlug: "bcl-pago-con-credito",
+                articleSlug: "tres-servicios-de-cuotas",
               },
             ],
           },
           {
-            id: "pc-condiciones",
+            id: "bcl-condiciones",
             title: "Condiciones legales",
             articleRefs: [
               {
@@ -318,20 +345,20 @@ export const FAQ_NAV: FaqNavSection[] = [
     description: "Soluciones para comercios, corresponsales y empresas en Panamá.",
     groups: [
       {
-        id: "cuotas-comercios-bnpl",
+        id: "cuotas-merchant",
         audience: "empresa",
-        title: "Cuotas para comercios (BNPL)",
+        title: "Pago en cuotas merchant",
         badge: "Comercios",
         description:
-          "Compra ahora y paga después en tu local: Punto Pago financia al cliente de tu tienda y te paga a ti. Distinto del Pago a cuotas de servicios en la app.",
+          "Compra ahora y paga después en tu local: Punto Pago financia al cliente y te paga a ti. Guía completa en comercios.puntopago.net.",
         subgroups: [
           {
             id: "cuotas-diferencia",
             title: "Antes de empezar",
             articleRefs: [
               {
-                categorySlug: "pago-a-cuotas-app",
-                articleSlug: "diferencia-cuotas-app-vs-comercios",
+                categorySlug: "bcl-pago-con-credito",
+                articleSlug: "tres-servicios-de-cuotas",
               },
             ],
           },
@@ -581,12 +608,13 @@ const CLIENTE_FEATURED_IDS = [
   "tarjeta-credito",
   "adelantos-saldo",
   "linea-credito",
-  "pago-a-cuotas-servicios",
+  "cuotas-debito",
+  "bcl-pago-con-credito",
   "preguntas-frecuentes",
 ] as const;
 
 const EMPRESA_FEATURED_IDS = [
-  "cuotas-comercios-bnpl",
+  "cuotas-merchant",
   "kioscos-local",
   "agente-corresponsal",
   "servicios-corporativos",
