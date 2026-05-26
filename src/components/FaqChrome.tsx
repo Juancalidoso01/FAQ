@@ -13,8 +13,8 @@ export function FaqChrome({ children }: { children: ReactNode }) {
   const isHome = pathname === "/";
 
   return (
-    <div className="pp-page-bg faq-shell relative flex min-h-screen text-[#0B0B13]">
-      <PpAmbient />
+    <div className="pp-page-bg faq-shell relative flex min-h-screen bg-[#fafafa] text-[#0B0B13]">
+      <PpAmbient subtle={pathname !== "/"} />
       <FaqSidebar open={sidebarOpen} onClose={closeSidebar} />
 
       <div className="relative z-10 flex min-w-0 flex-1 flex-col">
@@ -36,9 +36,9 @@ export function FaqChrome({ children }: { children: ReactNode }) {
           <span className="text-sm font-semibold text-[#0B0B13]">Centro de ayuda</span>
         </div>
 
-        <main className="faq-main flex-1 px-4 py-8 sm:px-8 sm:py-10 lg:px-12 lg:py-12">
+        <main className="faq-main flex-1 px-4 py-6 sm:px-8 sm:py-8 lg:px-10 lg:py-10">
           <div
-            className={`faq-main-inner mx-auto w-full ${isHome ? "max-w-none" : "max-w-3xl"}`}
+            className={`faq-main-inner mx-auto w-full ${isHome ? "max-w-6xl" : "max-w-3xl"}`}
           >
             {children}
           </div>

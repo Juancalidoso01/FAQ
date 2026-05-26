@@ -508,3 +508,127 @@ export function getUnmappedCategories(): FaqCategory[] {
   }
   return getAllCategories().filter((c) => !mapped.has(c.slug));
 }
+
+export type SidebarEntry =
+  | { type: "heading"; label: string }
+  | { type: "link"; title: string; href: string; external?: boolean };
+
+function isCreditProductArticle(categorySlug: string, articleSlug: string) {
+  return CREDIT_PRODUCT_REFS.some(
+    (ref) => ref.categorySlug === categorySlug && ref.articleSlug === articleSlug,
+  );
+}
+
+function isCuotasMerchantCategory(categorySlug: string | null) {
+  return categorySlug?.startsWith("cuotas-") ?? false;
+}
+
+/** Navegación lateral plana (máx. 2 niveles), estilo help center estándar. */
+export function getSidebarNav(
+  audience: FaqAudience,
+  activeCategorySlug: string | null,
+): SidebarEntry[] {
+  if (audience === "cliente") {
+    const recarga = getNavGroupById("recarga-billetera");
+    const faq = getNavGroupById("preguntas-frecuentes");
+    return [
+      { type: "link", title: "Resumen clientes", href: "/clientes" },
+      { type: "heading", label: "Productos de crédito" },
+      ...getCreditProducts().map((p) => ({
+        type: "link" as const,
+        title: p.title,
+        href: p.href,
+      })),
+      { type: "heading", label: "Más ayuda" },
+      ...(recarga?.items[0]
+        ? [{ type: "link" as const, title: "Recarga y billetera", href: recarga.items[0].href }]
+        : []),
+      ...(faq?.items[0]
+        ? [{ type: "link" as const, title: "Preguntas frecuentes", href: faq.items[0].href }]
+        : []),
+    ];
+  }
+
+  if (isCuotasMerchantCategory(activeCategorySlug)) {
+    const merchant = getNavGroupById("cuotas-merchant");
+    if (!merchant) return [{ type: "link", title: "Resumen empresas", href: "/empresas" }];
+
+    const entries: SidebarEntry[] = [
+      { type: "link", title: "Resumen empresas", href: "/empresas" },
+      { type: "heading", label: "Pago en cuotas merchant" },
+    ];
+
+    for (const subgroup of merchant.subgroups) {
+      if (subgroup.items.length === 0) continue;
+      entries.push({ type: "heading", label: subgroup.title });
+      for (const item of subgroup.items) {
+        entries.push({ type: "link", title: item.title, href: item.href });
+      }
+    }
+
+    if (merchant.links?.length) {
+      entries.push({ type: "heading", label: "Enlaces" });
+      for (const link of merchant.links) {
+        entries.push({
+          type: "link",
+          title: link.title,
+          href: link.href,
+          external: link.external,
+        });
+      }
+    }
+
+    return entries;
+  }
+
+  const section = FAQ_NAV.find((s) => s.id === "empresa");
+  const entries: SidebarEntry[] = [{ type: "link", title: "Resumen empresas", href: "/empresas" }];
+
+  if (section) {
+    entries.push({ type: "heading", label: "Soluciones" });
+    for (const group of section.groups) {
+      const resolved = resolveNavGroup(group);
+      const href = resolved.items[0]?.href ?? "/empresas";
+      entries.push({ type: "link", title: group.title, href });
+    }
+  }
+
+  return entries;
+}
+
+export type BreadcrumbItem = { label: string; href: string };
+
+export function getArticleBreadcrumbs(
+  categorySlug: string,
+  articleSlug: string,
+): BreadcrumbItem[] {
+  const result = getArticle(categorySlug, articleSlug);
+  if (!result) return [{ label: "Inicio", href: "/" }];
+
+  const audience = getAudienceForCategory(categorySlug);
+  const hubHref = audience === "cliente" ? "/clientes" : "/empresas";
+  const hubLabel = audience === "cliente" ? "Clientes" : "Empresas";
+
+  const crumbs: BreadcrumbItem[] = [
+    { label: "Inicio", href: "/" },
+    { label: hubLabel, href: hubHref },
+  ];
+
+  if (isCreditProductArticle(categorySlug, articleSlug)) {
+    crumbs.push({ label: "Productos de crédito", href: `${hubHref}#creditos` });
+  } else if (isCuotasMerchantCategory(categorySlug)) {
+    const merchant = getNavGroupById("cuotas-merchant");
+    if (merchant?.items[0]) {
+      crumbs.push({ label: "Pago en cuotas merchant", href: merchant.items[0].href });
+    }
+  } else {
+    crumbs.push({ label: result.category.title, href: `/categoria/${categorySlug}` });
+  }
+
+  crumbs.push({
+    label: result.article.title,
+    href: articlePath(categorySlug, articleSlug),
+  });
+
+  return crumbs;
+}

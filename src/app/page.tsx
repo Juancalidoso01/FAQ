@@ -2,10 +2,9 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { FaqAccordion } from "@/components/FaqAccordion";
 import { HeroBanner } from "@/components/HeroBanner";
-import { ContentPanel, SectionHeading } from "@/components/FaqLayout";
+import { SectionHeading } from "@/components/FaqLayout";
 import { JsonLd } from "@/components/FaqUi";
 import { SearchBox } from "@/components/SearchBox";
-import { ProductCard } from "@/components/ProductCard";
 import { CreditProductCard } from "@/components/CreditProductCard";
 import {
   SITE_DESCRIPTION,
@@ -13,7 +12,7 @@ import {
   excerpt,
   getArticle,
 } from "@/lib/faq";
-import { getCreditProducts, getFeaturedGroups, getNavGroupById } from "@/lib/navigation";
+import { getCreditProducts, getNavGroupById } from "@/lib/navigation";
 import { faqPageJsonLd } from "@/lib/seo";
 
 export const metadata: Metadata = {
@@ -22,27 +21,16 @@ export const metadata: Metadata = {
   alternates: { canonical: "/" },
 };
 
-const STEPS = [
-  { n: "1", title: "Busca tu duda", text: "Usa el buscador o el menú lateral por producto." },
-  { n: "2", title: "Elige tu guía", text: "Cliente, empresa o preguntas frecuentes." },
-  { n: "3", title: "Sigue los pasos", text: "Instrucciones claras como en puntopago.net." },
-];
-
 export default function HomePage() {
   const creditProducts = getCreditProducts();
-  const creditSection = getNavGroupById("productos-credito");
-  const otherClienteProducts = getFeaturedGroups("cliente").filter(
-    (g) => !["productos-credito", "preguntas-frecuentes"].includes(g.id),
-  );
   const faqCliente = getNavGroupById("preguntas-frecuentes");
-  const empresaProducts = getFeaturedGroups("empresa").filter((g) => g.id !== "faq-empresas");
 
   const faqPreview =
-    faqCliente?.items.slice(0, 5).map((item) => {
+    faqCliente?.items.slice(0, 6).map((item) => {
       const result = getArticle(item.categorySlug, item.articleSlug);
       return {
         question: item.title,
-        answer: excerpt(result?.article.description || result?.article.content || item.title, 180),
+        answer: excerpt(result?.article.description || result?.article.content || item.title, 160),
         href: item.href,
       };
     }) ?? [];
@@ -57,96 +45,55 @@ export default function HomePage() {
     <>
       <JsonLd data={faqPageJsonLd(faqItems)} />
 
-      <section className="pp-hero mb-10 sm:mb-12">
+      <section className="pp-hero mb-12">
         <HeroBanner />
 
-        <div className="mt-8 text-center sm:mt-10">
-          <p className="text-xs font-semibold uppercase tracking-[0.16em] text-[#4749B6]">Centro de ayuda</p>
-          <h1 className="mt-3 text-3xl font-bold tracking-tight sm:text-4xl lg:text-[2.65rem] lg:leading-tight">
-            <span className="pp-brand-sheen">¿En qué te podemos ayudar?</span>
+        <div className="mx-auto mt-10 max-w-2xl text-center">
+          <h1 className="text-3xl font-bold tracking-tight text-[#0B0B13] sm:text-4xl">
+            ¿En qué te podemos ayudar?
           </h1>
-          <p className="mx-auto mt-4 max-w-xl text-base leading-relaxed text-slate-600">{SITE_DESCRIPTION}</p>
-          <div className="mx-auto mt-8 max-w-xl">
+          <p className="mt-3 text-base leading-relaxed text-slate-600">{SITE_DESCRIPTION}</p>
+          <div className="mt-8">
             <SearchBox large />
           </div>
         </div>
       </section>
 
-      <section aria-labelledby="steps-heading" className="mb-12">
-        <SectionHeading eyebrow="Cómo funciona" title="Encuentra respuestas en minutos" id="steps-heading" />
-        <div className="grid gap-4 sm:grid-cols-3">
-          {STEPS.map((step) => (
-            <div
-              key={step.n}
-              className="pp-step-card rounded-2xl border border-white/80 bg-white/80 p-5 shadow-sm backdrop-blur-sm"
-            >
-              <span className="inline-flex h-8 w-8 items-center justify-center rounded-full bg-[#4749B6] text-sm font-bold text-white">
-                {step.n}
-              </span>
-              <h3 className="mt-3 font-semibold text-[#0B0B13]">{step.title}</h3>
-              <p className="mt-1.5 text-sm leading-relaxed text-slate-600">{step.text}</p>
-            </div>
-          ))}
-        </div>
+      <section className="mb-10 grid gap-4 sm:grid-cols-2">
+        <Link
+          href="/clientes"
+          className="rounded-xl border border-slate-200 bg-white p-6 shadow-sm transition hover:border-[#4749B6]/30 hover:shadow-md"
+        >
+          <h2 className="text-lg font-semibold text-[#0B0B13]">Soy cliente</h2>
+          <p className="mt-2 text-sm text-slate-600">
+            Productos de crédito, recargas y preguntas sobre la app.
+          </p>
+        </Link>
+        <Link
+          href="/empresas"
+          className="rounded-xl border border-slate-200 bg-white p-6 shadow-sm transition hover:border-[#4749B6]/30 hover:shadow-md"
+        >
+          <h2 className="text-lg font-semibold text-[#0B0B13]">Soy empresa</h2>
+          <p className="mt-2 text-sm text-slate-600">
+            Cuotas en comercio, kioscos, corresponsales y soluciones B2B.
+          </p>
+        </Link>
       </section>
 
-      <section aria-labelledby="clientes-heading" className="mb-12">
+      <section aria-labelledby="creditos-heading" className="mb-12">
         <SectionHeading
-          eyebrow="Para clientes"
           title="Productos de crédito"
-          description={creditSection?.description}
+          description="Guías oficiales para clientes Punto Pago."
           action={
             <Link href="/clientes" className="pp-btn-ghost text-sm">
-              Ver todo →
+              Ver todas →
             </Link>
           }
-          id="clientes-heading"
+          id="creditos-heading"
         />
         <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
           {creditProducts.map((product) => (
             <CreditProductCard key={product.href} product={product} />
-          ))}
-        </div>
-
-        {otherClienteProducts.length > 0 && (
-          <div className="mt-10">
-            <SectionHeading
-              eyebrow="También en la app"
-              title="Otros servicios"
-              action={
-                <Link href="/clientes" className="pp-btn-ghost text-sm">
-                  Ver todo →
-                </Link>
-              }
-            />
-            <div className="grid gap-4 sm:grid-cols-2">
-              {otherClienteProducts.map((product) => (
-                <ProductCard key={product.id} product={product} />
-              ))}
-            </div>
-          </div>
-        )}
-
-        {faqCliente && (
-          <div className="mt-4">
-            <ProductCard product={faqCliente} variant="highlight" />
-          </div>
-        )}
-      </section>
-
-      <section aria-labelledby="empresas-heading" className="mb-12">
-        <SectionHeading
-          eyebrow="Para empresas"
-          title="Soluciones para comercios"
-          action={
-            <Link href="/empresas" className="pp-btn-ghost text-sm">
-              Ver todo →
-            </Link>
-          }
-        />
-        <div className="grid gap-4 sm:grid-cols-2">
-          {empresaProducts.map((product) => (
-            <ProductCard key={product.id} product={product} />
           ))}
         </div>
       </section>
@@ -154,9 +101,16 @@ export default function HomePage() {
       {faqPreview.length > 0 && (
         <section aria-labelledby="faq-heading" className="mb-4">
           <SectionHeading
-            eyebrow="Saber más"
             title="Preguntas frecuentes"
-            description="Hemos respondido las dudas más comunes de nuestros clientes."
+            description="Lo más consultado por nuestros usuarios."
+            action={
+              faqCliente?.items[0] ? (
+                <Link href={faqCliente.items[0].href} className="pp-btn-ghost text-sm">
+                  Ver todas →
+                </Link>
+              ) : undefined
+            }
+            id="faq-heading"
           />
           <FaqAccordion items={faqPreview} />
         </section>

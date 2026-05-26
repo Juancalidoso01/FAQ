@@ -32,7 +32,7 @@ body {
 
 @media (min-width: 1024px) {
   .faq-sidebar {
-    width: 19rem;
+    width: 17.5rem;
     flex-shrink: 0;
   }
 }
@@ -71,7 +71,8 @@ body {
 }
 
 .pp-content-panel {
-  backdrop-filter: blur(8px);
+  background: #fff;
+  border-color: rgb(226 232 240);
 }
 
 .pp-hero {

@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { ArticleContent } from "@/components/ArticleContent";
+import { Breadcrumbs } from "@/components/Breadcrumbs";
 import { ContentPanel } from "@/components/FaqLayout";
 import { JsonLd } from "@/components/FaqUi";
 import {
@@ -9,6 +10,7 @@ import {
   getAllCategories,
   getArticle,
 } from "@/lib/faq";
+import { getArticleBreadcrumbs } from "@/lib/navigation";
 import { articleJsonLd, breadcrumbJsonLd } from "@/lib/seo";
 
 type Props = { params: Promise<{ categorySlug: string; articleSlug: string }> };
@@ -52,29 +54,25 @@ export default async function ArticlePage({ params }: Props) {
 
   const { category, article } = result;
   const related = category.articles.filter((a) => a.slug !== article.slug).slice(0, 4);
+  const breadcrumbs = getArticleBreadcrumbs(categorySlug, articleSlug);
 
   return (
     <>
       <JsonLd
         data={[
           articleJsonLd(category, article),
-          breadcrumbJsonLd([
-            { name: "Inicio", url: "/" },
-            { name: category.title, url: `/categoria/${category.slug}` },
-            { name: article.title, url: articlePath(category.slug, article.slug) },
-          ]),
+          breadcrumbJsonLd(breadcrumbs.map((b) => ({ name: b.label, url: b.href }))),
         ]}
       />
 
+      <Breadcrumbs items={breadcrumbs} />
+
       <ContentPanel>
         <article itemScope itemType="https://schema.org/Article">
-          <header className="mb-8 border-b border-slate-200/80 pb-6">
-            <p className="text-xs font-semibold uppercase tracking-[0.12em] text-[#4749B6]">
-              {category.title}
-            </p>
+          <header className="mb-8 border-b border-slate-200 pb-6">
             <h1
               itemProp="headline"
-              className="mt-2 text-2xl font-bold tracking-tight text-[#0B0B13] sm:text-3xl"
+              className="text-2xl font-bold tracking-tight text-[#0B0B13] sm:text-3xl"
             >
               {article.title}
             </h1>

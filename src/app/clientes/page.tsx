@@ -26,7 +26,7 @@ export default function ClientesPage() {
         Guías oficiales de productos de crédito, recargas y soporte.
       </p>
 
-      <section aria-labelledby="creditos-heading" className="mt-8">
+      <section id="creditos" aria-labelledby="creditos-heading" className="mt-8 scroll-mt-8">
         <h2 id="creditos-heading" className="text-sm font-semibold uppercase tracking-wide text-slate-500">
           Productos de crédito
         </h2>

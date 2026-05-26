@@ -6,7 +6,7 @@ const RING_SIZE = 44;
 const RING_LERP = 0.42;
 
 /** Fondo animado + brillo que sigue el cursor + aro circular (mismo patrón formulario / puntopago.net). */
-export function PpAmbient() {
+export function PpAmbient({ subtle = false }: { subtle?: boolean }) {
   const [reduceMotion, setReduceMotion] = useState(false);
   const [finePointer, setFinePointer] = useState<boolean | null>(null);
   const target = useRef({ x: 0, y: 0 });
@@ -33,7 +33,7 @@ export function PpAmbient() {
     return () => mq.removeEventListener("change", onChange);
   }, []);
 
-  const showRing = !reduceMotion && finePointer === true;
+  const showRing = !subtle && !reduceMotion && finePointer === true;
 
   useEffect(() => {
     if (reduceMotion) return;
@@ -93,13 +93,16 @@ export function PpAmbient() {
 
   return (
     <>
-      <div className="pointer-events-none fixed inset-0 z-0 overflow-hidden" aria-hidden>
+      <div
+        className={`pointer-events-none fixed inset-0 z-0 overflow-hidden ${subtle ? "opacity-40" : ""}`}
+        aria-hidden
+      >
         <div className="pp-blob pp-blob-a" />
         <div className="pp-blob pp-blob-b" />
         <div className="pp-blob pp-blob-c" />
         <div className="pp-grid-mask" />
 
-        {!reduceMotion && (
+        {!subtle && !reduceMotion && (
           <div
             className="pp-cursor-glow"
             style={{
