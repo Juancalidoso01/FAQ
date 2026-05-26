@@ -273,6 +273,24 @@ body {
   display: none;
 }
 
+.faq-article .faq-figure {
+  margin: 1.25rem 0;
+}
+
+.faq-article .faq-figure img {
+  width: 100%;
+  max-width: 42rem;
+  border-radius: 0.85rem;
+  border: 1px solid #e2e8f0;
+  box-shadow: 0 8px 24px rgba(15, 23, 42, 0.08);
+}
+
+.faq-article hr {
+  margin: 1.5rem 0;
+  border: 0;
+  border-top: 1px solid #e2e8f0;
+}
+
 @media (max-width: 640px) {
   .faq-article .faq-table-row {
     grid-template-columns: 1fr;

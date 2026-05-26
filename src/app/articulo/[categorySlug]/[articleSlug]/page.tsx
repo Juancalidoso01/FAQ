@@ -101,16 +101,18 @@ export default async function ArticlePage({ params }: Props) {
           <ArticleContent content={article.content} />
         </div>
 
-        {article.intercomUrl && (
+        {(article.sourceUrl || article.intercomUrl) && (
           <p className="mt-8 text-xs text-slate-400">
             Fuente original:{" "}
             <a
-              href={article.intercomUrl}
+              href={article.sourceUrl ?? article.intercomUrl}
               target="_blank"
               rel="noopener noreferrer"
               className="text-[#4749B6] hover:underline"
             >
-              Intercom Help Center
+              {article.sourceUrl?.includes("comercios.puntopago.net")
+                ? "GitBook Comercios"
+                : "Intercom Help Center"}
             </a>
           </p>
         )}

@@ -27,7 +27,13 @@ En producción, usa la URL final del sitio (por ejemplo `https://ayuda.puntopago
 npm run scrape
 ```
 
-Esto regenera `content/faq-data.json` con los artículos publicados en Intercom.
+Esto regenera:
+
+- `content/faq-data.json` — artículos de Intercom
+- `content/gitbook-comercios.json` — guía Cuotas (GitBook comercios)
+
+Solo Intercom: `npm run scrape:intercom`  
+Solo GitBook: `npm run scrape:gitbook`
 
 ## SEO
 
@@ -38,7 +44,9 @@ Esto regenera `content/faq-data.json` con los artículos publicados en Intercom.
 
 ## Estructura
 
-- `content/faq-data.json` — contenido importado
+- `content/faq-data.json` — contenido Intercom
+- `content/gitbook-comercios.json` — contenido GitBook Cuotas
 - `src/app/` — rutas Next.js App Router
 - `src/components/` — UI (incluye cursor/ambient de Punto Pago)
 - `scripts/scrape-intercom.py` — scraper de Intercom
+- `scripts/scrape-gitbook.py` — scraper de GitBook comercios

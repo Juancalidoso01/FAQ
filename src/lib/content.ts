@@ -52,6 +52,25 @@ export function renderArticleContent(raw: string): string {
       continue;
     }
 
+    const imageMatch = trimmed.match(/^!\[(.*?)\]\((.+?)\)$/);
+    if (imageMatch) {
+      closeList();
+      const [, alt, href] = imageMatch;
+      const safeHref = sanitizeHref(href);
+      if (safeHref) {
+        html.push(
+          `<figure class="faq-figure"><img src="${safeHref}" alt="${escapeHtml(alt || "Imagen")}" loading="lazy" /></figure>`,
+        );
+      }
+      continue;
+    }
+
+    if (trimmed === "---") {
+      closeList();
+      html.push("<hr />");
+      continue;
+    }
+
     if (trimmed.startsWith("> ")) {
       closeList();
       html.push(`<blockquote><p>${inlineHtml(trimmed.slice(2))}</p></blockquote>`);
