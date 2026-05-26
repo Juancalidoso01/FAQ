@@ -1,17 +1,21 @@
 import type { Metadata } from "next";
 import Link from "next/link";
+import { CreditProductCard } from "@/components/CreditProductCard";
 import { ProductCard } from "@/components/ProductCard";
-import { getNavGroupById, getNavSections } from "@/lib/navigation";
+import { getCreditProducts, getNavGroupById } from "@/lib/navigation";
 
 export const metadata: Metadata = {
   title: "Para clientes",
-  description: "Ayuda sobre tarjeta de crédito, adelantos, línea de crédito, Cuotas débito, BCL y la app Punto Pago.",
+  description:
+    "Productos de crédito, BCL, recargas y preguntas frecuentes de la app Punto Pago.",
   alternates: { canonical: "/clientes" },
 };
 
 export default function ClientesPage() {
-  const section = getNavSections().find((s) => s.id === "cliente");
-  const products = section?.groups.filter((g) => g.id !== "preguntas-frecuentes") ?? [];
+  const creditProducts = getCreditProducts();
+  const creditSection = getNavGroupById("productos-credito");
+  const bcl = getNavGroupById("bcl-pago-con-credito");
+  const recarga = getNavGroupById("recarga-billetera");
   const faq = getNavGroupById("preguntas-frecuentes");
 
   return (
@@ -20,17 +24,30 @@ export default function ClientesPage() {
         Punto Pago para clientes
       </h1>
       <p className="mt-2 text-slate-600">
-        Productos financieros, recargas y soporte de la app para usuarios finales.
+        Guías oficiales de productos de crédito, préstamo en la app, recargas y soporte.
       </p>
 
-      <section aria-labelledby="productos-heading" className="mt-8">
-        <h2 id="productos-heading" className="text-sm font-semibold uppercase tracking-wide text-slate-500">
-          Productos
+      <section aria-labelledby="creditos-heading" className="mt-8">
+        <h2 id="creditos-heading" className="text-sm font-semibold uppercase tracking-wide text-slate-500">
+          Productos de crédito
+        </h2>
+        {creditSection && (
+          <p className="mt-1 text-sm text-slate-600">{creditSection.description}</p>
+        )}
+        <div className="mt-4 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+          {creditProducts.map((product) => (
+            <CreditProductCard key={product.href} product={product} />
+          ))}
+        </div>
+      </section>
+
+      <section aria-labelledby="otros-heading" className="mt-10">
+        <h2 id="otros-heading" className="text-sm font-semibold uppercase tracking-wide text-slate-500">
+          Otros servicios
         </h2>
         <div className="mt-4 grid gap-4 sm:grid-cols-2">
-          {products.map((product) => (
-            <ProductCard key={product.id} product={product} />
-          ))}
+          {bcl && <ProductCard product={bcl} />}
+          {recarga && <ProductCard product={recarga} />}
         </div>
       </section>
 

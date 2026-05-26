@@ -6,13 +6,14 @@ import { ContentPanel, SectionHeading } from "@/components/FaqLayout";
 import { JsonLd } from "@/components/FaqUi";
 import { SearchBox } from "@/components/SearchBox";
 import { ProductCard } from "@/components/ProductCard";
+import { CreditProductCard } from "@/components/CreditProductCard";
 import {
   SITE_DESCRIPTION,
   SITE_NAME,
   excerpt,
   getArticle,
 } from "@/lib/faq";
-import { getFeaturedGroups, getNavGroupById } from "@/lib/navigation";
+import { getCreditProducts, getFeaturedGroups, getNavGroupById } from "@/lib/navigation";
 import { faqPageJsonLd } from "@/lib/seo";
 import { HERO_PRODUCTS_IMAGE } from "@/lib/site-images";
 
@@ -29,8 +30,10 @@ const STEPS = [
 ];
 
 export default function HomePage() {
-  const clienteProducts = getFeaturedGroups("cliente").filter(
-    (g) => g.id !== "preguntas-frecuentes",
+  const creditProducts = getCreditProducts();
+  const creditSection = getNavGroupById("productos-credito");
+  const otherClienteProducts = getFeaturedGroups("cliente").filter(
+    (g) => !["productos-credito", "preguntas-frecuentes"].includes(g.id),
   );
   const faqCliente = getNavGroupById("preguntas-frecuentes");
   const empresaProducts = getFeaturedGroups("empresa").filter((g) => g.id !== "faq-empresas");
@@ -105,18 +108,40 @@ export default function HomePage() {
       <section aria-labelledby="clientes-heading" className="mb-12">
         <SectionHeading
           eyebrow="Para clientes"
-          title="Productos y servicios"
+          title="Productos de crédito"
+          description={creditSection?.description}
           action={
             <Link href="/clientes" className="pp-btn-ghost text-sm">
               Ver todo →
             </Link>
           }
+          id="clientes-heading"
         />
-        <div className="grid gap-4 sm:grid-cols-2">
-          {clienteProducts.map((product) => (
-            <ProductCard key={product.id} product={product} />
+        <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+          {creditProducts.map((product) => (
+            <CreditProductCard key={product.href} product={product} />
           ))}
         </div>
+
+        {otherClienteProducts.length > 0 && (
+          <div className="mt-10">
+            <SectionHeading
+              eyebrow="También en la app"
+              title="Otros servicios"
+              action={
+                <Link href="/clientes" className="pp-btn-ghost text-sm">
+                  Ver todo →
+                </Link>
+              }
+            />
+            <div className="grid gap-4 sm:grid-cols-2">
+              {otherClienteProducts.map((product) => (
+                <ProductCard key={product.id} product={product} />
+              ))}
+            </div>
+          </div>
+        )}
+
         {faqCliente && (
           <div className="mt-4">
             <ProductCard product={faqCliente} variant="highlight" />

@@ -17,8 +17,10 @@ export type FaqNavLink = {
 export type FaqNavArticleRef = {
   categorySlug: string;
   articleSlug: string;
-  /** Etiqueta corta en el menú lateral (evita títulos largos de Intercom/GitBook). */
+  /** Etiqueta corta en el menú lateral y tarjetas. */
   navTitle?: string;
+  /** Etiqueta corta en tarjetas (ej. badge de Dream Card). */
+  badge?: string;
 };
 
 export type FaqNavSubgroup = {
@@ -59,6 +61,62 @@ export type FaqNavItem = {
   articleSlug: string;
 };
 
+/** Productos de crédito: guías de guia.puntopago.net + Dream Card. */
+export const CREDIT_PRODUCT_REFS: FaqNavArticleRef[] = [
+  {
+    categorySlug: "tarjeta-de-credito",
+    articleSlug: "tarjeta-de-credito",
+    navTitle: "Tarjeta de crédito",
+  },
+  {
+    categorySlug: "dreamcard",
+    articleSlug: "dreamcard",
+    navTitle: "Dream Card",
+    badge: "Historial APC",
+  },
+  {
+    categorySlug: "linea-credito",
+    articleSlug: "linea-de-credito",
+    navTitle: "Línea de crédito",
+  },
+  {
+    categorySlug: "adelanto-de-saldo",
+    articleSlug: "adelanto-de-saldo",
+    navTitle: "Adelanto de saldo",
+  },
+  {
+    categorySlug: "cuotas-debito",
+    articleSlug: "pago-con-cuotas",
+    navTitle: "Pago con cuotas",
+  },
+];
+
+export type CreditProduct = {
+  title: string;
+  description: string;
+  href: string;
+  categorySlug: string;
+  articleSlug: string;
+  badge?: string;
+};
+
+export function getCreditProducts(): CreditProduct[] {
+  const products: CreditProduct[] = [];
+  for (const ref of CREDIT_PRODUCT_REFS) {
+    const result = getArticle(ref.categorySlug, ref.articleSlug);
+    if (!result) continue;
+    products.push({
+      title: ref.navTitle ?? result.article.title,
+      description: result.article.description,
+      href: articlePath(result.category.slug, result.article.slug),
+      categorySlug: result.category.slug,
+      articleSlug: result.article.slug,
+      badge: ref.badge,
+    });
+  }
+  return products;
+}
+
 export type FaqNavSubgroupResolved = FaqNavSubgroup & {
   items: FaqNavItem[];
 };
@@ -75,105 +133,15 @@ export const FAQ_NAV: FaqNavSection[] = [
     description: "Productos financieros, recargas y soporte de la app Punto Pago.",
     groups: [
       {
-        id: "tarjeta-credito",
+        id: "productos-credito",
         audience: "cliente",
-        title: "Tarjeta de crédito",
+        title: "Productos de crédito",
         flatSidebar: true,
         description:
-          "Comienza a construir tu historial crediticio con la tarjeta de crédito Punto Pago, sin anualidad de por vida.",
-        articleRefs: [
-          {
-            categorySlug: "tarjeta-de-credito",
-            articleSlug: "tarjeta-de-credito",
-          },
-          {
-            categorySlug: "terminos-y-condiciones",
-            articleSlug: "limites-de-tu-tarjeta-punto-pago",
-            navTitle: "Límites y condiciones",
-          },
-        ],
-      },
-      {
-        id: "dreamcard",
-        audience: "cliente",
-        title: "Dream Card",
-        badge: "Historial APC",
-        flatSidebar: true,
-        description:
-          "Tarjeta de crédito para construir o reparar historial en la APC desde la app: $10 de emisión, límite inicial $10, sin anualidad.",
-        articleRefs: [
-          {
-            categorySlug: "dreamcard",
-            articleSlug: "dreamcard",
-          },
-        ],
+          "Tarjeta de crédito, Dream Card, línea de crédito, adelanto de saldo y pago con cuotas — guías oficiales Punto Pago.",
+        articleRefs: CREDIT_PRODUCT_REFS,
         links: [
-          { title: "Descargar app Punto Pago", href: "https://puntopago.net/", external: true },
-        ],
-      },
-      {
-        id: "adelantos-saldo",
-        audience: "cliente",
-        title: "Adelantos de saldo",
-        flatSidebar: true,
-        description:
-          "Paga y recarga tus servicios con un adelanto de saldo hoy y devuélvelo en 15 días.",
-        articleRefs: [
-          {
-            categorySlug: "adelanto-de-saldo",
-            articleSlug: "adelanto-de-saldo",
-          },
-        ],
-        links: [
-          { title: "Descargar app Punto Pago", href: "https://puntopago.net/", external: true },
-        ],
-      },
-      {
-        id: "linea-credito",
-        audience: "cliente",
-        title: "Línea de crédito",
-        flatSidebar: true,
-        description:
-          "Usa tu línea de crédito para pagar facturas y servicios en Punto Pago.",
-        articleRefs: [
-          {
-            categorySlug: "linea-credito",
-            articleSlug: "linea-de-credito",
-          },
-          {
-            categorySlug: "aumento-de-credito",
-            articleSlug: "solicitud-de-aumento-de-limite-de-credito",
-            navTitle: "Aumentar límite",
-          },
-          {
-            categorySlug: "terminos-y-condiciones",
-            articleSlug: "terminos-y-condiciones-prestamos",
-            navTitle: "Términos y condiciones",
-          },
-        ],
-      },
-      {
-        id: "cuotas-debito",
-        audience: "cliente",
-        title: "Cuotas débito",
-        badge: "Tarjeta débito",
-        flatSidebar: true,
-        description:
-          "Paga en cuotas con tu tarjeta de débito o virtual Punto Pago, incluso sin saldo completo al momento.",
-        articleRefs: [
-          {
-            categorySlug: "cuotas-debito",
-            articleSlug: "pago-con-cuotas",
-            navTitle: "Pago con cuotas",
-          },
-          {
-            categorySlug: "bcl-pago-con-credito",
-            articleSlug: "tres-servicios-de-cuotas",
-            navTitle: "Tipos de cuotas en Punto Pago",
-          },
-        ],
-        links: [
-          { title: "Descargar app Punto Pago", href: "https://puntopago.net/", external: true },
+          { title: "Ver en guia.puntopago.net", href: "https://guia.puntopago.net/", external: true },
         ],
       },
       {
@@ -541,12 +509,9 @@ export function getNavGroupById(id: string): FaqNavGroupResolved | undefined {
 }
 
 const CLIENTE_FEATURED_IDS = [
-  "tarjeta-credito",
-  "dreamcard",
-  "adelantos-saldo",
-  "linea-credito",
-  "cuotas-debito",
+  "productos-credito",
   "bcl-pago-con-credito",
+  "recarga-billetera",
   "preguntas-frecuentes",
 ] as const;
 
