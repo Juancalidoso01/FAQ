@@ -3,6 +3,9 @@ import gitbookData from "../../content/gitbook-comercios.json";
 import gitbookGuiaData from "../../content/gitbook-guia.json";
 import productosTarjetasCliente from "../../content/productos-tarjetas-cliente.json";
 import productosPrepagoCliente from "../../content/productos-prepago-cliente.json";
+import productosCreditoCliente from "../../content/productos-credito-cliente.json";
+import productosMarketplaceCliente from "../../content/productos-marketplace-cliente.json";
+import productosRemesasCliente from "../../content/productos-remesas-cliente.json";
 
 export type FaqArticle = {
   id: string;
@@ -47,7 +50,19 @@ export function getAllCategories(): FaqCategory[] {
   const gitbookGuia = (gitbookGuiaData as FaqData).categories;
   const tarjetasCliente = (productosTarjetasCliente as FaqData).categories;
   const prepagoCliente = (productosPrepagoCliente as FaqData).categories;
-  return [...intercom, ...tarjetasCliente, ...prepagoCliente, ...gitbookGuia, ...gitbook];
+  const creditoCliente = (productosCreditoCliente as FaqData).categories;
+  const marketplaceCliente = (productosMarketplaceCliente as FaqData).categories;
+  const remesasCliente = (productosRemesasCliente as FaqData).categories;
+  return [
+    ...intercom,
+    ...tarjetasCliente,
+    ...prepagoCliente,
+    ...creditoCliente,
+    ...marketplaceCliente,
+    ...remesasCliente,
+    ...gitbookGuia,
+    ...gitbook,
+  ];
 }
 
 export function getCategory(slug: string): FaqCategory | undefined {

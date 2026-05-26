@@ -2,20 +2,24 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { CreditProductCard } from "@/components/CreditProductCard";
 import { ProductCard } from "@/components/ProductCard";
-import { getCreditProducts, getNavGroupById, getDebitProducts } from "@/lib/navigation";
+import { getCreditProducts, getNavGroupById, getDebitProducts, getMarketplaceProducts, getRemesasProducts } from "@/lib/navigation";
 
 export const metadata: Metadata = {
   title: "Para clientes",
   description:
-    "Productos de crédito, productos débito, recargas y preguntas frecuentes de la app Punto Pago.",
+    "Productos de crédito, débito, Marketplace, remesas internacionales, recargas y preguntas frecuentes de la app Punto Pago.",
   alternates: { canonical: "/clientes" },
 };
 
 export default function ClientesPage() {
   const creditProducts = getCreditProducts();
   const debitProducts = getDebitProducts();
+  const marketplaceProducts = getMarketplaceProducts();
+  const remesasProducts = getRemesasProducts();
   const creditSection = getNavGroupById("productos-credito");
   const debitoSection = getNavGroupById("productos-debito");
+  const marketplaceSection = getNavGroupById("marketplace");
+  const remesasSection = getNavGroupById("remesas-internacionales");
   const recarga = getNavGroupById("recarga-billetera");
   const faq = getNavGroupById("preguntas-frecuentes");
 
@@ -25,7 +29,7 @@ export default function ClientesPage() {
         Punto Pago para clientes
       </h1>
       <p className="mt-2 text-slate-600">
-        Guías de crédito, débito prepago, recargas y soporte de la app.
+        Guías de crédito, débito, Marketplace, remesas y soporte de la app.
       </p>
 
       <section id="creditos" aria-labelledby="creditos-heading" className="mt-8 scroll-mt-8">
@@ -51,6 +55,34 @@ export default function ClientesPage() {
         )}
         <div className="mt-4 grid gap-4 sm:grid-cols-2">
           {debitProducts.map((product) => (
+            <CreditProductCard key={product.href} product={product} />
+          ))}
+        </div>
+      </section>
+
+      <section id="marketplace" aria-labelledby="marketplace-heading" className="mt-10 scroll-mt-8">
+        <h2 id="marketplace-heading" className="text-sm font-semibold uppercase tracking-wide text-slate-500">
+          Marketplace
+        </h2>
+        {marketplaceSection && (
+          <p className="mt-1 text-sm text-slate-600">{marketplaceSection.description}</p>
+        )}
+        <div className="mt-4 grid gap-4 sm:grid-cols-2">
+          {marketplaceProducts.map((product) => (
+            <CreditProductCard key={product.href} product={product} />
+          ))}
+        </div>
+      </section>
+
+      <section id="remesas" aria-labelledby="remesas-heading" className="mt-10 scroll-mt-8">
+        <h2 id="remesas-heading" className="text-sm font-semibold uppercase tracking-wide text-slate-500">
+          Remesas internacionales
+        </h2>
+        {remesasSection && (
+          <p className="mt-1 text-sm text-slate-600">{remesasSection.description}</p>
+        )}
+        <div className="mt-4 grid gap-4 sm:grid-cols-2">
+          {remesasProducts.map((product) => (
             <CreditProductCard key={product.href} product={product} />
           ))}
         </div>

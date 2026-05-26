@@ -12,7 +12,7 @@ import {
   excerpt,
   getArticle,
 } from "@/lib/faq";
-import { getCreditProducts, getNavGroupById, getDebitProducts } from "@/lib/navigation";
+import { getCreditProducts, getNavGroupById, getDebitProducts, getMarketplaceProducts, getRemesasProducts } from "@/lib/navigation";
 import { faqPageJsonLd } from "@/lib/seo";
 
 export const metadata: Metadata = {
@@ -24,6 +24,8 @@ export const metadata: Metadata = {
 export default function HomePage() {
   const creditProducts = getCreditProducts();
   const debitProducts = getDebitProducts();
+  const marketplaceProducts = getMarketplaceProducts();
+  const remesasProducts = getRemesasProducts();
   const faqCliente = getNavGroupById("preguntas-frecuentes");
 
   const faqPreview =
@@ -67,7 +69,7 @@ export default function HomePage() {
         >
           <h2 className="text-lg font-semibold text-[#0B0B13]">Soy cliente</h2>
           <p className="mt-2 text-sm text-slate-600">
-            Productos de crédito, productos débito, recargas y preguntas sobre la app.
+            Productos de crédito, débito, Marketplace, remesas y preguntas sobre la app.
           </p>
         </Link>
         <Link
@@ -112,6 +114,42 @@ export default function HomePage() {
         />
         <div className="grid gap-4 sm:grid-cols-2">
           {debitProducts.map((product) => (
+            <CreditProductCard key={product.href} product={product} />
+          ))}
+        </div>
+      </section>
+
+      <section aria-labelledby="marketplace-heading" className="mb-12">
+        <SectionHeading
+          title="Marketplace"
+          description="Compra en la tienda de la app con entrega a domicilio y pago al contado."
+          action={
+            <Link href="/clientes#marketplace" className="pp-btn-ghost text-sm">
+              Ver más →
+            </Link>
+          }
+          id="marketplace-heading"
+        />
+        <div className="grid gap-4 sm:grid-cols-2">
+          {marketplaceProducts.map((product) => (
+            <CreditProductCard key={product.href} product={product} />
+          ))}
+        </div>
+      </section>
+
+      <section aria-labelledby="remesas-heading" className="mb-12">
+        <SectionHeading
+          title="Remesas internacionales"
+          description="Envía dinero a Colombia, Nicaragua y República Dominicana desde la app."
+          action={
+            <Link href="/clientes#remesas" className="pp-btn-ghost text-sm">
+              Ver más →
+            </Link>
+          }
+          id="remesas-heading"
+        />
+        <div className="grid gap-4 sm:grid-cols-2">
+          {remesasProducts.map((product) => (
             <CreditProductCard key={product.href} product={product} />
           ))}
         </div>

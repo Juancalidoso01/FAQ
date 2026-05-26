@@ -1,0 +1,22 @@
+{
+  "categories": [
+    {
+      "slug": "marketplace",
+      "title": "Marketplace",
+      "description": "Tienda en línea dentro de la app Punto Pago: compra productos de comercios locales con entrega a domicilio y pago seguro.",
+      "icon": "shopping-bag",
+      "articles": [
+        {
+          "id": "marketplace-guia",
+          "slug": "marketplace",
+          "title": "Marketplace",
+          "description": "Compra productos de comercios panameños desde la app Punto Pago. Entrega gratis a domicilio, pago seguro y descuentos. Sin financiamiento.",
+          "content": "# Marketplace\n\nEl **Marketplace** de Punto Pago es la **tienda en línea** integrada en la súper app. Permite comprar productos y servicios de **comercios locales en Panamá** con **venta regular** — pagas el total con tu saldo, tarjeta u otros métodos integrados en la app, **sin crédito ni cuotas**.\n\n> **No es crédito ni débito:** es compra directa en la tienda digital. Si buscas financiamiento, consulta la guía de **Marketplace en cuotas** en Productos de crédito.\n\n---\n\n## ¿Qué puedo hacer?\n\n- Explorar el catálogo desde la app y comprar **sin ir a la tienda física**.\n- Recibir productos con **entrega gratis en todo Panamá**.\n- Pagar con **seguridad y garantía** desde la aplicación.\n- Aprovechar **descuentos y promociones** del Marketplace.\n\n---\n\n## ¿Cómo compro?\n\n1. Descarga **Punto Pago** y regístrate con tu número celular.\n2. Abre la sección **Marketplace** en la app.\n3. Elige productos, añádelos al carrito y **paga el total** al confirmar.\n4. Recibe tu pedido en **domicilio**.\n\n---\n\n## ¿Quiero vender en el Marketplace?\n\nLos comercios pueden publicar productos contactando al equipo de Punto Pago a través del portal de negocios.\n\n---\n\n## Soporte\n\nTeléfono: +507 399-3999  \nWhatsApp: +507 6825-2816",
+          "updatedAt": "2026-05-26T00:00:00Z",
+          "sourceUrl": "https://www.tiktok.com/@puntopagopanama/video/7380541244834942213"
+        }
+      ]
+    }
+  ],
+  "source": "Guía de producto Punto Pago — Marketplace"
+}

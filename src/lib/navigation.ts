@@ -89,7 +89,66 @@ export const CREDIT_PRODUCT_REFS: FaqNavArticleRef[] = [
     articleSlug: "pago-con-cuotas",
     navTitle: "Pago con cuotas",
   },
+  {
+    categorySlug: "marketplace-en-cuotas",
+    articleSlug: "marketplace-en-cuotas",
+    navTitle: "Marketplace en cuotas",
+    badge: "4 cuotas 0%",
+  },
 ];
+
+/** Marketplace regular: compra directa en la tienda de la app (no crédito ni débito). */
+export const MARKETPLACE_PRODUCT_REFS: FaqNavArticleRef[] = [
+  {
+    categorySlug: "marketplace",
+    articleSlug: "marketplace",
+    navTitle: "Marketplace",
+  },
+];
+
+export function getMarketplaceProducts(): CreditProduct[] {
+  const products: CreditProduct[] = [];
+  for (const ref of MARKETPLACE_PRODUCT_REFS) {
+    const result = getArticle(ref.categorySlug, ref.articleSlug);
+    if (!result) continue;
+    products.push({
+      title: ref.navTitle ?? result.article.title,
+      description: result.article.description,
+      href: articlePath(result.category.slug, result.article.slug),
+      categorySlug: result.category.slug,
+      articleSlug: result.article.slug,
+      badge: ref.badge,
+    });
+  }
+  return products;
+}
+
+/** Remesas internacionales desde la app (crossborder). */
+export const REMESAS_PRODUCT_REFS: FaqNavArticleRef[] = [
+  {
+    categorySlug: "remesas-internacionales",
+    articleSlug: "remesas-internacionales",
+    navTitle: "Remesas internacionales",
+    badge: "Primeros 2 gratis",
+  },
+];
+
+export function getRemesasProducts(): CreditProduct[] {
+  const products: CreditProduct[] = [];
+  for (const ref of REMESAS_PRODUCT_REFS) {
+    const result = getArticle(ref.categorySlug, ref.articleSlug);
+    if (!result) continue;
+    products.push({
+      title: ref.navTitle ?? result.article.title,
+      description: result.article.description,
+      href: articlePath(result.category.slug, result.article.slug),
+      categorySlug: result.category.slug,
+      articleSlug: result.article.slug,
+      badge: ref.badge,
+    });
+  }
+  return products;
+}
 
 export type CreditProduct = {
   title: string;
@@ -170,11 +229,32 @@ export const FAQ_NAV: FaqNavSection[] = [
         title: "Productos de crédito",
         flatSidebar: true,
         description:
-          "Tarjeta de crédito, Dream Card, línea de crédito, adelanto de saldo y pago con cuotas — guías oficiales Punto Pago.",
+          "Tarjeta de crédito, Dream Card, línea de crédito, adelanto de saldo, pago con cuotas y Marketplace en cuotas — guías oficiales Punto Pago.",
         articleRefs: CREDIT_PRODUCT_REFS,
         links: [
           { title: "Ver en guia.puntopago.net", href: "https://guia.puntopago.net/", external: true },
         ],
+      },
+      {
+        id: "marketplace",
+        audience: "cliente",
+        title: "Marketplace",
+        flatSidebar: true,
+        description:
+          "Tienda en línea en la app: compra productos de comercios locales con entrega a domicilio y pago al contado.",
+        articleRefs: MARKETPLACE_PRODUCT_REFS,
+        links: [
+          { title: "Marketplace para vendedores", href: "https://puntopago.net/business/marketplace/", external: true },
+        ],
+      },
+      {
+        id: "remesas-internacionales",
+        audience: "cliente",
+        title: "Remesas internacionales",
+        flatSidebar: true,
+        description:
+          "Envía dinero desde Panamá a Colombia, Nicaragua y República Dominicana desde la app, sin comisiones en tus primeros 2 envíos.",
+        articleRefs: REMESAS_PRODUCT_REFS,
       },
       {
         id: "productos-debito",
@@ -517,6 +597,8 @@ export function getNavGroupById(id: string): FaqNavGroupResolved | undefined {
 const CLIENTE_FEATURED_IDS = [
   "productos-credito",
   "productos-debito",
+  "marketplace",
+  "remesas-internacionales",
   "recarga-billetera",
   "preguntas-frecuentes",
 ] as const;
@@ -570,6 +652,18 @@ function isDebitProductArticle(categorySlug: string, articleSlug: string) {
   );
 }
 
+function isMarketplaceProductArticle(categorySlug: string, articleSlug: string) {
+  return MARKETPLACE_PRODUCT_REFS.some(
+    (ref) => ref.categorySlug === categorySlug && ref.articleSlug === articleSlug,
+  );
+}
+
+function isRemesasProductArticle(categorySlug: string, articleSlug: string) {
+  return REMESAS_PRODUCT_REFS.some(
+    (ref) => ref.categorySlug === categorySlug && ref.articleSlug === articleSlug,
+  );
+}
+
 function isCuotasMerchantCategory(categorySlug: string | null) {
   return categorySlug?.startsWith("cuotas-") ?? false;
 }
@@ -592,6 +686,18 @@ export function getSidebarNav(
       })),
       { type: "heading", label: "Productos débito" },
       ...getDebitProducts().map((p) => ({
+        type: "link" as const,
+        title: p.title,
+        href: p.href,
+      })),
+      { type: "heading", label: "Marketplace" },
+      ...getMarketplaceProducts().map((p) => ({
+        type: "link" as const,
+        title: p.title,
+        href: p.href,
+      })),
+      { type: "heading", label: "Remesas internacionales" },
+      ...getRemesasProducts().map((p) => ({
         type: "link" as const,
         title: p.title,
         href: p.href,
@@ -675,6 +781,10 @@ export function getArticleBreadcrumbs(
     crumbs.push({ label: "Productos de crédito", href: `${hubHref}#creditos` });
   } else if (isDebitProductArticle(categorySlug, articleSlug)) {
     crumbs.push({ label: "Productos débito", href: `${hubHref}#debito` });
+  } else if (isMarketplaceProductArticle(categorySlug, articleSlug)) {
+    crumbs.push({ label: "Marketplace", href: `${hubHref}#marketplace` });
+  } else if (isRemesasProductArticle(categorySlug, articleSlug)) {
+    crumbs.push({ label: "Remesas internacionales", href: `${hubHref}#remesas` });
   } else if (isCuotasMerchantCategory(categorySlug)) {
     const merchant = getNavGroupById("cuotas-merchant");
     if (merchant?.items[0]) {

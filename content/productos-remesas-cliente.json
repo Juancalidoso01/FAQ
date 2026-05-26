@@ -1,0 +1,22 @@
+{
+  "categories": [
+    {
+      "slug": "remesas-internacionales",
+      "title": "Remesas internacionales",
+      "description": "Envía dinero desde Panamá a Colombia, Nicaragua y República Dominicana desde la app Punto Pago.",
+      "icon": "globe",
+      "articles": [
+        {
+          "id": "remesas-internacionales-guia",
+          "slug": "remesas-internacionales",
+          "title": "Remesas internacionales",
+          "description": "Envía dinero desde Panamá a Colombia, Nicaragua y República Dominicana. Primeros 2 envíos sin comisión. Desde la app, a bancos o billeteras digitales.",
+          "content": "# Remesas internacionales\n\nCon **Remesas internacionales** de Punto Pago puedes enviar dinero desde Panamá a tus familiares en el extranjero **directamente desde tu celular**, sin hacer filas ni ir a una ventanilla.\n\n---\n\n## ¿Qué es este servicio?\n\nEs la **transferencia internacional** (crossborder) integrada en la app Punto Pago. Recargas tu billetera, eliges el país de destino y el dinero llega a una cuenta bancaria o billetera digital del beneficiario.\n\n---\n\n## ¿A qué países puedo enviar?\n\n- **Colombia**\n- **Nicaragua**\n- **República Dominicana**\n\n---\n\n## ¿Cuánto cuesta?\n\n- **Primeros 2 envíos:** sin comisión (promoción de envío gratis).\n- **Envíos siguientes:** la app muestra la **tasa de cambio**, el monto a convertir y cuánto recibirá el destinatario **antes de confirmar**, para que veas el costo con transparencia.\n\n---\n\n## ¿A dónde llega el dinero?\n\nA cualquier **cuenta bancaria** o **billetera digital** en el país de destino que indiques al enviar la remesa.\n\n---\n\n## ¿Cómo envío una remesa?\n\n1. **Descarga Punto Pago** (Google Play o App Store) y regístrate con tu número de celular.\n2. **Recarga tu billetera** con tarjeta o en uno de los **más de 1,500 quioscos** Punto Pago en Panamá. Desde la app puedes ver el quiosco más cercano.\n3. Entra a **Remesas**, selecciona el **país de destino** y completa los datos del beneficiario.\n4. Revisa monto, tasa de cambio y cuota del destinatario, y **confirma el envío**.\n\n---\n\n## ¿Tengo que ir a un local de Punto Pago?\n\nNo para enviar la remesa: el envío se hace **desde tu teléfono**. Solo necesitas saldo en tu billetera, que puedes recargar en la app o en un quiosco si lo prefieres.\n\n---\n\n## ¿Es lo mismo que transferir a otra persona en Panamá?\n\nNo. Las **remesas internacionales** van a **otro país** (Colombia, Nicaragua o República Dominicana). Las transferencias locales entre usuarios Punto Pago en Panamá son un servicio distinto dentro de la app.\n\n---\n\n## Soporte\n\nTeléfono: +507 399-3999  \nWhatsApp: +507 6825-2816",
+          "updatedAt": "2026-05-26T00:00:00Z",
+          "sourceUrl": "https://puntopago.net/products/crossborder/"
+        }
+      ]
+    }
+  ],
+  "source": "Guía de producto Punto Pago — Remesas internacionales"
+}
