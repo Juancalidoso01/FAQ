@@ -257,6 +257,45 @@ body {
   font-weight: 600;
 }
 
+.faq-article h3 {
+  margin: 1.5rem 0 0.65rem;
+  font-size: 1.05rem;
+  font-weight: 700;
+  color: #0b0b13;
+}
+
+.faq-article .faq-table-wrap {
+  margin: 1rem 0 1.5rem;
+  overflow-x: auto;
+  border: 1px solid #e2e8f0;
+  border-radius: 0.85rem;
+  background: #fff;
+}
+
+.faq-article .faq-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.92rem;
+}
+
+.faq-article .faq-table th,
+.faq-article .faq-table td {
+  padding: 0.75rem 0.9rem;
+  border-bottom: 1px solid #e2e8f0;
+  text-align: left;
+  vertical-align: top;
+}
+
+.faq-article .faq-table th {
+  background: #f8fafc;
+  color: #0b0b13;
+  font-weight: 600;
+}
+
+.faq-article .faq-table tr:last-child td {
+  border-bottom: 0;
+}
+
 .faq-article .faq-table-row {
   display: grid;
   grid-template-columns: 1fr 1fr;

@@ -35,6 +35,8 @@ Esto regenera:
 Solo Intercom: `npm run scrape:intercom`  
 Solo GitBook: `npm run scrape:gitbook`
 
+El scraper de GitBook resuelve imágenes desde el HTML publicado y guarda un mapa en `content/gitbook-image-map.json` (`fileId → url`) para futuras sincronizaciones con GitBook.
+
 ## SEO
 
 - Schema.org: `WebSite`, `FAQPage`, `Article`, `BreadcrumbList`, `CollectionPage`

@@ -3,6 +3,7 @@ export function renderArticleContent(raw: string): string {
   const lines = raw.split("\n");
   const html: string[] = [];
   let inList = false;
+  let index = 0;
 
   const closeList = () => {
     if (inList) {
@@ -11,31 +12,64 @@ export function renderArticleContent(raw: string): string {
     }
   };
 
-  for (const line of lines) {
+  const isTableRow = (line: string) => line.includes("|") && line.trim().startsWith("|");
+  const isTableSeparator = (line: string) =>
+    /^\|?\s*:?-{3,}:?\s*(\|\s*:?-{3,}:?\s*)+\|?$/.test(line.trim());
+
+  while (index < lines.length) {
+    const line = lines[index];
     const trimmed = line.trim();
+
     if (!trimmed) {
       closeList();
+      index += 1;
+      continue;
+    }
+
+    if (
+      isTableRow(trimmed) &&
+      index + 1 < lines.length &&
+      isTableSeparator(lines[index + 1].trim())
+    ) {
+      closeList();
+      const tableLines: string[] = [trimmed];
+      index += 2;
+      while (index < lines.length && isTableRow(lines[index].trim())) {
+        tableLines.push(lines[index].trim());
+        index += 1;
+      }
+      html.push(renderMarkdownTable(tableLines));
+      continue;
+    }
+
+    if (trimmed.startsWith("### ")) {
+      closeList();
+      html.push(`<h3>${inlineHtml(trimmed.slice(4))}</h3>`);
+      index += 1;
       continue;
     }
 
     if (trimmed.startsWith("## ")) {
       closeList();
       html.push(`<h2>${inlineHtml(trimmed.slice(3))}</h2>`);
+      index += 1;
       continue;
     }
 
     if (trimmed.startsWith("# ")) {
       closeList();
       html.push(`<h2>${inlineHtml(trimmed.slice(2))}</h2>`);
+      index += 1;
       continue;
     }
 
-    if (trimmed.startsWith("- ")) {
+    if (trimmed.startsWith("- ") || trimmed.startsWith("* ")) {
       if (!inList) {
         html.push("<ul>");
         inList = true;
       }
       html.push(`<li>${inlineHtml(trimmed.slice(2))}</li>`);
+      index += 1;
       continue;
     }
 
@@ -49,6 +83,7 @@ export function renderArticleContent(raw: string): string {
           `<p><a href="${safeHref}" target="_blank" rel="noopener noreferrer">${escapeHtml(label)}</a></p>`,
         );
       }
+      index += 1;
       continue;
     }
 
@@ -59,41 +94,60 @@ export function renderArticleContent(raw: string): string {
       const safeHref = sanitizeHref(href);
       if (safeHref) {
         html.push(
-          `<figure class="faq-figure"><img src="${safeHref}" alt="${escapeHtml(alt || "Imagen")}" loading="lazy" /></figure>`,
+          `<figure class="faq-figure"><img src="${safeHref}" alt="${escapeHtml(alt || "Imagen")}" loading="lazy" decoding="async" /></figure>`,
         );
       }
+      index += 1;
       continue;
     }
 
     if (trimmed === "---") {
       closeList();
       html.push("<hr />");
+      index += 1;
       continue;
     }
 
     if (trimmed.startsWith("> ")) {
       closeList();
       html.push(`<blockquote><p>${inlineHtml(trimmed.slice(2))}</p></blockquote>`);
-      continue;
-    }
-
-    if (trimmed.includes(" | ")) {
-      closeList();
-      const cells = trimmed.split(" | ").map((cell) => inlineHtml(cell.trim()));
-      html.push(`<p class="faq-table-row">${cells.join('<span class="faq-table-sep"> · </span>')}</p>`);
+      index += 1;
       continue;
     }
 
     closeList();
     html.push(`<p>${inlineHtml(trimmed)}</p>`);
+    index += 1;
   }
 
   closeList();
   return html.join("\n");
 }
 
+function renderMarkdownTable(rows: string[]): string {
+  const parsed = rows.map((row) =>
+    row
+      .trim()
+      .replace(/^\|/, "")
+      .replace(/\|$/, "")
+      .split("|")
+      .map((cell) => inlineHtml(cell.trim())),
+  );
+
+  if (parsed.length === 0) return "";
+
+  const [head, ...body] = parsed;
+  const headHtml = head.map((cell) => `<th>${cell}</th>`).join("");
+  const bodyHtml = body
+    .map((row) => `<tr>${row.map((cell) => `<td>${cell}</td>`).join("")}</tr>`)
+    .join("");
+
+  return `<div class="faq-table-wrap"><table class="faq-table"><thead><tr>${headHtml}</tr></thead><tbody>${bodyHtml}</tbody></table></div>`;
+}
+
 function inlineHtml(text: string): string {
   let out = escapeHtml(text);
+  out = out.replace(/\*\*(.+?)\*\*/g, "<strong>$1</strong>");
   out = out.replace(/&lt;b&gt;(.*?)&lt;\/b&gt;/g, "<strong>$1</strong>");
   out = out.replace(/&lt;i&gt;(.*?)&lt;\/i&gt;/g, "<em>$1</em>");
   out = out.replace(/&lt;u&gt;(.*?)&lt;\/u&gt;/g, "<u>$1</u>");

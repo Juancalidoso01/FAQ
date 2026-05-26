@@ -11,6 +11,8 @@ export type FaqArticle = {
   intercomUrl?: string;
   sourceUrl?: string;
   gitbookUrl?: string;
+  gitbookPageId?: string;
+  images?: Array<{ fileId: string; url: string; sourceUrl?: string }>;
 };
 
 export type FaqCategory = {
