@@ -1,23 +1,6 @@
 {
   "categories": [
     {
-      "slug": "cuotas-debito",
-      "title": "Cuotas débito",
-      "description": "Paga en cuotas con tu tarjeta de débito o virtual Punto Pago.",
-      "icon": "credit-card",
-      "articles": [
-        {
-          "id": "cuotas-con-tarjeta-debito",
-          "slug": "cuotas-con-tarjeta-debito",
-          "title": "Cuotas con tarjeta de débito",
-          "description": "Financia compras con tu tarjeta de débito o virtual Punto Pago y paga en cuotas, incluso cuando no tienes saldo disponible al momento.",
-          "content": "# Cuotas con tarjeta de débito\n\n**Cuotas débito** permite que un cliente con **tarjeta de débito o tarjeta virtual** Punto Pago realice compras y las pague **en cuotas**, aunque no tenga el monto completo disponible en el momento.\n\n> **No confundir con BCL** (préstamo para pagar servicios de operadores en la app) ni con **Pago en cuotas merchant** (compras en comercios afiliados).\n\n---\n\n## ¿Para qué sirve?\n\n- Pagar en la app o en comercios habilitados usando tu **tarjeta débito/virtual**.\n- Dividir el monto en **cuotas** según el plan aprobado.\n- Comprar cuando hoy no tienes todo el saldo en la billetera.\n\n---\n\n## ¿Cómo funciona?\n\n1. Tienes activa tu **tarjeta débito o virtual** Punto Pago.\n2. Al pagar, eliges la opción de **pago en cuotas** (cuando esté disponible para esa transacción).\n3. Punto Pago evalúa tu perfil y muestra el **plan de cuotas**.\n4. Confirmas y completas la compra; las cuotas se cargan según el calendario acordado.\n\n---\n\n## Diferencias con otros productos\n\n| Producto | Qué es |\n| --- | --- |\n| **Cuotas débito** (este) | Cuotas usando tu **tarjeta débito/virtual** |\n| **BCL — Pago con crédito (app)** | Préstamo/cupo Punto Pago para **pagar facturas de operadores** (luz, cable, etc.) |\n| **Pago en cuotas merchant** | Cuotas al comprar en un **comercio afiliado** (QR en tienda) |\n\nConsulta la guía **Tres formas de pagar en cuotas** para compararlas en detalle.\n\n---\n\n## Soporte\n\nTeléfono: +507 399-3999  \nWhatsApp: +507 6825-2816",
-          "updatedAt": "2026-05-26T00:00:00Z",
-          "sourceUrl": "https://puntopago.net/"
-        }
-      ]
-    },
-    {
       "slug": "bcl-pago-con-credito",
       "title": "BCL — Pago con crédito (app)",
       "description": "Préstamo con cupo Punto Pago en la app para pagar servicios de operadores en cuotas.",

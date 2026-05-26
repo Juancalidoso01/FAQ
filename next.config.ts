@@ -5,12 +5,14 @@ const nextConfig: NextConfig = {
     remotePatterns: [
       { protocol: "https", hostname: "puntopago.net" },
       { protocol: "https", hostname: "comercios.puntopago.net" },
+      { protocol: "https", hostname: "guia.puntopago.net" },
       { protocol: "https", hostname: "intercom.help" },
       { protocol: "https", hostname: "downloads.intercomcdn.com" },
       { protocol: "https", hostname: "images.gitbook.com" },
       { protocol: "https", hostname: "files.gitbook.com" },
       { protocol: "https", hostname: "content.gitbook.com" },
       { protocol: "https", hostname: "3686210280-files.gitbook.io" },
+      { protocol: "https", hostname: "837792458-files.gitbook.io" },
     ],
   },
   async redirects() {
@@ -23,6 +25,11 @@ const nextConfig: NextConfig = {
       {
         source: "/articulo/pago-a-cuotas-app/diferencia-cuotas-app-vs-comercios",
         destination: "/articulo/bcl-pago-con-credito/tres-servicios-de-cuotas",
+        permanent: true,
+      },
+      {
+        source: "/articulo/cuotas-debito/cuotas-con-tarjeta-debito",
+        destination: "/articulo/cuotas-debito/pago-con-cuotas",
         permanent: true,
       },
     ];

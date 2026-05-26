@@ -75,6 +75,16 @@ export const FAQ_NAV: FaqNavSection[] = [
           "Comienza a construir tu historial crediticio con la tarjeta de crédito Punto Pago, sin anualidad de por vida.",
         subgroups: [
           {
+            id: "tc-guia",
+            title: "Guía oficial",
+            articleRefs: [
+              {
+                categorySlug: "tarjeta-de-credito",
+                articleSlug: "tarjeta-de-credito",
+              },
+            ],
+          },
+          {
             id: "tc-info",
             title: "Sobre la tarjeta",
             articleRefs: [
@@ -126,8 +136,18 @@ export const FAQ_NAV: FaqNavSection[] = [
           "Paga y recarga tus servicios con un adelanto de saldo hoy y devuélvelo en 15 días.",
         subgroups: [
           {
-            id: "as-guias",
-            title: "Cómo funciona",
+            id: "as-guia",
+            title: "Guía oficial",
+            articleRefs: [
+              {
+                categorySlug: "adelanto-de-saldo",
+                articleSlug: "adelanto-de-saldo",
+              },
+            ],
+          },
+          {
+            id: "as-mas",
+            title: "Más información",
             articleRefs: [
               {
                 categorySlug: "nuestros-servicios",
@@ -147,6 +167,16 @@ export const FAQ_NAV: FaqNavSection[] = [
         description:
           "Usa tu línea de crédito para pagar facturas y servicios en Punto Pago.",
         subgroups: [
+          {
+            id: "lc-guia",
+            title: "Guía oficial",
+            articleRefs: [
+              {
+                categorySlug: "linea-credito",
+                articleSlug: "linea-de-credito",
+              },
+            ],
+          },
           {
             id: "lc-solicitud",
             title: "Solicitar o aumentar",
@@ -183,7 +213,7 @@ export const FAQ_NAV: FaqNavSection[] = [
             articleRefs: [
               {
                 categorySlug: "cuotas-debito",
-                articleSlug: "cuotas-con-tarjeta-debito",
+                articleSlug: "pago-con-cuotas",
               },
               {
                 categorySlug: "bcl-pago-con-credito",

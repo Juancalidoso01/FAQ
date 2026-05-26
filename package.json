@@ -7,9 +7,10 @@
     "build": "next build",
     "start": "next start",
     "lint": "eslint",
-    "scrape": "python3 scripts/scrape-intercom.py && python3 scripts/scrape-gitbook.py",
+    "scrape": "python3 scripts/scrape-intercom.py && python3 scripts/scrape-gitbook.py && python3 scripts/scrape-gitbook-guia.py",
     "scrape:intercom": "python3 scripts/scrape-intercom.py",
-    "scrape:gitbook": "python3 scripts/scrape-gitbook.py",
+    "scrape:gitbook": "python3 scripts/scrape-gitbook.py && python3 scripts/scrape-gitbook-guia.py",
+    "scrape:gitbook-guia": "python3 scripts/scrape-gitbook-guia.py",
     "deploy:prod": "npx --yes vercel@latest deploy --prod --yes",
     "vercel:whoami": "npx --yes vercel@latest whoami",
     "vercel:env": "npx --yes vercel@latest env ls"
