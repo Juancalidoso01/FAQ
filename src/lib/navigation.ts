@@ -85,23 +85,30 @@ export const FAQ_NAV: FaqNavSection[] = [
           {
             categorySlug: "tarjeta-de-credito",
             articleSlug: "tarjeta-de-credito",
-            navTitle: "Guía completa",
-          },
-          {
-            categorySlug: "adquiere-tu-mastercard",
-            articleSlug: "dreamcard-la-tarjeta-de-credito-de-punto-pago",
-            navTitle: "Solicitar tarjeta",
-          },
-          {
-            categorySlug: "adquiere-tu-mastercard",
-            articleSlug: "ubicaciones-de-maquinas-dispensadoras",
-            navTitle: "Dónde retirarla",
           },
           {
             categorySlug: "terminos-y-condiciones",
             articleSlug: "limites-de-tu-tarjeta-punto-pago",
-            navTitle: "Límites de la tarjeta",
+            navTitle: "Límites y condiciones",
           },
+        ],
+      },
+      {
+        id: "dreamcard",
+        audience: "cliente",
+        title: "Dream Card",
+        badge: "Historial APC",
+        flatSidebar: true,
+        description:
+          "Tarjeta de crédito para construir o reparar historial en la APC desde la app: $10 de emisión, límite inicial $10, sin anualidad.",
+        articleRefs: [
+          {
+            categorySlug: "dreamcard",
+            articleSlug: "dreamcard",
+          },
+        ],
+        links: [
+          { title: "Descargar app Punto Pago", href: "https://puntopago.net/", external: true },
         ],
       },
       {
@@ -115,7 +122,6 @@ export const FAQ_NAV: FaqNavSection[] = [
           {
             categorySlug: "adelanto-de-saldo",
             articleSlug: "adelanto-de-saldo",
-            navTitle: "Guía completa",
           },
         ],
         links: [
@@ -133,7 +139,6 @@ export const FAQ_NAV: FaqNavSection[] = [
           {
             categorySlug: "linea-credito",
             articleSlug: "linea-de-credito",
-            navTitle: "Guía completa",
           },
           {
             categorySlug: "aumento-de-credito",
@@ -183,7 +188,6 @@ export const FAQ_NAV: FaqNavSection[] = [
           {
             categorySlug: "bcl-pago-con-credito",
             articleSlug: "bcl-pago-con-credito-en-la-app",
-            navTitle: "Guía completa",
           },
           {
             categorySlug: "bcl-pago-con-credito",
@@ -538,6 +542,7 @@ export function getNavGroupById(id: string): FaqNavGroupResolved | undefined {
 
 const CLIENTE_FEATURED_IDS = [
   "tarjeta-credito",
+  "dreamcard",
   "adelantos-saldo",
   "linea-credito",
   "cuotas-debito",

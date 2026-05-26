@@ -1,0 +1,22 @@
+{
+  "categories": [
+    {
+      "slug": "dreamcard",
+      "title": "Dream Card",
+      "description": "Tarjeta de crédito para construir o reparar historial crediticio (APC) desde la app, sin anualidad.",
+      "icon": "credit-card",
+      "articles": [
+        {
+          "id": "dreamcard-guia",
+          "slug": "dreamcard",
+          "title": "Dream Card",
+          "description": "Tarjeta de crédito en Panamá para construir o reparar historial crediticio (APC) sin anualidad. Solicítala desde la app por $10 con límite inicial de $10.",
+          "content": "# Dream Card\n\nLa **Dream Card** de Punto Pago es una tarjeta de crédito en Panamá diseñada para **construir o reparar historial crediticio (APC)** sin pagar membresía ni anualidad. Se solicita 100% desde la app, cuesta **$10**, comienza con un límite inicial de **$10** y este aumenta automáticamente según tu buen comportamiento de pago.\n\n> **Producto hermano de la tarjeta de crédito Punto Pago:** la Dream Card está pensada para dar tus primeros pasos en crédito; la tarjeta de crédito Punto Pago es el producto general con cupos más amplios.\n\n---\n\n## ¿Cómo solicitarla?\n\nEl proceso es rápido y puedes gestionarlo desde tu smartphone:\n\n1. **Descarga la app:** busca y descarga Punto Pago en Google Play o App Store.\n2. **Regístrate:** crea tu cuenta con tu documento de identidad y datos personales.\n3. **Solicitud:** ingresa a la sección **Dream Card** y sigue las instrucciones.\n4. **Pago:** realiza el pago único de emisión de **$10** en la app.\n5. **Aprobación y entrega:** una vez aprobada (toma pocos minutos), recibirás tu tarjeta física en tu domicilio.\n\n---\n\n## Características principales\n\n- **Requisitos accesibles:** disponible para residentes y extranjeros por igual.\n- **Límite dinámico:** empieza con **$10** y el cupo crece a medida que usas la tarjeta y pagas a tiempo.\n- **Cero comisiones abusivas:** sin cuota anual, sin recargo por transacciones en el extranjero ni cargos por seguro de tarjeta.\n- **Construye historial:** mejora tu perfil en la APC con un producto pensado para empezar sin riesgos.\n\n---\n\n## Soporte\n\nTeléfono: +507 399-3999  \nWhatsApp: +507 6825-2816",
+          "updatedAt": "2026-05-26T00:00:00Z",
+          "sourceUrl": "https://puntopago.net/"
+        }
+      ]
+    }
+  ],
+  "source": "Guía de producto Punto Pago — Dream Card"
+}

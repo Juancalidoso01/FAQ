@@ -32,6 +32,11 @@ const nextConfig: NextConfig = {
         destination: "/articulo/cuotas-debito/pago-con-cuotas",
         permanent: true,
       },
+      {
+        source: "/articulo/adquiere-tu-mastercard/dreamcard-la-tarjeta-de-credito-de-punto-pago",
+        destination: "/articulo/dreamcard/dreamcard",
+        permanent: true,
+      },
     ];
   },
 };
