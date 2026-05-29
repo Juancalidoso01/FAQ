@@ -1,4 +1,4 @@
-import { google } from "@ai-sdk/google";
+import { createGoogleGenerativeAI } from "@ai-sdk/google";
 import { generateText, Output } from "ai";
 import { NextResponse } from "next/server";
 import { z } from "zod";
@@ -33,17 +33,34 @@ const draftSchema = z.object({
   }),
 });
 
+/** Acepta varios nombres comunes para evitar errores al nombrar la variable. */
+function resolveGoogleApiKey(): string | undefined {
+  return (
+    process.env.GOOGLE_GENERATIVE_AI_API_KEY ||
+    process.env.GEMINI_API_KEY ||
+    process.env.GOOGLE_API_KEY ||
+    process.env.GOOGLE_AI_API_KEY ||
+    undefined
+  );
+}
+
 export async function POST(request: Request) {
   if (!isRedactorAuthorized(request)) {
     return NextResponse.json({ error: "Clave de acceso incorrecta." }, { status: 401 });
   }
 
-  if (!process.env.GOOGLE_GENERATIVE_AI_API_KEY) {
+  const apiKey = resolveGoogleApiKey();
+  if (!apiKey) {
     return NextResponse.json(
-      { error: "Falta configurar GOOGLE_GENERATIVE_AI_API_KEY en el entorno." },
+      {
+        error:
+          "Falta la clave de Gemini. Crea en Vercel una variable GOOGLE_GENERATIVE_AI_API_KEY (o GEMINI_API_KEY) para Production y redespliega.",
+      },
       { status: 503 },
     );
   }
+
+  const google = createGoogleGenerativeAI({ apiKey });
 
   let texto = "";
   try {
