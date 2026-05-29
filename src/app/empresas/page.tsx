@@ -6,6 +6,7 @@ import {
   EMPRESA_HUB_ANCHORS,
   getEmpresaHubHref,
   getFeaturedGroups,
+  getOrganizedMenu,
 } from "@/lib/navigation";
 
 export const metadata: Metadata = {
@@ -17,22 +18,33 @@ export const metadata: Metadata = {
 
 export default function EmpresasPage() {
   const topicGroups = getFeaturedGroups("empresa");
+  const menu = getOrganizedMenu("empresa");
+  const itemsByGroup = new Map(menu.groups.map((group) => [group.id, group.items]));
 
-  const accordionSections = topicGroups.map((group) => ({
-    id: EMPRESA_HUB_ANCHORS[group.id as keyof typeof EMPRESA_HUB_ANCHORS],
-    title: group.title,
-    description: group.description,
-    items:
-      group.items.length > 0
-        ? group.items.map((item) => ({
-            title: item.title,
-            href: item.href,
-          }))
-        : (group.links?.map((link) => ({
-            title: link.title,
-            href: link.href,
-          })) ?? []),
-  }));
+  const accordionSections = topicGroups.map((group) => {
+    const items = itemsByGroup.get(group.id) ?? group.items;
+    return {
+      id: EMPRESA_HUB_ANCHORS[group.id as keyof typeof EMPRESA_HUB_ANCHORS],
+      title: group.title,
+      description: group.description,
+      items:
+        items.length > 0
+          ? items.map((item) => ({ title: item.title, href: item.href }))
+          : (group.links?.map((link) => ({
+              title: link.title,
+              href: link.href,
+            })) ?? []),
+    };
+  });
+
+  if (menu.unplaced.length > 0) {
+    accordionSections.push({
+      id: "novedades",
+      title: "Nuevas guías",
+      description: "Guías agregadas recientemente por el equipo de Punto Pago.",
+      items: menu.unplaced.map((item) => ({ title: item.title, href: item.href })),
+    });
+  }
 
   return (
     <>

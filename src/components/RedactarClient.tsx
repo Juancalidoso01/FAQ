@@ -137,9 +137,17 @@ export function RedactarClient({
   return (
     <div className="mx-auto max-w-4xl">
       <header className="mb-8">
-        <p className="text-xs font-semibold uppercase tracking-[0.14em] text-[#4749B6]">
-          Herramienta del equipo
-        </p>
+        <div className="flex flex-wrap items-start justify-between gap-3">
+          <p className="text-xs font-semibold uppercase tracking-[0.14em] text-[#4749B6]">
+            Herramienta del equipo
+          </p>
+          <Link
+            href="/redactar/organizar"
+            className="rounded-lg border border-slate-300 px-3 py-1.5 text-xs font-semibold text-slate-700 hover:bg-slate-50"
+          >
+            Organizar el menú →
+          </Link>
+        </div>
         <h1 className="mt-1 text-2xl font-bold tracking-tight text-[#0B0B13] sm:text-3xl">
           Redactar una guía con IA
         </h1>

@@ -22,6 +22,8 @@ export type FaqArticle = {
   gitbookUrl?: string;
   gitbookPageId?: string;
   images?: Array<{ fileId: string; url: string; sourceUrl?: string }>;
+  /** true si la guía fue creada por el equipo desde /redactar. */
+  team?: boolean;
 };
 
 export type FaqCategory = {

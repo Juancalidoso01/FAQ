@@ -6,6 +6,7 @@ import {
   CLIENTE_HUB_ANCHORS,
   getClienteHubHref,
   getFeaturedGroups,
+  getOrganizedMenu,
 } from "@/lib/navigation";
 
 export const metadata: Metadata = {
@@ -17,16 +18,27 @@ export const metadata: Metadata = {
 
 export default function ClientesPage() {
   const topicGroups = getFeaturedGroups("cliente");
+  const menu = getOrganizedMenu("cliente");
+  const itemsByGroup = new Map(menu.groups.map((group) => [group.id, group.items]));
 
   const accordionSections = topicGroups.map((group) => ({
     id: CLIENTE_HUB_ANCHORS[group.id as keyof typeof CLIENTE_HUB_ANCHORS],
     title: group.title,
     description: group.description,
-    items: group.items.map((item) => ({
+    items: (itemsByGroup.get(group.id) ?? group.items).map((item) => ({
       title: item.title,
       href: item.href,
     })),
   }));
+
+  if (menu.unplaced.length > 0) {
+    accordionSections.push({
+      id: "novedades",
+      title: "Nuevas guías",
+      description: "Guías agregadas recientemente por el equipo de Punto Pago.",
+      items: menu.unplaced.map((item) => ({ title: item.title, href: item.href })),
+    });
+  }
 
   return (
     <>

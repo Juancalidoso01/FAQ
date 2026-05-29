@@ -5,6 +5,12 @@ import {
   getCategory,
   type FaqCategory,
 } from "@/lib/faq";
+import {
+  loadMenuOverrides,
+  organizeMenu,
+  type OrganizedMenu,
+  type SimpleGroup,
+} from "@/lib/menu-overrides";
 
 export type FaqAudience = "cliente" | "empresa";
 
@@ -810,21 +816,12 @@ export function getNavGroupIdForArticle(
   categorySlug: string,
   articleSlug: string,
 ): string | undefined {
-  for (const id of CLIENTE_FEATURED_IDS) {
-    const group = getNavGroupById(id);
-    if (!group) continue;
-    const match = group.items.some(
-      (item) => item.categorySlug === categorySlug && item.articleSlug === articleSlug,
-    );
-    if (match) return id;
-  }
-  for (const id of EMPRESA_FEATURED_IDS) {
-    const group = getNavGroupById(id);
-    if (!group) continue;
-    const match = group.items.some(
-      (item) => item.categorySlug === categorySlug && item.articleSlug === articleSlug,
-    );
-    if (match) return id;
+  const matches = (item: FaqNavItem) =>
+    item.categorySlug === categorySlug && item.articleSlug === articleSlug;
+  for (const audience of ["cliente", "empresa"] as FaqAudience[]) {
+    for (const group of getOrganizedMenu(audience).groups) {
+      if (group.items.some(matches)) return group.id;
+    }
   }
   if (isCuotasMerchantCategory(categorySlug)) {
     return "cuotas-merchant";
@@ -836,9 +833,16 @@ export function getSectionArticles(
   categorySlug: string,
   articleSlug: string,
 ): FaqNavItem[] {
-  const groupId = getNavGroupIdForArticle(categorySlug, articleSlug);
-  if (!groupId) return [];
-  return getNavGroupById(groupId)?.items ?? [];
+  const matches = (item: FaqNavItem) =>
+    item.categorySlug === categorySlug && item.articleSlug === articleSlug;
+  for (const audience of ["cliente", "empresa"] as FaqAudience[]) {
+    const menu = getOrganizedMenu(audience);
+    for (const group of menu.groups) {
+      if (group.items.some(matches)) return group.items;
+    }
+    if (menu.unplaced.some(matches)) return menu.unplaced;
+  }
+  return [];
 }
 
 export const POPULAR_CLIENT_LINKS: Array<{ title: string; href: string }> = [
@@ -867,6 +871,43 @@ export const POPULAR_CLIENT_LINKS: Array<{ title: string; href: string }> = [
     href: "/articulo/tarjetas-mastercard/comprar-en-linea",
   },
 ];
+
+/** Todas las guías creadas por el equipo desde /redactar, sin aplicar ubicaciones. */
+function getTeamArticlesBase(audience: FaqAudience): FaqNavItem[] {
+  const items: FaqNavItem[] = [];
+  for (const category of getAllCategories()) {
+    if (getAudienceForCategory(category.slug) !== audience) continue;
+    for (const article of category.articles) {
+      if (!article.team) continue;
+      items.push({
+        title: article.title,
+        href: articlePath(category.slug, article.slug),
+        categorySlug: category.slug,
+        articleSlug: article.slug,
+      });
+    }
+  }
+  return dedupeItems(items);
+}
+
+/**
+ * Menú organizado para una audiencia: grupos curados con las ubicaciones
+ * manuales aplicadas, más las guías del equipo aún sin ubicar.
+ */
+export function getOrganizedMenu(audience: FaqAudience): OrganizedMenu {
+  const baseGroups: SimpleGroup[] = getFeaturedGroups(audience).map((group) => ({
+    id: group.id,
+    title: group.title,
+    items: group.items,
+  }));
+  const teamItems = getTeamArticlesBase(audience);
+  return organizeMenu(baseGroups, teamItems, loadMenuOverrides());
+}
+
+/** Guías del equipo que aún no fueron ubicadas (para la sección "Nuevas guías"). */
+export function getTeamNavItems(audience: FaqAudience): FaqNavItem[] {
+  return getOrganizedMenu(audience).unplaced;
+}
 
 export function getUnmappedCategories(): FaqCategory[] {
   const mapped = new Set<string>();
@@ -952,7 +993,7 @@ export function getSidebarNav(
   }
 
   if (audience === "cliente") {
-    return [
+    const entries: SidebarEntry[] = [
       { type: "link", title: "Resumen clientes", href: "/clientes", hubId: "hub" },
       { type: "heading", label: "Temas" },
       ...getFeaturedGroups("cliente").map((group) => ({
@@ -962,6 +1003,15 @@ export function getSidebarNav(
         hubId: group.id,
       })),
     ];
+    if (getTeamNavItems("cliente").length > 0) {
+      entries.push({
+        type: "link",
+        title: "Nuevas guías",
+        href: "/clientes#novedades",
+        hubId: "novedades",
+      });
+    }
+    return entries;
   }
 
   if (isCuotasMerchantCategory(activeCategorySlug)) {
@@ -996,7 +1046,7 @@ export function getSidebarNav(
     return entries;
   }
 
-  return [
+  const empresaEntries: SidebarEntry[] = [
     { type: "link", title: "Resumen empresas", href: "/empresas", hubId: "hub" },
     { type: "heading", label: "Soluciones" },
     ...getFeaturedGroups("empresa").map((group) => ({
@@ -1006,6 +1056,15 @@ export function getSidebarNav(
       hubId: group.id,
     })),
   ];
+  if (getTeamNavItems("empresa").length > 0) {
+    empresaEntries.push({
+      type: "link",
+      title: "Nuevas guías",
+      href: "/empresas#novedades",
+      hubId: "novedades",
+    });
+  }
+  return empresaEntries;
 }
 
 export type BreadcrumbItem = { label: string; href: string };

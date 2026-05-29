@@ -149,6 +149,7 @@ export async function POST(request: Request) {
       description: descripcion,
       content: contenido,
       updatedAt: new Date().toISOString(),
+      team: true,
     });
 
     await writeContentFile(
