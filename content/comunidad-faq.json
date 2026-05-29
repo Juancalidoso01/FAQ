@@ -1,4 +1,21 @@
 {
-  "categories": [],
+  "categories": [
+    {
+      "slug": "prueba-ia",
+      "title": "Prueba IA",
+      "description": "Articulo de prueba para validar el token de GitHub.",
+      "icon": "folder",
+      "articles": [
+        {
+          "id": "prueba-ia-prueba-de-publicacion",
+          "slug": "prueba-de-publicacion",
+          "title": "Prueba de publicacion (borrar)",
+          "description": "Articulo de prueba para validar el token de GitHub.",
+          "content": "## Prueba\nEste es un articulo de prueba para validar la publicacion. Se puede borrar.",
+          "updatedAt": "2026-05-29T21:21:48.934Z"
+        }
+      ]
+    }
+  ],
   "source": "Artículos redactados por el equipo de Punto Pago con asistencia de IA"
 }
