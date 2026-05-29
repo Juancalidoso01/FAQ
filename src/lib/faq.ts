@@ -8,6 +8,7 @@ import productosMarketplaceCliente from "../../content/productos-marketplace-cli
 import productosRemesasCliente from "../../content/productos-remesas-cliente.json";
 import productosRecargaCliente from "../../content/productos-recarga-cliente.json";
 import productosTarjetasMastercardCliente from "../../content/productos-tarjetas-mastercard-cliente.json";
+import comunidadFaq from "../../content/comunidad-faq.json";
 
 export type FaqArticle = {
   id: string;
@@ -57,6 +58,7 @@ export function getAllCategories(): FaqCategory[] {
   const remesasCliente = (productosRemesasCliente as FaqData).categories;
   const recargaCliente = (productosRecargaCliente as FaqData).categories;
   const tarjetasMastercardCliente = (productosTarjetasMastercardCliente as FaqData).categories;
+  const comunidad = (comunidadFaq as FaqData).categories;
   return [
     ...intercom,
     ...tarjetasCliente,
@@ -68,6 +70,7 @@ export function getAllCategories(): FaqCategory[] {
     ...recargaCliente,
     ...gitbookGuia,
     ...gitbook,
+    ...comunidad,
   ];
 }
 

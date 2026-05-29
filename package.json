@@ -16,9 +16,12 @@
     "vercel:env": "npx --yes vercel@latest env ls"
   },
   "dependencies": {
+    "@ai-sdk/google": "^3.0.80",
+    "ai": "^6.0.193",
     "next": "^16.2.6",
     "react": "^19.2.0",
-    "react-dom": "^19.2.0"
+    "react-dom": "^19.2.0",
+    "zod": "^4.4.3"
   },
   "devDependencies": {
     "@tailwindcss/postcss": "^4",
