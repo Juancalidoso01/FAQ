@@ -1,9 +1,88 @@
-/** Convierte contenido importado de Intercom (HTML inline + markdown simple) a HTML seguro. */
-export function renderArticleContent(raw: string): string {
+export type ArticleHeading = { id: string; text: string; level: 2 | 3 };
+
+export type ParsedArticle = {
+  html: string;
+  headings: ArticleHeading[];
+  readingMinutes: number;
+};
+
+/** Convierte texto a un slug apto para anclas (#id). */
+function slugify(text: string): string {
+  return text
+    .toLowerCase()
+    .normalize("NFD")
+    .replace(/[\u0300-\u036f]/g, "")
+    .replace(/<[^>]+>/g, "")
+    .replace(/[^a-z0-9\s-]/g, "")
+    .trim()
+    .replace(/\s+/g, "-")
+    .replace(/-+/g, "-");
+}
+
+/** Devuelve solo el texto plano (sin etiquetas ni markdown) de un encabezado. */
+function plainText(raw: string): string {
+  return raw
+    .replace(/\[([^\]]+)\]\([^)]*\)/g, "$1")
+    .replace(/[*_`]/g, "")
+    .replace(/<[^>]+>/g, "")
+    .trim();
+}
+
+/**
+ * Elimina el primer encabezado del contenido cuando duplica el título del
+ * artículo (que ya se muestra como <h1> en la página).
+ */
+function stripDuplicateTitle(raw: string, title?: string): string {
+  if (!title) return raw;
   const lines = raw.split("\n");
+  let i = 0;
+  while (i < lines.length && !lines[i].trim()) i += 1;
+  if (i >= lines.length) return raw;
+  const match = lines[i].trim().match(/^#{1,3}\s+(.*)$/);
+  if (match && slugify(plainText(match[1])) === slugify(title)) {
+    lines.splice(0, i + 1);
+    while (lines.length && !lines[0].trim()) lines.shift();
+    return lines.join("\n");
+  }
+  return raw;
+}
+
+/** Convierte contenido importado de Intercom (HTML inline + markdown simple) a HTML seguro. */
+export function renderArticleContent(raw: string, title?: string): string {
+  return parseArticleContent(raw, title).html;
+}
+
+/**
+ * Procesa el contenido del artículo y devuelve el HTML seguro, la lista de
+ * encabezados (para la tabla de contenido) y el tiempo de lectura estimado.
+ */
+export function parseArticleContent(raw: string, title?: string): ParsedArticle {
+  const source = stripDuplicateTitle(raw, title);
+  const lines = source.split("\n");
   const html: string[] = [];
+  const headings: ArticleHeading[] = [];
+  const usedIds = new Set<string>();
   let inList = false;
   let index = 0;
+
+  const makeId = (text: string) => {
+    const base = slugify(text) || "seccion";
+    let id = base;
+    let n = 2;
+    while (usedIds.has(id)) {
+      id = `${base}-${n}`;
+      n += 1;
+    }
+    usedIds.add(id);
+    return id;
+  };
+
+  const pushHeading = (rawText: string, level: 2 | 3) => {
+    const text = plainText(rawText);
+    const id = makeId(text);
+    headings.push({ id, text, level });
+    html.push(`<h${level} id="${id}">${inlineHtml(rawText)}</h${level}>`);
+  };
 
   const closeList = () => {
     if (inList) {
@@ -44,21 +123,21 @@ export function renderArticleContent(raw: string): string {
 
     if (trimmed.startsWith("### ")) {
       closeList();
-      html.push(`<h3>${inlineHtml(trimmed.slice(4))}</h3>`);
+      pushHeading(trimmed.slice(4), 3);
       index += 1;
       continue;
     }
 
     if (trimmed.startsWith("## ")) {
       closeList();
-      html.push(`<h2>${inlineHtml(trimmed.slice(3))}</h2>`);
+      pushHeading(trimmed.slice(3), 2);
       index += 1;
       continue;
     }
 
     if (trimmed.startsWith("# ")) {
       closeList();
-      html.push(`<h2>${inlineHtml(trimmed.slice(2))}</h2>`);
+      pushHeading(trimmed.slice(2), 2);
       index += 1;
       continue;
     }
@@ -121,7 +200,11 @@ export function renderArticleContent(raw: string): string {
   }
 
   closeList();
-  return html.join("\n");
+
+  const words = plainText(source).split(/\s+/).filter(Boolean).length;
+  const readingMinutes = Math.max(1, Math.round(words / 200));
+
+  return { html: html.join("\n"), headings, readingMinutes };
 }
 
 function renderMarkdownTable(rows: string[]): string {
