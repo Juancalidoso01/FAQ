@@ -127,6 +127,13 @@ export function RedactarClient({
     setTexto("");
   }
 
+  const currentStep = published ? 3 : draft ? 2 : 1;
+  const steps = [
+    { n: 1, label: "Escribe la información" },
+    { n: 2, label: "Revisa el borrador" },
+    { n: 3, label: "Publica" },
+  ];
+
   return (
     <div className="mx-auto max-w-4xl">
       <header className="mb-8">
@@ -142,6 +149,34 @@ export function RedactarClient({
           resultado antes de publicar.
         </p>
       </header>
+
+      {!(requiresPassword && !unlocked) && (
+        <ol className="mb-6 flex flex-wrap items-center gap-x-2 gap-y-2 text-sm">
+          {steps.map((step, i) => {
+            const done = currentStep > step.n;
+            const active = currentStep === step.n;
+            return (
+              <li key={step.n} className="flex items-center gap-2">
+                <span
+                  className={`flex h-6 w-6 items-center justify-center rounded-full text-xs font-bold ${
+                    done
+                      ? "bg-emerald-500 text-white"
+                      : active
+                        ? "bg-[#4749B6] text-white"
+                        : "bg-slate-200 text-slate-500"
+                  }`}
+                >
+                  {done ? "✓" : step.n}
+                </span>
+                <span className={active ? "font-semibold text-[#0B0B13]" : "text-slate-500"}>
+                  {step.label}
+                </span>
+                {i < steps.length - 1 && <span className="mx-1 text-slate-300" aria-hidden>→</span>}
+              </li>
+            );
+          })}
+        </ol>
+      )}
 
       {requiresPassword && !unlocked ? (
         <div className="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm">
