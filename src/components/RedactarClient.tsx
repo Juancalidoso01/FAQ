@@ -22,6 +22,18 @@ type Draft = {
 
 const NEW_CATEGORY = "__nueva__";
 
+/** Pequeño círculo de carga. `light` para fondos oscuros (botones de color). */
+function Spinner({ light = false }: { light?: boolean }) {
+  return (
+    <span
+      aria-hidden
+      className={`inline-block h-3.5 w-3.5 shrink-0 animate-spin rounded-full border-2 border-t-transparent ${
+        light ? "border-white/90" : "border-[#4749B6]"
+      }`}
+    />
+  );
+}
+
 const audienceLabel: Record<string, string> = {
   cliente: "Clientes",
   empresa: "Empresas",
@@ -284,8 +296,9 @@ export function RedactarClient({
             ) : (
               <span
                 aria-disabled
-                className="cursor-not-allowed rounded-full bg-slate-300 px-4 py-2 text-sm font-semibold text-white"
+                className="inline-flex cursor-not-allowed items-center gap-2 rounded-full bg-slate-400 px-4 py-2 text-sm font-semibold text-white"
               >
+                <Spinner light />
                 Preparando la guía…
               </span>
             )}
@@ -347,6 +360,7 @@ export function RedactarClient({
             disabled={structuring || texto.trim().length < 15}
             className="mt-4 inline-flex items-center gap-2 rounded-full bg-[#4749B6] px-5 py-2.5 text-sm font-semibold text-white transition hover:bg-[#3b3da6] disabled:cursor-not-allowed disabled:opacity-50"
           >
+            {structuring && <Spinner light />}
             {structuring ? "Estructurando con IA…" : "Estructurar con IA"}
           </button>
         </div>
@@ -444,6 +458,7 @@ export function RedactarClient({
                 disabled={publishing || !draft.titulo.trim() || !draft.contenidoMarkdown.trim()}
                 className="inline-flex items-center gap-2 rounded-full bg-[#4749B6] px-5 py-2.5 text-sm font-semibold text-white transition hover:bg-[#3b3da6] disabled:cursor-not-allowed disabled:opacity-50"
               >
+                {publishing && <Spinner light />}
                 {publishing ? "Publicando…" : "Publicar guía"}
               </button>
               <button
