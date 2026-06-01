@@ -9,6 +9,14 @@ import { parseArticleContent } from "@/lib/content";
 
 type TaxonomyItem = { slug: string; title: string; audience: string };
 
+type SimilarArticle = {
+  slug: string;
+  title: string;
+  categorySlug: string;
+  categoryTitle: string;
+  href: string;
+};
+
 type Draft = {
   titulo: string;
   descripcion: string;
@@ -54,6 +62,7 @@ export function RedactarClient({
   const [publishing, setPublishing] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [draft, setDraft] = useState<Draft | null>(null);
+  const [similares, setSimilares] = useState<SimilarArticle[]>([]);
   const [published, setPublished] = useState<{ path: string } | null>(null);
   const [liveReady, setLiveReady] = useState(false);
   const [clave, setClave] = useState("");
@@ -131,6 +140,7 @@ export function RedactarClient({
       const data = await res.json();
       if (!res.ok) throw new Error(data.error ?? "No se pudo procesar el texto.");
       setDraft(data.draft as Draft);
+      setSimilares(Array.isArray(data.similares) ? (data.similares as SimilarArticle[]) : []);
     } catch (err) {
       setError(err instanceof Error ? err.message : "Error inesperado.");
     } finally {
@@ -173,6 +183,7 @@ export function RedactarClient({
 
   function reset() {
     setDraft(null);
+    setSimilares([]);
     setPublished(null);
     setError(null);
     setTexto("");
@@ -386,10 +397,37 @@ export function RedactarClient({
               {t("Revisar y editar")}
             </h2>
 
-            {draft.posibleDuplicado.existe && (
+            {(draft.posibleDuplicado.existe || similares.length > 0) && (
               <div className="mb-4 rounded-xl border border-amber-200 bg-amber-50 p-3 text-sm text-amber-800">
                 <strong>{t("Posible duplicado:")}</strong>{" "}
                 {draft.posibleDuplicado.motivo || t("Revisa si ya existe una guía similar.")}
+                {similares.length > 0 && (
+                  <div className="mt-2">
+                    <p className="text-xs font-semibold uppercase tracking-wide text-amber-700">
+                      {t("Guías parecidas")}
+                    </p>
+                    <ul className="mt-1 space-y-1">
+                      {similares.map((s) => (
+                        <li key={s.slug}>
+                          <a
+                            href={s.href}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="font-medium text-[#4749B6] underline hover:text-[#3b3da6]"
+                          >
+                            {s.title}
+                          </a>{" "}
+                          <span className="text-amber-700">· {s.categoryTitle}</span>
+                        </li>
+                      ))}
+                    </ul>
+                    <p className="mt-2 text-xs text-amber-700">
+                      {t(
+                        "Si tu guía cubre lo mismo, considera editar la existente en vez de crear una nueva.",
+                      )}
+                    </p>
+                  </div>
+                )}
               </div>
             )}
 

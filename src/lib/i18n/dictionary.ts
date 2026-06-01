@@ -231,6 +231,9 @@ export const RU: Record<string, string> = {
   "Revisar y editar": "Проверить и отредактировать",
   "Posible duplicado:": "Возможный дубликат:",
   "Revisa si ya existe una guía similar.": "Проверьте, нет ли уже похожего руководства.",
+  "Guías parecidas": "Похожие руководства",
+  "Si tu guía cubre lo mismo, considera editar la existente en vez de crear una nueva.":
+    "Если ваше руководство охватывает то же самое, лучше отредактируйте существующее, а не создавайте новое.",
   "Título": "Заголовок",
   Resumen: "Краткое описание",
   "Tema / categoría": "Тема / категория",

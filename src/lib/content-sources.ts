@@ -73,3 +73,26 @@ export function getAllArticleSlugs(): string[] {
     source.data.categories.flatMap((c) => c.articles.map((a) => a.slug)),
   );
 }
+
+export type ArticleBrief = {
+  slug: string;
+  title: string;
+  description: string;
+  categorySlug: string;
+  categoryTitle: string;
+};
+
+/** Lista breve de TODOS los artículos (título + descripción) para detectar duplicados. */
+export function getAllArticlesBrief(): ArticleBrief[] {
+  return CONTENT_SOURCES.flatMap((source) =>
+    source.data.categories.flatMap((category) =>
+      category.articles.map((article) => ({
+        slug: article.slug,
+        title: article.title,
+        description: article.description ?? "",
+        categorySlug: category.slug,
+        categoryTitle: category.title,
+      })),
+    ),
+  );
+}

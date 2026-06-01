@@ -2,9 +2,10 @@ import { createGoogleGenerativeAI } from "@ai-sdk/google";
 import { generateText, Output } from "ai";
 import { NextResponse } from "next/server";
 import { z } from "zod";
-import { getTaxonomy } from "@/lib/content-sources";
+import { getAllArticlesBrief, getTaxonomy } from "@/lib/content-sources";
 import { isRedactorAuthorized } from "@/lib/redactar-access";
 import { slugify } from "@/lib/slug";
+import { findSimilarArticles } from "@/lib/similarity";
 
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
@@ -84,6 +85,11 @@ export async function POST(request: Request) {
     .map((c) => `- ${c.slug} — ${c.title} [${c.audience}] (${c.articleCount} artículos)`)
     .join("\n");
 
+  const existingArticles = getAllArticlesBrief();
+  const articlesList = existingArticles
+    .map((a) => `- [${a.categorySlug}] ${a.title} (${a.slug})`)
+    .join("\n");
+
   const langRules =
     idioma === "ru"
       ? [
@@ -108,6 +114,10 @@ export async function POST(request: Request) {
     "",
     "Clasifica el artículo en una de estas categorías existentes (usa el slug EXACTO) o marca esNuevaCategoria=true si ninguna encaja:",
     taxonomyList,
+    "",
+    "DETECCIÓN DE DUPLICADOS. Compara el contenido nuevo con esta lista de guías que YA EXISTEN.",
+    "Si el contenido nuevo trata esencialmente el mismo tema o responde la misma pregunta que una guía existente, marca posibleDuplicado.existe=true, copia su slug EXACTO en posibleDuplicado.articuloSlug y explica brevemente en posibleDuplicado.motivo. Si no se parece a ninguna, posibleDuplicado.existe=false.",
+    articlesList,
   ].join("\n");
 
   try {
@@ -121,7 +131,32 @@ export async function POST(request: Request) {
     const draft = result.output;
     const cleanedSlug = slugify(draft.slugSugerido || draft.titulo) || "nueva-guia";
 
-    return NextResponse.json({ draft: { ...draft, slugSugerido: cleanedSlug } });
+    // Red de seguridad determinista: aunque el modelo no lo detecte, comparamos
+    // por solapamiento de palabras contra todas las guías existentes.
+    const similares = findSimilarArticles(draft.titulo, draft.descripcion, existingArticles);
+
+    let posibleDuplicado = draft.posibleDuplicado;
+    if (!posibleDuplicado.existe && similares.length > 0) {
+      const top = similares[0];
+      posibleDuplicado = {
+        existe: true,
+        articuloSlug: top.slug,
+        motivo: `Se parece a una guía existente: "${top.title}" (${top.categoryTitle}).`,
+      };
+    } else if (posibleDuplicado.existe && !posibleDuplicado.articuloSlug && similares[0]) {
+      posibleDuplicado = { ...posibleDuplicado, articuloSlug: similares[0].slug };
+    }
+
+    return NextResponse.json({
+      draft: { ...draft, slugSugerido: cleanedSlug, posibleDuplicado },
+      similares: similares.map((s) => ({
+        slug: s.slug,
+        title: s.title,
+        categorySlug: s.categorySlug,
+        categoryTitle: s.categoryTitle,
+        href: `/articulo/${s.categorySlug}/${s.slug}`,
+      })),
+    });
   } catch (error) {
     console.error("Error al estructurar con IA:", error);
     return NextResponse.json(
