@@ -205,6 +205,12 @@ export function RedactarClient({
             >
               {t("Organizar el menú →")}
             </Link>
+            <Link
+              href="/libro"
+              className="rounded-lg border border-slate-300 px-3 py-1.5 text-xs font-semibold text-slate-700 hover:bg-slate-50"
+            >
+              {t("Exportar libro →")}
+            </Link>
           </div>
         </div>
         <h1 className="mt-1 text-2xl font-bold tracking-tight text-[#0B0B13] sm:text-3xl">

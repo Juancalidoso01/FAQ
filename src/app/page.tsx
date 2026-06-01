@@ -171,6 +171,12 @@ export default function HomePage() {
             +507 6825-2816
           </a>
         </p>
+        <p className="mt-3 border-t border-slate-100 pt-3">
+          <Link href="/libro" className="font-medium text-[#4749B6] hover:underline">
+            <T>Descargar guía completa</T>
+          </Link>{" "}
+          <T>(libro digital en PDF o HTML)</T>
+        </p>
       </section>
     </>
   );

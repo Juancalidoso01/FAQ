@@ -292,6 +292,20 @@ export const RU: Record<string, string> = {
     "Порядок сохранён. Vercel развернёт изменения через ~1 минуту.",
   "Error desconocido.": "Неизвестная ошибка.",
 
+  // Libro digital / exportar
+  "Guía completa": "Полное руководство",
+  Índice: "Содержание",
+  "← Volver al inicio": "← На главную",
+  "Descargar HTML": "Скачать HTML",
+  "Imprimir / Guardar PDF": "Печать / Сохранить PDF",
+  guías: "руководств",
+  "Las guías sin traducción se muestran en español.":
+    "Руководства без перевода показаны на испанском.",
+  "Descargar libro": "Скачать книгу",
+  "Exportar libro →": "Экспортировать книгу →",
+  "Descargar guía completa": "Скачать полное руководство",
+  "(libro digital en PDF o HTML)": "(цифровая книга в PDF или HTML)",
+
   // Subgrupos (empresa)
   "Introducción": "Введение",
   Comenzando: "Начало работы",

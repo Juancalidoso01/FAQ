@@ -620,3 +620,261 @@ body {
     justify-content: center;
   }
 }
+
+/* ===== Libro digital / exportable ===== */
+.book-page {
+  position: relative;
+  z-index: 10;
+}
+
+.book-toolbar {
+  position: sticky;
+  top: 0;
+  z-index: 30;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+  padding: 0.7rem 1.25rem;
+  border-bottom: 1px solid #e2e8f0;
+  background: rgba(255, 255, 255, 0.9);
+  backdrop-filter: blur(12px);
+}
+
+.book-toolbar__right {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.55rem;
+}
+
+.book-back {
+  font-size: 0.88rem;
+  font-weight: 600;
+  color: #475569;
+  text-decoration: none;
+}
+
+.book-back:hover {
+  color: #4749b6;
+}
+
+.book-lang {
+  display: inline-flex;
+  border: 1px solid #cbd5e1;
+  border-radius: 0.6rem;
+  overflow: hidden;
+}
+
+.book-lang button {
+  padding: 0.35rem 0.7rem;
+  font-size: 0.8rem;
+  font-weight: 700;
+  color: #475569;
+  background: #fff;
+}
+
+.book-lang button.is-active {
+  background: #4749b6;
+  color: #fff;
+}
+
+.book-btn {
+  padding: 0.45rem 0.95rem;
+  border-radius: 0.6rem;
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: #fff;
+  background: #4749b6;
+}
+
+.book-btn:hover {
+  background: #3b3da6;
+}
+
+.book-btn--ghost {
+  color: #4749b6;
+  background: transparent;
+  border: 1px solid #cbd5e1;
+}
+
+.book-btn--ghost:hover {
+  background: #f1f5f9;
+}
+
+.book-content {
+  max-width: 46rem;
+  margin: 0 auto;
+  padding: 2.5rem 1.5rem 5rem;
+}
+
+.book-cover {
+  text-align: center;
+  padding: 2.5rem 0 2rem;
+  border-bottom: 1px solid #e2e8f0;
+  margin-bottom: 2rem;
+}
+
+.book-cover__eyebrow {
+  font-size: 0.75rem;
+  font-weight: 700;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: #4749b6;
+}
+
+.book-cover__title {
+  margin: 0.5rem 0 0.25rem;
+  font-size: 2.1rem;
+  font-weight: 800;
+  letter-spacing: -0.02em;
+}
+
+.book-cover__subtitle {
+  font-size: 1.05rem;
+  color: #334155;
+}
+
+.book-cover__meta {
+  margin-top: 0.5rem;
+  font-size: 0.85rem;
+  color: #64748b;
+}
+
+.book-cover__note {
+  margin-top: 0.75rem;
+  font-size: 0.8rem;
+  color: #b45309;
+}
+
+.book-toc {
+  margin-bottom: 2.5rem;
+  padding: 1.25rem 1.5rem;
+  border: 1px solid #e2e8f0;
+  border-radius: 1rem;
+  background: #fff;
+}
+
+.book-toc h2 {
+  margin: 0 0 0.75rem;
+  font-size: 1.1rem;
+  font-weight: 700;
+}
+
+.book-toc__part-title {
+  margin: 0.9rem 0 0.3rem;
+  font-size: 0.78rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: #4749b6;
+}
+
+.book-toc ul {
+  margin: 0;
+  padding-left: 1rem;
+}
+
+.book-toc li {
+  font-size: 0.92rem;
+  margin: 0.15rem 0;
+}
+
+.book-toc a {
+  color: #334155;
+  text-decoration: none;
+}
+
+.book-toc a:hover {
+  color: #4749b6;
+  text-decoration: underline;
+}
+
+.book-part__title {
+  margin: 2.5rem 0 1rem;
+  font-size: 1.75rem;
+  font-weight: 800;
+  letter-spacing: -0.02em;
+  color: #0b0b13;
+}
+
+.book-chapter {
+  margin-bottom: 2.5rem;
+  scroll-margin-top: 5rem;
+}
+
+.book-chapter__title {
+  margin: 1.5rem 0 0.75rem;
+  padding-top: 0.75rem;
+  border-top: 2px solid #4749b6;
+  font-size: 1.35rem;
+  font-weight: 700;
+}
+
+.book-article-block {
+  margin: 1.5rem 0;
+  padding-bottom: 1.25rem;
+  border-bottom: 1px solid #eef2f7;
+  scroll-margin-top: 5rem;
+}
+
+.book-article-block__title {
+  margin: 0 0 0.35rem;
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: #4749b6;
+}
+
+.book-article-block__lead {
+  margin: 0 0 0.75rem;
+  color: #475569;
+  font-size: 0.95rem;
+}
+
+@media print {
+  .no-print {
+    display: none !important;
+  }
+
+  .pp-ambient,
+  .faq-shell .faq-sidebar {
+    display: none !important;
+  }
+
+  body {
+    background: #fff !important;
+  }
+
+  .book-content {
+    max-width: none;
+    padding: 0;
+  }
+
+  .book-cover {
+    padding-top: 0;
+  }
+
+  .book-part {
+    break-before: page;
+  }
+
+  .book-part:first-of-type {
+    break-before: auto;
+  }
+
+  .book-chapter {
+    break-inside: avoid;
+  }
+
+  .book-article-block__title,
+  .book-chapter__title,
+  .book-part__title {
+    break-after: avoid;
+  }
+
+  .faq-article a {
+    color: #0b0b13;
+    text-decoration: none;
+  }
+}

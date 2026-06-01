@@ -15,6 +15,11 @@ export function FaqChrome({ children }: { children: ReactNode }) {
   const pathname = usePathname();
   const t = useT();
   const isWideHub = pathname === "/" || pathname === "/clientes" || pathname === "/empresas";
+  const isBook = pathname === "/libro" || pathname.startsWith("/libro/");
+
+  if (isBook) {
+    return <div className="pp-page-bg relative min-h-screen bg-[#fafafa] text-[#0B0B13]">{children}</div>;
+  }
 
   return (
     <div className="pp-page-bg faq-shell relative flex min-h-screen items-start bg-[#fafafa] text-[#0B0B13]">
