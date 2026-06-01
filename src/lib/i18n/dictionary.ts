@@ -198,6 +198,52 @@ export const RU: Record<string, string> = {
   "Dudas comunes de comercios sobre afiliación, terminales y comisiones.":
     "Частые вопросы торговцев о подключении, терминалах и комиссиях.",
 
+  // Herramienta del equipo: redactar
+  "Herramienta del equipo": "Инструмент команды",
+  "Revisar traducciones →": "Проверить переводы →",
+  "Organizar el menú →": "Организовать меню →",
+  "Redactar una guía con IA": "Создать руководство с ИИ",
+  "Pega aquí lo que sabes (una pregunta frecuente, una respuesta que das por teléfono o tus notas) y la IA lo convierte en una guía ordenada y la ubica en el tema correcto. Revisa el resultado antes de publicar.":
+    "Вставьте сюда то, что знаете (частый вопрос, ответ, который вы даёте по телефону, или свои заметки), и ИИ превратит это в понятное руководство и поместит в нужную тему. Проверьте результат перед публикацией.",
+  "Escribe la información": "Введите информацию",
+  "Revisa el borrador": "Проверьте черновик",
+  Publica: "Опубликуйте",
+  "Clave de acceso del equipo": "Пароль доступа команды",
+  Entrar: "Войти",
+  "¡Guía publicada!": "Руководство опубликовано!",
+  "Tu guía ya está disponible en línea. Puedes abrirla.":
+    "Ваше руководство уже доступно онлайн. Можно открыть.",
+  "Estamos publicando tu guía. Tarda 1–2 minutos en aparecer; te avisamos aquí cuando esté lista. No cierres esta página.":
+    "Мы публикуем ваше руководство. Это занимает 1–2 минуты; мы сообщим здесь, когда оно будет готово. Не закрывайте эту страницу.",
+  "Ver la guía": "Открыть руководство",
+  "Preparando la guía…": "Подготовка руководства…",
+  "Redactar otra": "Создать ещё одно",
+  "Idioma del contenido": "Язык материала",
+  "Escribe en ruso. Al publicar se generará también la versión en español automáticamente.":
+    "Пишите на русском. При публикации автоматически создастся и версия на испанском.",
+  "Escribe en español. Los consultores podrán verla en ruso (traducción automática).":
+    "Пишите на испанском. Консультанты смогут видеть это на русском (автоматический перевод).",
+  "Información a convertir en guía": "Информация для преобразования в руководство",
+  "Ej: Cuando el cliente pregunta cómo recuperar su PIN, debe entrar a la app, ir a Tarjetas, seleccionar la tarjeta y tocar 'Ver PIN'. Necesita tener la app actualizada...":
+    "Напр.: Когда клиент спрашивает, как восстановить PIN, нужно зайти в приложение, открыть «Карты», выбрать карту и нажать «Посмотреть PIN». Приложение должно быть обновлено...",
+  "Estructurando con IA…": "Структурирование с ИИ…",
+  "Estructurar con IA": "Структурировать с ИИ",
+  "Revisar y editar": "Проверить и отредактировать",
+  "Posible duplicado:": "Возможный дубликат:",
+  "Revisa si ya existe una guía similar.": "Проверьте, нет ли уже похожего руководства.",
+  "Título": "Заголовок",
+  Resumen: "Краткое описание",
+  "Tema / categoría": "Тема / категория",
+  "➕ Crear tema nuevo…": "➕ Создать новую тему…",
+  "Nombre del tema nuevo": "Название новой темы",
+  "Ej: Pagos con QR": "Напр.: Оплата по QR",
+  "Contenido (markdown)": "Содержание (markdown)",
+  "Publicando…": "Публикация…",
+  "Publicar guía": "Опубликовать руководство",
+  "Empezar de nuevo": "Начать заново",
+  "Vista previa": "Предпросмотр",
+  General: "Общее",
+
   // Subgrupos (empresa)
   "Introducción": "Введение",
   Comenzando: "Начало работы",

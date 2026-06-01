@@ -4,6 +4,7 @@ import Link from "next/link";
 import { useEffect, useMemo, useState } from "react";
 import { ArticleContent } from "@/components/ArticleContent";
 import { useLang } from "@/components/LanguageProvider";
+import { useT } from "@/components/T";
 import { parseArticleContent } from "@/lib/content";
 
 type TaxonomyItem = { slug: string; title: string; audience: string };
@@ -59,6 +60,7 @@ export function RedactarClient({
   const [unlocked, setUnlocked] = useState(!requiresPassword);
 
   const { enableTeamMode } = useLang();
+  const t = useT();
   useEffect(() => {
     enableTeamMode();
   }, [enableTeamMode]);
@@ -178,9 +180,9 @@ export function RedactarClient({
 
   const currentStep = published ? 3 : draft ? 2 : 1;
   const steps = [
-    { n: 1, label: "Escribe la información" },
-    { n: 2, label: "Revisa el borrador" },
-    { n: 3, label: "Publica" },
+    { n: 1, label: t("Escribe la información") },
+    { n: 2, label: t("Revisa el borrador") },
+    { n: 3, label: t("Publica") },
   ];
 
   return (
@@ -188,30 +190,30 @@ export function RedactarClient({
       <header className="mb-8">
         <div className="flex flex-wrap items-start justify-between gap-3">
           <p className="text-xs font-semibold uppercase tracking-[0.14em] text-[#4749B6]">
-            Herramienta del equipo
+            {t("Herramienta del equipo")}
           </p>
           <div className="flex flex-wrap items-center gap-2">
             <Link
               href="/redactar/traducir"
               className="rounded-lg border border-slate-300 px-3 py-1.5 text-xs font-semibold text-slate-700 hover:bg-slate-50"
             >
-              Revisar traducciones →
+              {t("Revisar traducciones →")}
             </Link>
             <Link
               href="/redactar/organizar"
               className="rounded-lg border border-slate-300 px-3 py-1.5 text-xs font-semibold text-slate-700 hover:bg-slate-50"
             >
-              Organizar el menú →
+              {t("Organizar el menú →")}
             </Link>
           </div>
         </div>
         <h1 className="mt-1 text-2xl font-bold tracking-tight text-[#0B0B13] sm:text-3xl">
-          Redactar una guía con IA
+          {t("Redactar una guía con IA")}
         </h1>
         <p className="mt-2 max-w-2xl text-sm leading-relaxed text-slate-600">
-          Pega aquí lo que sabes (una pregunta frecuente, una respuesta que das por teléfono o tus
-          notas) y la IA lo convierte en una guía ordenada y la ubica en el tema correcto. Revisa el
-          resultado antes de publicar.
+          {t(
+            "Pega aquí lo que sabes (una pregunta frecuente, una respuesta que das por teléfono o tus notas) y la IA lo convierte en una guía ordenada y la ubica en el tema correcto. Revisa el resultado antes de publicar.",
+          )}
         </p>
       </header>
 
@@ -246,7 +248,7 @@ export function RedactarClient({
       {requiresPassword && !unlocked ? (
         <div className="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm">
           <label htmlFor="clave" className="text-sm font-semibold text-[#0B0B13]">
-            Clave de acceso del equipo
+            {t("Clave de acceso del equipo")}
           </label>
           <input
             id="clave"
@@ -264,16 +266,16 @@ export function RedactarClient({
               onClick={() => clave.trim() && setUnlocked(true)}
               className="rounded-full bg-[#4749B6] px-5 py-2.5 text-sm font-semibold text-white hover:bg-[#3b3da6]"
             >
-              Entrar
+              {t("Entrar")}
             </button>
           </div>
         </div>
       ) : published ? (
         <div className="rounded-2xl border border-emerald-200 bg-emerald-50 p-6">
-          <h2 className="text-lg font-bold text-emerald-900">¡Guía publicada!</h2>
+          <h2 className="text-lg font-bold text-emerald-900">{t("¡Guía publicada!")}</h2>
           {liveReady ? (
             <p className="mt-2 text-sm text-emerald-800">
-              Tu guía ya está disponible en línea. Puedes abrirla.
+              {t("Tu guía ya está disponible en línea. Puedes abrirla.")}
             </p>
           ) : (
             <p className="mt-2 flex items-center gap-2 text-sm text-emerald-800">
@@ -281,8 +283,9 @@ export function RedactarClient({
                 aria-hidden
                 className="inline-block h-3.5 w-3.5 animate-spin rounded-full border-2 border-emerald-600 border-t-transparent"
               />
-              Estamos publicando tu guía. Tarda 1–2 minutos en aparecer; te avisamos aquí cuando
-              esté lista. No cierres esta página.
+              {t(
+                "Estamos publicando tu guía. Tarda 1–2 minutos en aparecer; te avisamos aquí cuando esté lista. No cierres esta página.",
+              )}
             </p>
           )}
           <div className="mt-4 flex flex-wrap gap-3">
@@ -291,7 +294,7 @@ export function RedactarClient({
                 href={published.path}
                 className="rounded-full bg-[#4749B6] px-4 py-2 text-sm font-semibold text-white hover:bg-[#3b3da6]"
               >
-                Ver la guía
+                {t("Ver la guía")}
               </Link>
             ) : (
               <span
@@ -299,7 +302,7 @@ export function RedactarClient({
                 className="inline-flex cursor-not-allowed items-center gap-2 rounded-full bg-slate-400 px-4 py-2 text-sm font-semibold text-white"
               >
                 <Spinner light />
-                Preparando la guía…
+                {t("Preparando la guía…")}
               </span>
             )}
             <button
@@ -307,14 +310,14 @@ export function RedactarClient({
               onClick={reset}
               className="rounded-full border border-slate-300 px-4 py-2 text-sm font-semibold text-slate-700 hover:border-[#4749B6] hover:text-[#4749B6]"
             >
-              Redactar otra
+              {t("Redactar otra")}
             </button>
           </div>
         </div>
       ) : !draft ? (
         <div className="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm">
           <div className="mb-4">
-            <span className="text-xs font-semibold text-slate-600">Idioma del contenido</span>
+            <span className="text-xs font-semibold text-slate-600">{t("Idioma del contenido")}</span>
             <div className="mt-1.5 inline-flex rounded-lg border border-slate-300 p-0.5">
               {(
                 [
@@ -338,19 +341,25 @@ export function RedactarClient({
             </div>
             <p className="mt-1.5 text-xs text-slate-500">
               {idioma === "ru"
-                ? "Escribe en ruso. Al publicar se generará también la versión en español automáticamente."
-                : "Escribe en español. Los consultores podrán verla en ruso (traducción automática)."}
+                ? t(
+                    "Escribe en ruso. Al publicar se generará también la versión en español automáticamente.",
+                  )
+                : t(
+                    "Escribe en español. Los consultores podrán verla en ruso (traducción automática).",
+                  )}
             </p>
           </div>
           <label htmlFor="texto" className="text-sm font-semibold text-[#0B0B13]">
-            Información a convertir en guía
+            {t("Información a convertir en guía")}
           </label>
           <textarea
             id="texto"
             value={texto}
             onChange={(e) => setTexto(e.target.value)}
             rows={10}
-            placeholder="Ej: Cuando el cliente pregunta cómo recuperar su PIN, debe entrar a la app, ir a Tarjetas, seleccionar la tarjeta y tocar 'Ver PIN'. Necesita tener la app actualizada..."
+            placeholder={t(
+              "Ej: Cuando el cliente pregunta cómo recuperar su PIN, debe entrar a la app, ir a Tarjetas, seleccionar la tarjeta y tocar 'Ver PIN'. Necesita tener la app actualizada...",
+            )}
             className="mt-2 w-full rounded-xl border border-slate-300 p-3 text-sm leading-relaxed text-slate-800 outline-none focus:border-[#4749B6] focus:ring-2 focus:ring-[#4749B6]/20"
           />
           {error && <p className="mt-3 text-sm text-red-600">{error}</p>}
@@ -361,25 +370,26 @@ export function RedactarClient({
             className="mt-4 inline-flex items-center gap-2 rounded-full bg-[#4749B6] px-5 py-2.5 text-sm font-semibold text-white transition hover:bg-[#3b3da6] disabled:cursor-not-allowed disabled:opacity-50"
           >
             {structuring && <Spinner light />}
-            {structuring ? "Estructurando con IA…" : "Estructurar con IA"}
+            {structuring ? t("Estructurando con IA…") : t("Estructurar con IA")}
           </button>
         </div>
       ) : (
         <div className="grid gap-6 lg:grid-cols-2">
           <div className="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm">
             <h2 className="mb-4 text-sm font-semibold uppercase tracking-wide text-slate-500">
-              Revisar y editar
+              {t("Revisar y editar")}
             </h2>
 
             {draft.posibleDuplicado.existe && (
               <div className="mb-4 rounded-xl border border-amber-200 bg-amber-50 p-3 text-sm text-amber-800">
-                <strong>Posible duplicado:</strong> {draft.posibleDuplicado.motivo || "Revisa si ya existe una guía similar."}
+                <strong>{t("Posible duplicado:")}</strong>{" "}
+                {draft.posibleDuplicado.motivo || t("Revisa si ya existe una guía similar.")}
               </div>
             )}
 
             <div className="space-y-4">
               <div>
-                <label className="text-xs font-semibold text-slate-600">Título</label>
+                <label className="text-xs font-semibold text-slate-600">{t("Título")}</label>
                 <input
                   value={draft.titulo}
                   onChange={(e) => updateDraft({ titulo: e.target.value })}
@@ -389,7 +399,7 @@ export function RedactarClient({
 
               <div>
                 <label className="text-xs font-semibold text-slate-600">
-                  Resumen ({draft.descripcion.length}/160)
+                  {t("Resumen")} ({draft.descripcion.length}/160)
                 </label>
                 <textarea
                   value={draft.descripcion}
@@ -400,7 +410,7 @@ export function RedactarClient({
               </div>
 
               <div>
-                <label className="text-xs font-semibold text-slate-600">Tema / categoría</label>
+                <label className="text-xs font-semibold text-slate-600">{t("Tema / categoría")}</label>
                 <select
                   value={categorySelectValue}
                   onChange={(e) => {
@@ -414,7 +424,7 @@ export function RedactarClient({
                   className="mt-1 w-full rounded-lg border border-slate-300 px-3 py-2 text-sm outline-none focus:border-[#4749B6]"
                 >
                   {Object.entries(groupedTaxonomy).map(([audience, items]) => (
-                    <optgroup key={audience} label={audienceLabel[audience] ?? audience}>
+                    <optgroup key={audience} label={t(audienceLabel[audience] ?? audience)}>
                       {items.map((item) => (
                         <option key={item.slug} value={item.slug}>
                           {item.title}
@@ -422,24 +432,24 @@ export function RedactarClient({
                       ))}
                     </optgroup>
                   ))}
-                  <option value={NEW_CATEGORY}>➕ Crear tema nuevo…</option>
+                  <option value={NEW_CATEGORY}>{t("➕ Crear tema nuevo…")}</option>
                 </select>
               </div>
 
               {draft.esNuevaCategoria && (
                 <div>
-                  <label className="text-xs font-semibold text-slate-600">Nombre del tema nuevo</label>
+                  <label className="text-xs font-semibold text-slate-600">{t("Nombre del tema nuevo")}</label>
                   <input
                     value={draft.categoriaNuevaTitulo}
                     onChange={(e) => updateDraft({ categoriaNuevaTitulo: e.target.value })}
-                    placeholder="Ej: Pagos con QR"
+                    placeholder={t("Ej: Pagos con QR")}
                     className="mt-1 w-full rounded-lg border border-slate-300 px-3 py-2 text-sm outline-none focus:border-[#4749B6]"
                   />
                 </div>
               )}
 
               <div>
-                <label className="text-xs font-semibold text-slate-600">Contenido (markdown)</label>
+                <label className="text-xs font-semibold text-slate-600">{t("Contenido (markdown)")}</label>
                 <textarea
                   value={draft.contenidoMarkdown}
                   onChange={(e) => updateDraft({ contenidoMarkdown: e.target.value })}
@@ -459,21 +469,21 @@ export function RedactarClient({
                 className="inline-flex items-center gap-2 rounded-full bg-[#4749B6] px-5 py-2.5 text-sm font-semibold text-white transition hover:bg-[#3b3da6] disabled:cursor-not-allowed disabled:opacity-50"
               >
                 {publishing && <Spinner light />}
-                {publishing ? "Publicando…" : "Publicar guía"}
+                {publishing ? t("Publicando…") : t("Publicar guía")}
               </button>
               <button
                 type="button"
                 onClick={reset}
                 className="rounded-full border border-slate-300 px-5 py-2.5 text-sm font-semibold text-slate-700 hover:border-slate-400"
               >
-                Empezar de nuevo
+                {t("Empezar de nuevo")}
               </button>
             </div>
           </div>
 
           <div className="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm">
             <h2 className="mb-4 text-sm font-semibold uppercase tracking-wide text-slate-500">
-              Vista previa
+              {t("Vista previa")}
             </h2>
             <h3 className="text-xl font-bold tracking-tight text-[#0B0B13]">{draft.titulo}</h3>
             {draft.descripcion && (
