@@ -49,6 +49,12 @@ export function TraducirClient({
   const [saved, setSaved] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [showPreview, setShowPreview] = useState(true);
+  const [batch, setBatch] = useState<{
+    running: boolean;
+    translated: number;
+    total: number | null;
+    failed: number;
+  } | null>(null);
 
   const [unlocked, setUnlocked] = useState(!requiresPassword);
   const [clave, setClave] = useState("");
@@ -175,6 +181,41 @@ export function TraducirClient({
     }
   }
 
+  async function translateAll() {
+    setError(null);
+    setBatch({ running: true, translated: 0, total: null, failed: 0 });
+    let skip: string[] = [];
+    let translated = 0;
+    let total: number | null = null;
+    try {
+      // Bucle por tandas hasta que no queden guías pendientes.
+      for (let guard = 0; guard < 200; guard += 1) {
+        const res = await fetch("/api/redactar/traducir/todo", {
+          method: "POST",
+          headers: authHeaders(),
+          body: JSON.stringify({ skip, limit: 4 }),
+        });
+        const data = await res.json();
+        if (!res.ok) throw new Error(data.error ?? "No se pudo traducir el lote.");
+        translated += data.processed as number;
+        if (total === null) total = (data.remaining as number) + (data.processed as number);
+        if (Array.isArray(data.failed) && data.failed.length > 0) {
+          skip = [...skip, ...(data.failed as string[])];
+        }
+        setBatch({ running: true, translated, total, failed: skip.length });
+        if (data.done || (data.processed === 0 && (data.failed?.length ?? 0) === 0)) break;
+      }
+      // Marca como traducidas todas menos las que fallaron.
+      const allKeys = new Set(index.map((i) => `${i.categorySlug}/${i.articleSlug}`));
+      skip.forEach((k) => allKeys.delete(k));
+      setTranslatedKeys(allKeys);
+      setBatch((b) => (b ? { ...b, running: false } : b));
+    } catch (err) {
+      setError(err instanceof Error ? err.message : "Error desconocido.");
+      setBatch((b) => (b ? { ...b, running: false } : b));
+    }
+  }
+
   if (requiresPassword && !unlocked) {
     return (
       <div className="mx-auto max-w-md">
@@ -213,13 +254,64 @@ export function TraducirClient({
             guía se traduce al idioma contrario al que se redactó.
           </p>
         </div>
-        <Link
-          href="/redactar"
-          className="rounded-lg border border-slate-300 px-3 py-2 text-sm font-medium text-slate-700 hover:bg-slate-50"
-        >
-          ← Volver a redactar
-        </Link>
+        <div className="flex flex-wrap items-center gap-2">
+          <button
+            type="button"
+            onClick={translateAll}
+            disabled={batch?.running}
+            className="rounded-lg bg-[#4749B6] px-3 py-2 text-sm font-semibold text-white hover:bg-[#3b3da6] disabled:opacity-50"
+          >
+            {batch?.running ? "Traduciendo todo…" : "Traducir todo lo que falta"}
+          </button>
+          <Link
+            href="/redactar"
+            className="rounded-lg border border-slate-300 px-3 py-2 text-sm font-medium text-slate-700 hover:bg-slate-50"
+          >
+            ← Volver
+          </Link>
+        </div>
       </header>
+
+      {batch && (
+        <div className="mb-5 rounded-xl border border-[#4749B6]/20 bg-[#4749B6]/[0.04] px-4 py-3 text-sm">
+          {batch.running ? (
+            <div>
+              <p className="font-medium text-[#0B0B13]">
+                Traduciendo todas las guías pendientes…{" "}
+                {batch.total !== null && (
+                  <span className="text-slate-600">
+                    {batch.translated} de {batch.total}
+                  </span>
+                )}
+              </p>
+              <div className="mt-2 h-2 w-full overflow-hidden rounded-full bg-slate-200">
+                <div
+                  className="h-full rounded-full bg-[#4749B6] transition-all"
+                  style={{
+                    width:
+                      batch.total && batch.total > 0
+                        ? `${Math.round((batch.translated / batch.total) * 100)}%`
+                        : "10%",
+                  }}
+                />
+              </div>
+              <p className="mt-2 text-xs text-slate-500">
+                No cierres esta página. Puede tardar varios minutos según la cantidad de guías.
+              </p>
+            </div>
+          ) : (
+            <p className="text-emerald-800">
+              Listo: se tradujeron {batch.translated} guías.{" "}
+              {batch.failed > 0 && (
+                <span className="text-amber-700">
+                  {batch.failed} no se pudieron traducir; puedes reintentar.
+                </span>
+              )}{" "}
+              Los cambios se publican tras el redespliegue de Vercel (~1 min).
+            </p>
+          )}
+        </div>
+      )}
 
       <div className="grid gap-6 lg:grid-cols-[18rem_1fr]">
         {/* Lista de artículos */}
