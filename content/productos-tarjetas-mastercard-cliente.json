@@ -77,6 +77,16 @@
           "description": "Beneficios y promociones de la red Mastercard para tarjetas Punto Pago en Panamá.",
           "content": "# Promociones Mastercard\n\nLas tarjetas Punto Pago son **Mastercard** y pueden acceder a promociones y beneficios de la red a nivel regional.\n\n---\n\n## Dónde ver ofertas\n\nConsulta las promociones vigentes para Panamá en el sitio oficial de Mastercard:\n\n[Ofertas y promociones Mastercard — Panamá](https://cam.mastercard.com/es-region-cam/consumidores/conozca-nuestras-ofertas-y-promociones/priceless-specials/panama.html)\n\n---\n\n## Cómo usar una promoción\n\n1. Revisa los **términos** de cada oferta (comercios participantes, fechas y condiciones).\n2. Paga con tu **tarjeta Mastercard Punto Pago** en el comercio indicado.\n3. Algunas promociones requieren **registro previo** en el portal de Mastercard.\n\n---\n\n## Promociones Punto Pago\n\nAdemás de las de la red Mastercard, Punto Pago puede publicar campañas propias en la **app** o en redes sociales. Revisa la sección de notificaciones y promociones dentro de la aplicación.",
           "updatedAt": "2026-05-26T00:00:00Z"
+        },
+        {
+          "id": "tarjetas-mastercard-estado-de-cuenta-de-tu-tarjeta",
+          "slug": "estado-de-cuenta-de-tu-tarjeta",
+          "title": "Estado de cuenta de tu tarjeta",
+          "description": "Aprende cómo consultar el estado de cuenta de tu tarjeta de forma rápida y sencilla en la app de Punto Pago.",
+          "content": "Ingresa a la aplicación\nPresiona la tarjeta \nPresiona donde dice más\nEstado de cuenta",
+          "updatedAt": "2026-06-01T19:27:31.968Z",
+          "team": true,
+          "lang": "es"
         }
       ]
     }
