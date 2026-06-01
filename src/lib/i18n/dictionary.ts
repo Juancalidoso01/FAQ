@@ -116,4 +116,7 @@ export const RU: Record<string, string> = {
   "Traducción guardada. Se publicará tras el redespliegue.":
     "Перевод сохранён. Он появится после повторного развёртывания.",
   "Mostrando borrador sin guardar.": "Показан несохранённый черновик.",
+  "Traduciendo automáticamente con IA…": "Автоматический перевод с ИИ…",
+  "Traducción guardada por el equipo. Puedes regenerarla si lo necesitas.":
+    "Перевод сохранён командой. При необходимости можно сгенерировать заново.",
 };

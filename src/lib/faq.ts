@@ -24,6 +24,8 @@ export type FaqArticle = {
   images?: Array<{ fileId: string; url: string; sourceUrl?: string }>;
   /** true si la guía fue creada por el equipo desde /redactar. */
   team?: boolean;
+  /** Idioma original en que se redactó el contenido. Por defecto "es". */
+  lang?: "es" | "ru";
 };
 
 export type FaqCategory = {

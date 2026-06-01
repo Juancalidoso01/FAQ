@@ -2,11 +2,11 @@ import type { Metadata } from "next";
 import { TraducirClient, type ArticleIndexItem } from "@/components/TraducirClient";
 import { getAllCategories } from "@/lib/faq";
 import { redactorRequiresPassword } from "@/lib/redactar-access";
-import { getArticleTranslation } from "@/lib/translations";
+import { getArticleTranslation, type Lang } from "@/lib/translations";
 
 export const metadata: Metadata = {
-  title: "Traducir guías al ruso",
-  description: "Herramienta interna para revisar y corregir las traducciones al ruso.",
+  title: "Revisar traducciones",
+  description: "Herramienta interna para revisar y corregir las traducciones entre español y ruso.",
   robots: { index: false, follow: false },
 };
 
@@ -19,12 +19,16 @@ export default function TraducirPage() {
       const key = `${category.slug}/${article.slug}`;
       if (seen.has(key)) continue;
       seen.add(key);
+      const originalLang: Lang = article.lang === "ru" ? "ru" : "es";
+      const targetLang: Lang = originalLang === "es" ? "ru" : "es";
       index.push({
         categorySlug: category.slug,
         articleSlug: article.slug,
         title: article.title,
         categoryTitle: category.title,
-        translated: Boolean(getArticleTranslation(category.slug, article.slug)),
+        originalLang,
+        targetLang,
+        translated: Boolean(getArticleTranslation(category.slug, article.slug, targetLang)),
       });
     }
   }

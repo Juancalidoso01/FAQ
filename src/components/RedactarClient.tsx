@@ -36,6 +36,7 @@ export function RedactarClient({
   requiresPassword: boolean;
 }) {
   const [texto, setTexto] = useState("");
+  const [idioma, setIdioma] = useState<"es" | "ru">("es");
   const [structuring, setStructuring] = useState(false);
   const [publishing, setPublishing] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -82,7 +83,7 @@ export function RedactarClient({
       const res = await fetch("/api/redactar/estructurar", {
         method: "POST",
         headers: authHeaders(),
-        body: JSON.stringify({ texto }),
+        body: JSON.stringify({ texto, idioma }),
       });
       const data = await res.json();
       if (!res.ok) throw new Error(data.error ?? "No se pudo procesar el texto.");
@@ -110,6 +111,7 @@ export function RedactarClient({
           esNuevaCategoria: draft.esNuevaCategoria,
           categoriaSlug: draft.categoriaSlug,
           categoriaNuevaTitulo: draft.categoriaNuevaTitulo,
+          idioma,
         }),
       });
       const data = await res.json();
@@ -152,7 +154,7 @@ export function RedactarClient({
               href="/redactar/traducir"
               className="rounded-lg border border-slate-300 px-3 py-1.5 text-xs font-semibold text-slate-700 hover:bg-slate-50"
             >
-              Traducir al ruso →
+              Revisar traducciones →
             </Link>
             <Link
               href="/redactar/organizar"
@@ -249,6 +251,35 @@ export function RedactarClient({
         </div>
       ) : !draft ? (
         <div className="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm">
+          <div className="mb-4">
+            <span className="text-xs font-semibold text-slate-600">Idioma del contenido</span>
+            <div className="mt-1.5 inline-flex rounded-lg border border-slate-300 p-0.5">
+              {(
+                [
+                  { id: "es", label: "Español" },
+                  { id: "ru", label: "Русский" },
+                ] as const
+              ).map((opt) => (
+                <button
+                  key={opt.id}
+                  type="button"
+                  onClick={() => setIdioma(opt.id)}
+                  className={`rounded-md px-3 py-1.5 text-sm font-semibold transition ${
+                    idioma === opt.id
+                      ? "bg-[#4749B6] text-white"
+                      : "text-slate-600 hover:bg-slate-100"
+                  }`}
+                >
+                  {opt.label}
+                </button>
+              ))}
+            </div>
+            <p className="mt-1.5 text-xs text-slate-500">
+              {idioma === "ru"
+                ? "Escribe en ruso. Al publicar se generará también la versión en español automáticamente."
+                : "Escribe en español. Los consultores podrán verla en ruso (traducción automática)."}
+            </p>
+          </div>
           <label htmlFor="texto" className="text-sm font-semibold text-[#0B0B13]">
             Información a convertir en guía
           </label>

@@ -63,9 +63,11 @@ export async function POST(request: Request) {
   const google = createGoogleGenerativeAI({ apiKey });
 
   let texto = "";
+  let idioma: "es" | "ru" = "es";
   try {
     const body = await request.json();
     texto = typeof body?.texto === "string" ? body.texto.trim() : "";
+    if (body?.idioma === "ru") idioma = "ru";
   } catch {
     return NextResponse.json({ error: "Cuerpo de la solicitud inválido." }, { status: 400 });
   }
@@ -82,11 +84,23 @@ export async function POST(request: Request) {
     .map((c) => `- ${c.slug} — ${c.title} [${c.audience}] (${c.articleCount} artículos)`)
     .join("\n");
 
+  const langRules =
+    idioma === "ru"
+      ? [
+          "Redacta el TÍTULO, la DESCRIPCIÓN y el CONTENIDO completamente EN RUSO, claro y profesional.",
+          "El slugSugerido debe ser en LETRAS LATINAS (transliteración o palabras clave en inglés), en minúsculas y con guiones. Nunca uses cirílico en el slug.",
+          "El campo categoriaNuevaTitulo, si aplica, va en ruso.",
+        ]
+      : [
+          "Español neutro de Panamá, tono cercano y profesional, tratando de 'tú'.",
+          "El slugSugerido va en minúsculas con guiones, derivado del título.",
+        ];
+
   const system = [
     "Eres editor del Centro de Ayuda (FAQ) de Punto Pago, una fintech de Panamá.",
     "Conviertes notas o preguntas del equipo de call center en una guía clara para clientes.",
     "Reglas de estilo:",
-    "- Español neutro de Panamá, tono cercano y profesional, tratando de 'tú'.",
+    ...langRules.map((r) => `- ${r}`),
     "- Sé directo y conciso. Usa pasos numerados para procedimientos y viñetas para listas.",
     "- No inventes datos (montos, plazos, requisitos). Si algo no está en el texto, no lo agregues.",
     "- No incluyas notas internas, fuentes, ni datos de contacto/soporte (se agregan automáticamente).",

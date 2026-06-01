@@ -16,7 +16,7 @@ import {
 } from "@/lib/faq";
 import { getArticleBreadcrumbs, getSectionArticles } from "@/lib/navigation";
 import { articleJsonLd, breadcrumbJsonLd } from "@/lib/seo";
-import { getArticleTranslation } from "@/lib/translations";
+import { getArticleTranslation, type Lang } from "@/lib/translations";
 
 /** Normaliza texto para comparar la descripción con el inicio del contenido. */
 function normalize(text: string): string {
@@ -93,25 +93,28 @@ export default async function ArticlePage({ params }: Props) {
   const showLead =
     descNorm.length > 0 && !contentStart.startsWith(descNorm.slice(0, 40));
 
-  const esRendered = {
+  const originalLang: Lang = article.lang === "ru" ? "ru" : "es";
+  const otherLang: Lang = originalLang === "es" ? "ru" : "es";
+
+  const originalRendered = {
     title: article.title,
     description: article.description ?? "",
     html: parsed.html,
     headings: parsed.headings,
     readingMinutes: parsed.readingMinutes,
   };
-  const esSource = {
+  const originalSource = {
     title: article.title,
     description: article.description ?? "",
     content: article.content,
   };
-  const ruTranslation = getArticleTranslation(categorySlug, articleSlug);
-  const ruRendered = ruTranslation
+  const otherTranslation = getArticleTranslation(categorySlug, articleSlug, otherLang);
+  const otherRendered = otherTranslation
     ? (() => {
-        const p = parseArticleContent(ruTranslation.content, ruTranslation.title);
+        const p = parseArticleContent(otherTranslation.content, otherTranslation.title);
         return {
-          title: ruTranslation.title,
-          description: ruTranslation.description,
+          title: otherTranslation.title,
+          description: otherTranslation.description,
           html: p.html,
           headings: p.headings,
           readingMinutes: p.readingMinutes,
@@ -138,9 +141,9 @@ export default async function ArticlePage({ params }: Props) {
           updatedAt={article.updatedAt ?? null}
           showLead={showLead}
           isRemesas={isRemesasArticle}
-          es={esRendered}
-          esSource={esSource}
-          ru={ruRendered}
+          originalLang={originalLang}
+          original={{ rendered: originalRendered, source: originalSource }}
+          translation={otherRendered}
         />
 
         <ArticleFeedback />

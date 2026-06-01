@@ -3,7 +3,7 @@ import { z } from "zod";
 import { readJsonFileOptional, writeJsonFile } from "@/lib/github";
 import { isRedactorAuthorized } from "@/lib/redactar-access";
 import {
-  TRANSLATIONS_RU_FILE,
+  TRANSLATIONS_FILES,
   translationKey,
   type TranslationStore,
 } from "@/lib/translations";
@@ -17,6 +17,8 @@ const bodySchema = z.object({
   titulo: z.string().min(1),
   descripcion: z.string().optional().default(""),
   contenidoMarkdown: z.string().min(1),
+  /** Idioma al que pertenece la traducción que se guarda. Por defecto "ru". */
+  lang: z.enum(["es", "ru"]).optional().default("ru"),
 });
 
 export async function POST(request: Request) {
@@ -44,10 +46,11 @@ export async function POST(request: Request) {
     return NextResponse.json({ error: "Datos de traducción inválidos." }, { status: 400 });
   }
 
-  const { categorySlug, articleSlug, titulo, descripcion, contenidoMarkdown } = parsed.data;
+  const { categorySlug, articleSlug, titulo, descripcion, contenidoMarkdown, lang } = parsed.data;
+  const file = TRANSLATIONS_FILES[lang];
 
   try {
-    const existing = await readJsonFileOptional<TranslationStore>(TRANSLATIONS_RU_FILE, token);
+    const existing = await readJsonFileOptional<TranslationStore>(file, token);
     const store: TranslationStore = existing?.data ?? {};
 
     store[translationKey(categorySlug, articleSlug)] = {
@@ -58,10 +61,10 @@ export async function POST(request: Request) {
     };
 
     await writeJsonFile(
-      TRANSLATIONS_RU_FILE,
+      file,
       store,
       existing?.sha ?? null,
-      `FAQ: traducción al ruso de ${categorySlug}/${articleSlug}`,
+      `FAQ: traducción (${lang}) de ${categorySlug}/${articleSlug}`,
       token,
     );
 

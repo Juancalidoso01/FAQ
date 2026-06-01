@@ -1,8 +1,15 @@
 import { NextResponse } from "next/server";
+import { resolveGoogleApiKey, translateArticle } from "@/lib/ai-translate";
 import type { FaqData } from "@/lib/faq";
 import { COMMUNITY_FILE, getFileForCategory } from "@/lib/content-sources";
+import { readJsonFileOptional, writeJsonFile } from "@/lib/github";
 import { isRedactorAuthorized } from "@/lib/redactar-access";
 import { slugify } from "@/lib/slug";
+import {
+  TRANSLATIONS_FILES,
+  translationKey,
+  type TranslationStore,
+} from "@/lib/translations";
 
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
@@ -85,6 +92,7 @@ export async function POST(request: Request) {
     esNuevaCategoria?: boolean;
     categoriaSlug?: string;
     categoriaNuevaTitulo?: string;
+    idioma?: string;
   };
   try {
     body = await request.json();
@@ -95,6 +103,7 @@ export async function POST(request: Request) {
   const titulo = (body.titulo ?? "").trim();
   const descripcion = (body.descripcion ?? "").trim();
   const contenido = (body.contenidoMarkdown ?? "").trim();
+  const idioma: "es" | "ru" = body.idioma === "ru" ? "ru" : "es";
   if (!titulo || !contenido) {
     return NextResponse.json({ error: "Faltan el título o el contenido." }, { status: 400 });
   }
@@ -150,6 +159,7 @@ export async function POST(request: Request) {
       content: contenido,
       updatedAt: new Date().toISOString(),
       team: true,
+      lang: idioma,
     });
 
     await writeContentFile(
@@ -159,6 +169,41 @@ export async function POST(request: Request) {
       `FAQ: agrega "${titulo}" en ${categorySlug}`,
       token,
     );
+
+    // Si se redactó en ruso, generamos de una vez la versión en español para que
+    // el sitio público (estático) la muestre traducida sin esperar al navegador.
+    if (idioma === "ru") {
+      const apiKey = resolveGoogleApiKey();
+      if (apiKey) {
+        try {
+          const es = await translateArticle(apiKey, {
+            from: "ru",
+            to: "es",
+            titulo,
+            descripcion,
+            contenidoMarkdown: contenido,
+          });
+          const file = TRANSLATIONS_FILES.es;
+          const existing = await readJsonFileOptional<TranslationStore>(file, token);
+          const store: TranslationStore = existing?.data ?? {};
+          store[translationKey(categorySlug, articleSlug)] = {
+            title: es.titulo,
+            description: es.descripcion,
+            content: es.contenidoMarkdown,
+            updatedAt: new Date().toISOString(),
+          };
+          await writeJsonFile(
+            file,
+            store,
+            existing?.sha ?? null,
+            `FAQ: traducción al español de ${categorySlug}/${articleSlug}`,
+            token,
+          );
+        } catch (translateError) {
+          console.error("No se pudo generar la versión en español:", translateError);
+        }
+      }
+    }
 
     return NextResponse.json({
       ok: true,
