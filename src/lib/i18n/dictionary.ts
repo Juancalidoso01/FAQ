@@ -244,6 +244,54 @@ export const RU: Record<string, string> = {
   "Vista previa": "Предпросмотр",
   General: "Общее",
 
+  // Herramienta del equipo: revisar traducciones
+  "Revisar traducciones": "Проверить переводы",
+  "Ingresa la clave del equipo para continuar.": "Введите пароль команды, чтобы продолжить.",
+  "Clave de acceso": "Пароль доступа",
+  "Elige una guía, genera la traducción con IA y corrige el texto antes de guardar. Cada guía se traduce al idioma contrario al que se redactó.":
+    "Выберите руководство, создайте перевод с помощью ИИ и отредактируйте текст перед сохранением. Каждое руководство переводится на язык, противоположный тому, на котором оно было написано.",
+  "Traduciendo todo…": "Переводим всё…",
+  "Traducir todo lo que falta": "Перевести всё недостающее",
+  "← Volver": "← Назад",
+  "Traduciendo todas las guías pendientes…": "Переводим все ожидающие руководства…",
+  de: "из",
+  "No cierres esta página. Puede tardar varios minutos según la cantidad de guías.":
+    "Не закрывайте эту страницу. Это может занять несколько минут в зависимости от количества руководств.",
+  "Listo: se tradujeron": "Готово: переведено",
+  "guías.": "руководств.",
+  "no se pudieron traducir; puedes reintentar.": "не удалось перевести; можно повторить попытку.",
+  "Los cambios se publican tras el redespliegue de Vercel (~1 min).":
+    "Изменения публикуются после повторного развёртывания Vercel (~1 мин).",
+  "Buscar guía…": "Поиск руководства…",
+  "Redactada en ruso": "Написано на русском",
+  Traducida: "Переведено",
+  "Sin resultados.": "Нет результатов.",
+  "Elige una guía de la lista para empezar.": "Выберите руководство из списка, чтобы начать.",
+  "Cargando…": "Загрузка…",
+  "Traducción guardada. Se publicará tras el redespliegue de Vercel (~1 min).":
+    "Перевод сохранён. Он будет опубликован после повторного развёртывания Vercel (~1 мин).",
+  original: "оригинал",
+  editable: "редактируемый",
+  Descripción: "Описание",
+
+  // Herramienta del equipo: organizar el menú
+  "Organizar el menú": "Организовать меню",
+  "Arrastra las guías entre secciones para decidir dónde aparece cada una. Las guías nuevas comienzan en «Sin ubicar».":
+    "Перетаскивайте руководства между разделами, чтобы решить, где появится каждое. Новые руководства начинают в разделе «Без размещения».",
+  "← Volver a redactar": "← Назад к созданию",
+  "Sin ubicar (nuevas)": "Без размещения (новые)",
+  "Suelta guías aquí": "Перетащите руководства сюда",
+  "¿Restaurar el orden original y borrar todas las ubicaciones manuales?":
+    "Восстановить исходный порядок и удалить все ручные размещения?",
+  "Restaurar orden original": "Восстановить исходный порядок",
+  "Guardar orden": "Сохранить порядок",
+  "Sin cambios": "Без изменений",
+  "Orden restaurado. Vercel desplegará los cambios en ~1 minuto.":
+    "Порядок восстановлен. Vercel развернёт изменения через ~1 минуту.",
+  "Orden guardado. Vercel desplegará los cambios en ~1 minuto.":
+    "Порядок сохранён. Vercel развернёт изменения через ~1 минуту.",
+  "Error desconocido.": "Неизвестная ошибка.",
+
   // Subgrupos (empresa)
   "Introducción": "Введение",
   Comenzando: "Начало работы",

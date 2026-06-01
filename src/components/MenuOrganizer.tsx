@@ -24,6 +24,7 @@ import { CSS } from "@dnd-kit/utilities";
 import Link from "next/link";
 import { useEffect, useMemo, useState } from "react";
 import { useLang } from "@/components/LanguageProvider";
+import { useT } from "@/components/T";
 
 export type OrganizerItem = { key: string; title: string; href: string };
 export type OrganizerGroup = { id: string; title: string; items: OrganizerItem[] };
@@ -87,6 +88,7 @@ export function MenuOrganizer({
   const [clave, setClave] = useState("");
 
   const { enableTeamMode } = useLang();
+  const t = useT();
   useEffect(() => {
     enableTeamMode();
   }, [enableTeamMode]);
@@ -190,13 +192,13 @@ export function MenuOrganizer({
       setMessage({
         type: "ok",
         text: reset
-          ? "Orden restaurado. Vercel desplegará los cambios en ~1 minuto."
-          : "Orden guardado. Vercel desplegará los cambios en ~1 minuto.",
+          ? t("Orden restaurado. Vercel desplegará los cambios en ~1 minuto.")
+          : t("Orden guardado. Vercel desplegará los cambios en ~1 minuto."),
       });
     } catch (error) {
       setMessage({
         type: "error",
-        text: error instanceof Error ? error.message : "Error desconocido.",
+        text: error instanceof Error ? error.message : t("Error desconocido."),
       });
     } finally {
       setSaving(false);
@@ -206,15 +208,15 @@ export function MenuOrganizer({
   if (requiresPassword && !unlocked) {
     return (
       <div className="mx-auto max-w-md">
-        <h1 className="text-xl font-bold text-[#0B0B13]">Organizar el menú</h1>
+        <h1 className="text-xl font-bold text-[#0B0B13]">{t("Organizar el menú")}</h1>
         <p className="mt-2 text-sm text-slate-600">
-          Ingresa la clave del equipo para continuar.
+          {t("Ingresa la clave del equipo para continuar.")}
         </p>
         <input
           type="password"
           value={clave}
           onChange={(e) => setClave(e.target.value)}
-          placeholder="Clave de acceso"
+          placeholder={t("Clave de acceso")}
           className="mt-4 w-full rounded-lg border border-slate-300 px-3 py-2 text-sm"
         />
         <button
@@ -222,7 +224,7 @@ export function MenuOrganizer({
           onClick={() => setUnlocked(clave.length > 0)}
           className="mt-3 w-full rounded-lg bg-[#4749B6] px-3 py-2 text-sm font-semibold text-white hover:bg-[#3b3da6]"
         >
-          Entrar
+          {t("Entrar")}
         </button>
       </div>
     );
@@ -234,18 +236,17 @@ export function MenuOrganizer({
         <div className="flex flex-wrap items-center justify-between gap-3">
           <div>
             <h1 className="text-2xl font-bold tracking-tight text-[#0B0B13]">
-              Organizar el menú
+              {t("Organizar el menú")}
             </h1>
             <p className="mt-1 text-sm text-slate-600">
-              Arrastra las guías entre secciones para decidir dónde aparece cada una. Las
-              guías nuevas comienzan en <strong>Sin ubicar</strong>.
+              {t("Arrastra las guías entre secciones para decidir dónde aparece cada una. Las guías nuevas comienzan en «Sin ubicar».")}
             </p>
           </div>
           <Link
             href="/redactar"
             className="rounded-lg border border-slate-300 px-3 py-2 text-sm font-medium text-slate-700 hover:bg-slate-50"
           >
-            ← Volver a redactar
+            {t("← Volver a redactar")}
           </Link>
         </div>
       </header>
@@ -262,7 +263,7 @@ export function MenuOrganizer({
                 : "bg-slate-100 text-slate-600 hover:bg-slate-200"
             }`}
           >
-            {b.label}
+            {t(b.label)}
           </button>
         ))}
       </div>
@@ -289,7 +290,7 @@ export function MenuOrganizer({
         <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-3">
           <Column
             id={containerId(board.audience, UNPLACED)}
-            title="Sin ubicar (nuevas)"
+            title={t("Sin ubicar (nuevas)")}
             highlight
             keys={containers[containerId(board.audience, UNPLACED)] ?? []}
             itemData={itemData}
@@ -298,7 +299,7 @@ export function MenuOrganizer({
             <Column
               key={group.id}
               id={containerId(board.audience, group.id)}
-              title={group.title}
+              title={t(group.title)}
               keys={containers[containerId(board.audience, group.id)] ?? []}
               itemData={itemData}
             />
@@ -314,14 +315,14 @@ export function MenuOrganizer({
         <button
           type="button"
           onClick={() => {
-            if (confirm("¿Restaurar el orden original y borrar todas las ubicaciones manuales?")) {
+            if (confirm(t("¿Restaurar el orden original y borrar todas las ubicaciones manuales?"))) {
               save(true);
             }
           }}
           disabled={saving}
           className="text-sm font-medium text-slate-500 underline hover:text-slate-700 disabled:opacity-50"
         >
-          Restaurar orden original
+          {t("Restaurar orden original")}
         </button>
         <button
           type="button"
@@ -329,7 +330,7 @@ export function MenuOrganizer({
           disabled={saving || !dirty}
           className="rounded-lg bg-[#4749B6] px-5 py-2.5 text-sm font-semibold text-white shadow-sm transition hover:bg-[#3b3da6] disabled:cursor-not-allowed disabled:opacity-50"
         >
-          {saving ? "Guardando…" : dirty ? "Guardar orden" : "Sin cambios"}
+          {saving ? t("Guardando…") : dirty ? t("Guardar orden") : t("Sin cambios")}
         </button>
       </div>
     </div>
@@ -350,6 +351,7 @@ function Column({
   highlight?: boolean;
 }) {
   const { setNodeRef, isOver } = useDroppable({ id });
+  const t = useT();
   return (
     <section
       className={`rounded-2xl border p-3 ${
@@ -364,7 +366,7 @@ function Column({
         <ul ref={setNodeRef} className="min-h-16 space-y-2">
           {keys.length === 0 && (
             <li className="rounded-lg border border-dashed border-slate-200 px-3 py-4 text-center text-xs text-slate-400">
-              Suelta guías aquí
+              {t("Suelta guías aquí")}
             </li>
           )}
           {keys.map((key) => (
@@ -393,6 +395,7 @@ function SortableCard({ id, title }: { id: string; title: string }) {
 }
 
 function CardBody({ title, dragging }: { title: string; dragging?: boolean }) {
+  const t = useT();
   return (
     <div
       className={`flex cursor-grab items-center gap-2 rounded-lg border border-slate-200 bg-white px-3 py-2.5 text-sm text-slate-700 shadow-sm active:cursor-grabbing ${
@@ -402,7 +405,7 @@ function CardBody({ title, dragging }: { title: string; dragging?: boolean }) {
       <span className="text-slate-300" aria-hidden>
         ⠿
       </span>
-      <span className="font-medium">{title}</span>
+      <span className="font-medium">{t(title)}</span>
     </div>
   );
 }
