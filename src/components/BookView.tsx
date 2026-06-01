@@ -5,6 +5,7 @@ import { useMemo } from "react";
 import { ArticleContent } from "@/components/ArticleContent";
 import { useLang } from "@/components/LanguageProvider";
 import { useT } from "@/components/T";
+import { puntoPagoLockupSvg } from "@/lib/brand";
 
 export type BookArticleContent = { title: string; description: string; html: string };
 export type BookArticle = {
@@ -59,8 +60,7 @@ export function BookView({
   function buildHtmlDocument(): string {
     const styles = `
       *{box-sizing:border-box}
-      body{font-family:-apple-system,Segoe UI,Roboto,Helvetica,Arial,sans-serif;color:#0B0B13;max-width:46rem;margin:0 auto;padding:2.5rem 1.5rem;line-height:1.6}
-      h1{font-size:2rem;margin:0 0 .25rem}
+      body{font-family:'Plus Jakarta Sans',-apple-system,Segoe UI,Roboto,Helvetica,Arial,sans-serif;color:#0B0B13;max-width:46rem;margin:0 auto;padding:0 1.5rem 3rem;line-height:1.6}
       h2{font-size:1.5rem;margin:2.5rem 0 .5rem;border-top:2px solid #4749B6;padding-top:1rem}
       h3{font-size:1.2rem;margin:1.75rem 0 .35rem}
       h4{font-size:1.02rem;margin:1.5rem 0 .25rem;color:#4749B6}
@@ -71,10 +71,16 @@ export function BookView({
       th,td{border:1px solid #e2e8f0;padding:.5rem .65rem;text-align:left;font-size:.92rem}
       th{background:#f1f5f9}
       hr{border:0;border-top:1px solid #e2e8f0;margin:1.5rem 0}
-      .cover{text-align:center;padding:4rem 0 3rem;border-bottom:1px solid #e2e8f0;margin-bottom:2rem}
-      .muted{color:#64748b;font-size:.9rem}
-      .toc a{display:block;text-decoration:none;color:#0B0B13;padding:.15rem 0}
-      .toc .chap{font-weight:700;margin-top:.75rem}
+      .cover{text-align:center;padding:3.5rem 1.5rem 3rem;margin:0 -1.5rem 2.5rem;border-radius:0 0 28px 28px;background:linear-gradient(135deg,#eef0ff 0%,#f7f5ff 60%,#ffffff 100%);border-bottom:3px solid #4749B6;-webkit-print-color-adjust:exact;print-color-adjust:exact}
+      .cover .brand{display:flex;justify-content:center;margin-bottom:1.5rem}
+      .cover .eyebrow{font-size:.72rem;font-weight:700;letter-spacing:.18em;text-transform:uppercase;color:#4749B6;margin:0}
+      .cover h1{font-size:2rem;font-weight:800;letter-spacing:-.02em;margin:.5rem 0 .25rem}
+      .cover .subtitle{font-size:1.1rem;color:#334155;margin:.25rem 0}
+      .cover .rule{width:64px;height:4px;border-radius:999px;background:#4749B6;margin:1rem auto;-webkit-print-color-adjust:exact;print-color-adjust:exact}
+      .muted{color:#64748b;font-size:.88rem;margin:.25rem 0 0}
+      .note{color:#b45309;font-size:.8rem;margin-top:.6rem}
+      .toc a{display:block;text-decoration:none;color:#334155;padding:.15rem 0}
+      .toc .chap{font-weight:700;margin-top:.9rem;color:#4749B6;text-transform:uppercase;font-size:.78rem;letter-spacing:.08em}
       .art{margin:1.75rem 0;padding-bottom:1rem;border-bottom:1px solid #eef2f7}
       .art p.lead{color:#475569}
     `;
@@ -86,7 +92,10 @@ export function BookView({
 
     const head = `<!doctype html><html lang="${ru ? "ru" : "es"}"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>${esc(siteName)}</title><style>${styles}</style></head><body>`;
 
-    const cover = `<div class="cover"><h1>${esc(siteName)}</h1><p class="muted">${esc(t("Guía completa"))} · ${esc(dateLabel)}</p></div>`;
+    const note = ru
+      ? `<p class="note">${esc(t("Las guías sin traducción se muestran en español."))}</p>`
+      : "";
+    const cover = `<div class="cover"><div class="brand">${puntoPagoLockupSvg("Html")}</div><p class="eyebrow">${esc(t("Centro de ayuda"))}</p><h1>${esc(siteName)}</h1><div class="rule"></div><p class="subtitle">${esc(t("Guía completa"))}</p><p class="muted">${totalArticles} ${esc(t("guías"))} · ${esc(dateLabel)}</p>${note}</div>`;
 
     const toc = [
       `<h2>${esc(t("Índice"))}</h2><div class="toc">`,
@@ -171,8 +180,13 @@ export function BookView({
 
       <article className="book-content">
         <header className="book-cover">
+          <div
+            className="book-cover__brand"
+            dangerouslySetInnerHTML={{ __html: puntoPagoLockupSvg("Cover") }}
+          />
           <p className="book-cover__eyebrow">{t("Centro de ayuda")}</p>
           <h1 className="book-cover__title">{siteName}</h1>
+          <div className="book-cover__rule" />
           <p className="book-cover__subtitle">{t("Guía completa")}</p>
           <p className="book-cover__meta">
             {totalArticles} {t("guías")} · {dateLabel}
