@@ -305,6 +305,7 @@ export const RU: Record<string, string> = {
   "Exportar libro →": "Экспортировать книгу →",
   "Descargar guía completa": "Скачать полное руководство",
   "(libro digital en PDF o HTML)": "(цифровая книга в PDF или HTML)",
+  "Exportar guía (PDF)": "Экспортировать руководство (PDF)",
 
   // Subgrupos (empresa)
   "Introducción": "Введение",

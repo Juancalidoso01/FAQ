@@ -266,6 +266,26 @@ export function FaqSidebar({
             </svg>
             <T>Agregar contenido</T>
           </Link>
+          <Link
+            href="/libro"
+            onClick={onClose}
+            className="mt-2 flex items-center justify-center gap-2 rounded-lg border border-[#4749B6]/30 bg-white px-3 py-2.5 text-sm font-semibold text-[#4749B6] transition hover:bg-[#4749B6]/5"
+          >
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              viewBox="0 0 20 20"
+              fill="currentColor"
+              className="h-4 w-4"
+              aria-hidden
+            >
+              <path
+                fillRule="evenodd"
+                d="M10 1a.75.75 0 0 1 .75.75v8.69l2.22-2.22a.75.75 0 1 1 1.06 1.06l-3.5 3.5a.75.75 0 0 1-1.06 0l-3.5-3.5a.75.75 0 1 1 1.06-1.06l2.22 2.22V1.75A.75.75 0 0 1 10 1ZM3.5 13a.75.75 0 0 1 .75.75v1.5c0 .414.336.75.75.75h10a.75.75 0 0 0 .75-.75v-1.5a.75.75 0 0 1 1.5 0v1.5A2.25 2.25 0 0 1 15 17.5H5a2.25 2.25 0 0 1-2.25-2.25v-1.5A.75.75 0 0 1 3.5 13Z"
+                clipRule="evenodd"
+              />
+            </svg>
+            <T>Exportar guía (PDF)</T>
+          </Link>
           <p className="mt-1.5 text-center text-[11px] text-slate-400">
             <T>Para el equipo Punto Pago</T>
           </p>
