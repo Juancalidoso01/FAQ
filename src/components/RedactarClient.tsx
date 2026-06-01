@@ -15,6 +15,8 @@ type SimilarArticle = {
   categorySlug: string;
   categoryTitle: string;
   href: string;
+  score: number;
+  level: "alta" | "media" | "baja";
 };
 
 type Draft = {
@@ -398,35 +400,55 @@ export function RedactarClient({
             </h2>
 
             {(draft.posibleDuplicado.existe || similares.length > 0) && (
-              <div className="mb-4 rounded-xl border border-amber-200 bg-amber-50 p-3 text-sm text-amber-800">
-                <strong>{t("Posible duplicado:")}</strong>{" "}
-                {draft.posibleDuplicado.motivo || t("Revisa si ya existe una guía similar.")}
+              <div className="mb-4 rounded-xl border border-amber-200 bg-amber-50 p-3 text-sm text-amber-900">
+                <p className="font-semibold">{t("Guías parecidas encontradas")}</p>
+                {draft.posibleDuplicado.existe && draft.posibleDuplicado.motivo && (
+                  <p className="mt-0.5 text-amber-800">
+                    <span className="font-medium">{t("La IA observa:")}</span>{" "}
+                    {draft.posibleDuplicado.motivo}
+                  </p>
+                )}
+                <p className="mt-1 text-xs text-amber-700">
+                  {t(
+                    "La calificación indica qué tan parecida es a una guía existente. Tú decides si publicar como nueva o editar la existente.",
+                  )}
+                </p>
                 {similares.length > 0 && (
-                  <div className="mt-2">
-                    <p className="text-xs font-semibold uppercase tracking-wide text-amber-700">
-                      {t("Guías parecidas")}
-                    </p>
-                    <ul className="mt-1 space-y-1">
-                      {similares.map((s) => (
-                        <li key={s.slug}>
+                  <ul className="mt-2 space-y-1.5">
+                    {similares.map((s) => {
+                      const styles =
+                        s.level === "alta"
+                          ? "bg-red-100 text-red-700"
+                          : s.level === "media"
+                            ? "bg-amber-100 text-amber-700"
+                            : "bg-slate-100 text-slate-600";
+                      const label =
+                        s.level === "alta"
+                          ? t("Coincidencia alta")
+                          : s.level === "media"
+                            ? t("Coincidencia media")
+                            : t("Coincidencia baja");
+                      return (
+                        <li key={s.slug} className="flex items-center gap-2">
+                          <span
+                            className={`inline-flex shrink-0 items-center rounded-full px-2 py-0.5 text-[11px] font-bold ${styles}`}
+                            title={label}
+                          >
+                            {s.score}% · {label}
+                          </span>
                           <a
                             href={s.href}
                             target="_blank"
                             rel="noopener noreferrer"
-                            className="font-medium text-[#4749B6] underline hover:text-[#3b3da6]"
+                            className="min-w-0 truncate font-medium text-[#4749B6] underline hover:text-[#3b3da6]"
                           >
                             {s.title}
-                          </a>{" "}
-                          <span className="text-amber-700">· {s.categoryTitle}</span>
+                          </a>
+                          <span className="shrink-0 text-xs text-amber-700">· {s.categoryTitle}</span>
                         </li>
-                      ))}
-                    </ul>
-                    <p className="mt-2 text-xs text-amber-700">
-                      {t(
-                        "Si tu guía cubre lo mismo, considera editar la existente en vez de crear una nueva.",
-                      )}
-                    </p>
-                  </div>
+                      );
+                    })}
+                  </ul>
                 )}
               </div>
             )}

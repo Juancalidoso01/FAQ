@@ -231,9 +231,13 @@ export const RU: Record<string, string> = {
   "Revisar y editar": "Проверить и отредактировать",
   "Posible duplicado:": "Возможный дубликат:",
   "Revisa si ya existe una guía similar.": "Проверьте, нет ли уже похожего руководства.",
-  "Guías parecidas": "Похожие руководства",
-  "Si tu guía cubre lo mismo, considera editar la existente en vez de crear una nueva.":
-    "Если ваше руководство охватывает то же самое, лучше отредактируйте существующее, а не создавайте новое.",
+  "Guías parecidas encontradas": "Найдены похожие руководства",
+  "La IA observa:": "ИИ замечает:",
+  "La calificación indica qué tan parecida es a una guía existente. Tú decides si publicar como nueva o editar la existente.":
+    "Оценка показывает, насколько руководство похоже на существующее. Вы решаете: опубликовать как новое или отредактировать существующее.",
+  "Coincidencia alta": "Высокое совпадение",
+  "Coincidencia media": "Среднее совпадение",
+  "Coincidencia baja": "Низкое совпадение",
   "Título": "Заголовок",
   Resumen: "Краткое описание",
   "Tema / categoría": "Тема / категория",

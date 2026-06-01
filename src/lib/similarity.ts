@@ -33,18 +33,29 @@ function jaccard(a: Set<string>, b: Set<string>): number {
   return inter / (a.size + b.size - inter);
 }
 
-export type SimilarArticle = ArticleBrief & { score: number };
+export type SimilarLevel = "alta" | "media" | "baja";
+export type SimilarArticle = ArticleBrief & { score: number; level: SimilarLevel };
+
+/** Umbral mínimo para mostrar una guía como candidata parecida. */
+const MIN_SCORE = 0.18;
+
+function levelFor(score: number): SimilarLevel {
+  if (score >= 0.5) return "alta";
+  if (score >= 0.3) return "media";
+  return "baja";
+}
 
 /**
- * Detecta artículos existentes parecidos al nuevo, de forma determinista
- * (sin IA), comparando títulos y descripciones por solapamiento de palabras.
- * Sirve como red de seguridad además del juicio del modelo.
+ * Califica qué tan parecido es el contenido nuevo a cada guía existente, de
+ * forma determinista (sin IA), comparando títulos y descripciones por
+ * solapamiento de palabras. NO decide por sí mismo si es duplicado: devuelve
+ * una calificación (0–1) para que el agente humano tome la decisión.
  */
 export function findSimilarArticles(
   title: string,
   description: string,
   articles: ArticleBrief[],
-  limit = 3,
+  limit = 5,
 ): SimilarArticle[] {
   const titleTokens = tokenSet(title);
   const newTokens = tokenSet(`${title} ${description}`);
@@ -55,9 +66,9 @@ export function findSimilarArticles(
       const aAllTokens = tokenSet(`${article.title} ${article.description}`);
       // Pondera el parecido del título por encima del de la descripción.
       const score = 0.7 * jaccard(titleTokens, aTitleTokens) + 0.3 * jaccard(newTokens, aAllTokens);
-      return { ...article, score };
+      return { ...article, score, level: levelFor(score) };
     })
-    .filter((a) => a.score >= 0.34)
+    .filter((a) => a.score >= MIN_SCORE)
     .sort((a, b) => b.score - a.score);
 
   return scored.slice(0, limit);

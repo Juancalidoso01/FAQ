@@ -131,19 +131,14 @@ export async function POST(request: Request) {
     const draft = result.output;
     const cleanedSlug = slugify(draft.slugSugerido || draft.titulo) || "nueva-guia";
 
-    // Red de seguridad determinista: aunque el modelo no lo detecte, comparamos
-    // por solapamiento de palabras contra todas las guías existentes.
+    // Calificación determinista de similitud (sin IA): no decide por sí misma,
+    // solo entrega un puntaje por guía para que el agente humano decida.
     const similares = findSimilarArticles(draft.titulo, draft.descripcion, existingArticles);
 
+    // Si el modelo marcó duplicado pero no dio el slug, lo completamos con el
+    // candidato de mayor puntaje (sin forzar el veredicto en ningún sentido).
     let posibleDuplicado = draft.posibleDuplicado;
-    if (!posibleDuplicado.existe && similares.length > 0) {
-      const top = similares[0];
-      posibleDuplicado = {
-        existe: true,
-        articuloSlug: top.slug,
-        motivo: `Se parece a una guía existente: "${top.title}" (${top.categoryTitle}).`,
-      };
-    } else if (posibleDuplicado.existe && !posibleDuplicado.articuloSlug && similares[0]) {
+    if (posibleDuplicado.existe && !posibleDuplicado.articuloSlug && similares[0]) {
       posibleDuplicado = { ...posibleDuplicado, articuloSlug: similares[0].slug };
     }
 
@@ -155,6 +150,8 @@ export async function POST(request: Request) {
         categorySlug: s.categorySlug,
         categoryTitle: s.categoryTitle,
         href: `/articulo/${s.categorySlug}/${s.slug}`,
+        score: Math.round(s.score * 100),
+        level: s.level,
       })),
     });
   } catch (error) {
