@@ -13,6 +13,16 @@
           "description": "Ve a un kiosco Punto Pago, inserta efectivo, elige el operador o servicio a pagar y el pago se aplica de inmediato.",
           "content": "# Recarga en kioscos\n\nEn los **kioscos Punto Pago** pagas servicios y recargas **con efectivo**. Tus pagos **se aplican de inmediato**.\n\n![](/images/recargas/instructivo-recarga-kioscos.png)\n\n---\n\n## ¿Qué puedo pagar?\n\n- **Recargas telefónicas:** prepago y postpago.\n- **Pagos de servicios:** aseo, cable, energía, internet y más.\n- **Pagos de préstamos:** bancos y financieras.\n\n---\n\n## Pasos en el kiosco\n\n1. **Selecciona el botón** del servicio que quieres pagar.\n2. **Ingresa el número de identificación** del servicio (número suscriptor, NAC, cédula u otro dato que pida el operador).\n3. **Inserta el efectivo** en la máquina (billete por billete).\n4. **Retira el comprobante** o comunícate con el call center si necesitas ayuda.\n\n---\n\n## ¿Dónde hay kioscos?\n\nPuedes ubicar kioscos Punto Pago desde la **app**, en la sección de mapa de terminales.",
           "updatedAt": "2026-05-26T00:00:00Z"
+        },
+        {
+          "id": "recarga-kioscos-pin-de-tu-pago-en-kioscos",
+          "slug": "pin-de-tu-pago-en-kioscos",
+          "title": "PIN de tu pago en kioscos",
+          "description": "Aprende qué hacer si no recibes el PIN de tu pago realizado en un kiosco de Punto Pago y cómo te notificamos.",
+          "content": "Cuando realizas un pago en cualquiera de nuestros kioscos, el sistema debe emitir un PIN como comprobante de tu transacción. Este PIN es importante para confirmar tu operación.\n\n## ¿Qué sucede si no recibes el PIN?\n\nEn ocasiones, puede que el PIN no se genere o no se te entregue al momento. No te preocupes, si al realizar tu pago en el kiosco dejaste tu número de WhatsApp, Punto Pago te notificará directamente por ese medio sobre el estado de tu transacción o para compartir el PIN.\n\n## Consejos importantes\n\n*   Siempre verifica si el kiosco te ha entregado el PIN de tu pago.\n*   Asegúrate de proporcionar tu número de WhatsApp correctamente en el kiosco para recibir notificaciones importantes.",
+          "updatedAt": "2026-06-01T16:21:15.402Z",
+          "team": true,
+          "lang": "es"
         }
       ]
     },
