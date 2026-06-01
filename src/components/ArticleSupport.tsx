@@ -1,3 +1,5 @@
+import { T } from "@/components/T";
+
 const SUPPORT_PHONE = "+507 399-3999";
 const WHATSAPP_NUMBER = "+507 6825-2816";
 const WHATSAPP_LINK = "https://wa.me/50768252816";
@@ -9,9 +11,11 @@ export function ArticleSupport() {
         💬
       </div>
       <div className="faq-support__body">
-        <p className="faq-support__title">¿Necesitas más ayuda?</p>
+        <p className="faq-support__title">
+          <T>¿Necesitas más ayuda?</T>
+        </p>
         <p className="faq-support__text">
-          Nuestro equipo de soporte está disponible para resolver tus dudas.
+          <T>Nuestro equipo de soporte está disponible para resolver tus dudas.</T>
         </p>
       </div>
       <div className="faq-support__actions">
@@ -24,7 +28,7 @@ export function ArticleSupport() {
           WhatsApp {WHATSAPP_NUMBER}
         </a>
         <a href={`tel:${SUPPORT_PHONE.replace(/\s/g, "")}`} className="faq-support__btn">
-          Llamar {SUPPORT_PHONE}
+          <T>Llamar</T> {SUPPORT_PHONE}
         </a>
       </div>
     </aside>

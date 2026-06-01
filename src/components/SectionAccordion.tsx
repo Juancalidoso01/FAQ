@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import { useEffect, useState } from "react";
+import { useT } from "@/components/T";
 
 export type SectionAccordionPanel = {
   id: string;
@@ -12,6 +13,7 @@ export type SectionAccordionPanel = {
 
 export function SectionAccordion({ sections }: { sections: SectionAccordionPanel[] }) {
   const [openId, setOpenId] = useState<string | null>(null);
+  const t = useT();
 
   useEffect(() => {
     const syncHash = () => {
@@ -39,10 +41,10 @@ export function SectionAccordion({ sections }: { sections: SectionAccordionPanel
               aria-expanded={isOpen}
             >
               <span>
-                <span className="block font-semibold text-[#0B0B13]">{section.title}</span>
+                <span className="block font-semibold text-[#0B0B13]">{t(section.title)}</span>
                 {section.description && (
                   <span className="mt-1 block text-sm leading-relaxed text-slate-600">
-                    {section.description}
+                    {t(section.description)}
                   </span>
                 )}
               </span>

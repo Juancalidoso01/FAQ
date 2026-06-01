@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { ProductCard } from "@/components/ProductCard";
 import { SearchBox } from "@/components/SearchBox";
 import { SectionAccordion } from "@/components/SectionAccordion";
+import { T } from "@/components/T";
 import {
   EMPRESA_HUB_ANCHORS,
   getEmpresaHubHref,
@@ -49,11 +50,13 @@ export default function EmpresasPage() {
   return (
     <>
       <h1 className="text-2xl font-semibold tracking-tight text-slate-900 sm:text-3xl">
-        Punto Pago para empresas
+        <T>Punto Pago para empresas</T>
       </h1>
       <p className="mt-2 max-w-2xl text-slate-600">
-        Soluciones para comercios, corresponsales y empresas. Elige una línea de negocio para ver las
-        guías.
+        <T>
+          Soluciones para comercios, corresponsales y empresas. Elige una línea de negocio para ver
+          las guías.
+        </T>
       </p>
 
       <div className="mt-6 max-w-xl">
@@ -65,7 +68,7 @@ export default function EmpresasPage() {
           id="soluciones-heading"
           className="text-sm font-semibold uppercase tracking-wide text-slate-500"
         >
-          Soluciones
+          <T>Soluciones</T>
         </h2>
         <div className="mt-4 grid gap-4 sm:grid-cols-2">
           {topicGroups.map((group) => (
@@ -89,10 +92,10 @@ export default function EmpresasPage() {
           id="guias-heading"
           className="text-sm font-semibold uppercase tracking-wide text-slate-500"
         >
-          Todas las guías por solución
+          <T>Todas las guías por solución</T>
         </h2>
         <p className="mt-1 text-sm text-slate-600">
-          Expande una solución para ver cada artículo disponible.
+          <T>Expande una solución para ver cada artículo disponible.</T>
         </p>
         <div className="mt-4">
           <SectionAccordion sections={accordionSections} />

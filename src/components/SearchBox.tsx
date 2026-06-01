@@ -2,6 +2,7 @@
 
 import { useRouter } from "next/navigation";
 import { FormEvent, useState } from "react";
+import { useT } from "@/components/T";
 
 export function SearchBox({
   defaultValue = "",
@@ -15,6 +16,7 @@ export function SearchBox({
   placeholder?: string;
 }) {
   const router = useRouter();
+  const t = useT();
   const [query, setQuery] = useState(defaultValue);
 
   const onSubmit = (e: FormEvent) => {
@@ -24,9 +26,9 @@ export function SearchBox({
   };
 
   return (
-    <form onSubmit={onSubmit} role="search" aria-label="Buscar en el centro de ayuda">
+    <form onSubmit={onSubmit} role="search" aria-label={t("Buscar en el centro de ayuda")}>
       <label htmlFor="faq-search" className="sr-only">
-        Buscar artículos
+        {t("Buscar artículos")}
       </label>
       <div
         className={`relative ${large ? "mx-auto max-w-xl" : ""} ${!compact && !large ? "" : ""}`}
@@ -37,7 +39,9 @@ export function SearchBox({
           name="q"
           value={query}
           onChange={(e) => setQuery(e.target.value)}
-          placeholder={placeholder ?? (large ? "Buscar en el centro de ayuda…" : "Buscar…")}
+          placeholder={
+            placeholder ?? (large ? t("Buscar en el centro de ayuda…") : t("Buscar…"))
+          }
           className={`w-full border border-slate-200/90 bg-white/95 text-[#0B0B13] shadow-sm placeholder:text-slate-400 focus:border-[#4749B6]/50 focus:outline-none focus:ring-2 focus:ring-[#4749B6]/20 ${
             compact
               ? "rounded-xl py-2 pl-3 pr-9 text-sm"
@@ -55,7 +59,7 @@ export function SearchBox({
                 ? "pp-btn-primary right-2 px-5 py-2.5 text-sm"
                 : "pp-btn-primary right-1.5 px-4 py-1.5 text-xs"
           }`}
-          aria-label="Buscar"
+          aria-label={t("Buscar")}
         >
           {compact ? (
             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" className="h-4 w-4">
@@ -66,7 +70,7 @@ export function SearchBox({
               />
             </svg>
           ) : (
-            "Buscar"
+            t("Buscar")
           )}
         </button>
       </div>

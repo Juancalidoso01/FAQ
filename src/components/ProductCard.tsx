@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { T } from "@/components/T";
 import type { FaqNavGroupResolved } from "@/lib/navigation";
 
 export function ProductCard({
@@ -25,7 +26,9 @@ export function ProductCard({
       }`}
     >
       <div className="flex items-start justify-between gap-2">
-        <h3 className="text-base font-bold text-[#0B0B13]">{product.title}</h3>
+        <h3 className="text-base font-bold text-[#0B0B13]">
+          <T>{product.title}</T>
+        </h3>
         {product.badge && (
           <span className="shrink-0 rounded-full bg-[#E8E9F7] px-2.5 py-0.5 text-[10px] font-semibold uppercase tracking-wide text-[#4749B6]">
             {product.badge}
@@ -41,7 +44,7 @@ export function ProductCard({
               key={sg.id}
               className="rounded-full bg-slate-100/90 px-2.5 py-0.5 text-[11px] font-medium text-slate-600"
             >
-              {sg.title}
+              <T>{sg.title}</T>
             </li>
           ))}
         </ul>
@@ -50,16 +53,22 @@ export function ProductCard({
       <div className="mt-5 flex flex-wrap items-center gap-3">
         {hubHref || firstArticle ? (
           <Link href={href} className="pp-btn-primary text-sm">
-            {variant === "highlight" ? "Ver preguntas frecuentes" : hubHref ? "Ver tema" : "Ver guía"}
+            <T>
+              {variant === "highlight"
+                ? "Ver preguntas frecuentes"
+                : hubHref
+                  ? "Ver tema"
+                  : "Ver guía"}
+            </T>
           </Link>
         ) : isExternal ? (
           <a href={href} target="_blank" rel="noopener noreferrer" className="pp-btn-primary text-sm">
-            Más información
+            <T>Más información</T>
           </a>
         ) : null}
         {product.items.length > 0 && (
           <span className="text-xs text-slate-400">
-            {product.items.length} {product.items.length === 1 ? "artículo" : "artículos"}
+            {product.items.length} <T>{product.items.length === 1 ? "artículo" : "artículos"}</T>
           </span>
         )}
       </div>

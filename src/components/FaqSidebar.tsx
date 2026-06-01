@@ -3,7 +3,9 @@
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import { useEffect, useMemo, useState } from "react";
+import { LanguageSwitcher } from "@/components/LanguageSwitcher";
 import { SearchBox } from "@/components/SearchBox";
+import { T, useT } from "@/components/T";
 import {
   CLIENTE_HUB_ANCHORS,
   EMPRESA_HUB_ANCHORS,
@@ -21,13 +23,14 @@ function AudienceTabs({
   active: FaqAudience | null;
   onSelect: (audience: FaqAudience) => void;
 }) {
+  const t = useT();
   const tabs: { id: FaqAudience; label: string }[] = [
     { id: "cliente", label: "Clientes" },
     { id: "empresa", label: "Empresas" },
   ];
 
   return (
-    <div className="flex rounded-lg bg-slate-100 p-1" role="tablist" aria-label="Tipo de usuario">
+    <div className="flex rounded-lg bg-slate-100 p-1" role="tablist" aria-label={t("Tipo de usuario")}>
       {tabs.map((tab) => {
         const selected = active === tab.id;
         return (
@@ -43,7 +46,7 @@ function AudienceTabs({
                 : "text-slate-600 hover:text-slate-900"
             }`}
           >
-            {tab.label}
+            {t(tab.label)}
           </button>
         );
       })}
@@ -65,6 +68,7 @@ function SidebarLink({
   pathname: string;
   activeHubId: string | null;
 }) {
+  const t = useT();
   const isHubActive =
     entry.hubId === "hub"
       ? (pathname === "/clientes" || pathname === "/empresas") && !activeHubId
@@ -98,7 +102,7 @@ function SidebarLink({
         rel="noopener noreferrer"
         className={className}
       >
-        {entry.title}
+        {t(entry.title)}
         <span className="ml-1 text-slate-400" aria-hidden>
           ↗
         </span>
@@ -108,7 +112,7 @@ function SidebarLink({
 
   return (
     <Link href={entry.href} className={className} aria-current={isActive ? "page" : undefined}>
-      {entry.title}
+      {t(entry.title)}
     </Link>
   );
 }
@@ -122,6 +126,7 @@ export function FaqSidebar({
 }) {
   const pathname = usePathname();
   const router = useRouter();
+  const t = useT();
   const [hashAnchor, setHashAnchor] = useState<string | null>(null);
 
   const activeCategorySlug = useMemo(() => {
@@ -207,10 +212,11 @@ export function FaqSidebar({
         }`}
         aria-label="Navegación del centro de ayuda"
       >
-        <div className="flex h-14 shrink-0 items-center border-b border-slate-200 px-4">
+        <div className="flex h-14 shrink-0 items-center gap-2 border-b border-slate-200 px-4">
           <Link href="/" className="font-semibold text-[#0B0B13] hover:text-[#4749B6]">
-            Centro de ayuda
+            <T>Centro de ayuda</T>
           </Link>
+          <LanguageSwitcher className="ml-auto" />
         </div>
 
         <div className="border-b border-slate-100 px-3 py-3">
@@ -230,7 +236,7 @@ export function FaqSidebar({
                     key={sidebarEntryKey(entry, index)}
                     className="px-3 pb-1 pt-4 text-[11px] font-semibold uppercase tracking-wide text-slate-400 first:pt-1"
                   >
-                    {entry.label}
+                    {t(entry.label)}
                   </li>
                 );
               }
@@ -258,9 +264,11 @@ export function FaqSidebar({
             >
               <path d="M10.75 4.75a.75.75 0 0 0-1.5 0v4.5h-4.5a.75.75 0 0 0 0 1.5h4.5v4.5a.75.75 0 0 0 1.5 0v-4.5h4.5a.75.75 0 0 0 0-1.5h-4.5v-4.5Z" />
             </svg>
-            Agregar contenido
+            <T>Agregar contenido</T>
           </Link>
-          <p className="mt-1.5 text-center text-[11px] text-slate-400">Para el equipo Punto Pago</p>
+          <p className="mt-1.5 text-center text-[11px] text-slate-400">
+            <T>Para el equipo Punto Pago</T>
+          </p>
         </div>
 
         <div className="shrink-0 border-t border-slate-200 px-4 py-3 text-xs text-slate-500">

@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { ProductCard } from "@/components/ProductCard";
 import { SearchBox } from "@/components/SearchBox";
 import { SectionAccordion } from "@/components/SectionAccordion";
+import { T } from "@/components/T";
 import {
   CLIENTE_HUB_ANCHORS,
   getClienteHubHref,
@@ -43,10 +44,10 @@ export default function ClientesPage() {
   return (
     <>
       <h1 className="text-2xl font-semibold tracking-tight text-slate-900 sm:text-3xl">
-        Punto Pago para clientes
+        <T>Punto Pago para clientes</T>
       </h1>
       <p className="mt-2 max-w-2xl text-slate-600">
-        Elige un tema para ver las guías. Usa la búsqueda si ya sabes qué necesitas.
+        <T>Elige un tema para ver las guías. Usa la búsqueda si ya sabes qué necesitas.</T>
       </p>
 
       <div className="mt-6 max-w-xl">
@@ -58,7 +59,7 @@ export default function ClientesPage() {
           id="temas-heading"
           className="text-sm font-semibold uppercase tracking-wide text-slate-500"
         >
-          Temas
+          <T>Temas</T>
         </h2>
         <div className="mt-4 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
           {topicGroups.map((group) => (
@@ -77,10 +78,13 @@ export default function ClientesPage() {
           id="guias-heading"
           className="text-sm font-semibold uppercase tracking-wide text-slate-500"
         >
-          Todas las guías por tema
+          <T>Todas las guías por tema</T>
         </h2>
         <p className="mt-1 text-sm text-slate-600">
-          Expande un tema para ver cada artículo. Los enlaces del menú lateral también llevan aquí.
+          <T>
+            Expande un tema para ver cada artículo. Los enlaces del menú lateral también llevan
+            aquí.
+          </T>
         </p>
         <div className="mt-4">
           <SectionAccordion sections={accordionSections} />

@@ -22,7 +22,8 @@ import {
 } from "@dnd-kit/sortable";
 import { CSS } from "@dnd-kit/utilities";
 import Link from "next/link";
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
+import { useLang } from "@/components/LanguageProvider";
 
 export type OrganizerItem = { key: string; title: string; href: string };
 export type OrganizerGroup = { id: string; title: string; items: OrganizerItem[] };
@@ -84,6 +85,11 @@ export function MenuOrganizer({
 
   const [unlocked, setUnlocked] = useState(!requiresPassword);
   const [clave, setClave] = useState("");
+
+  const { enableTeamMode } = useLang();
+  useEffect(() => {
+    enableTeamMode();
+  }, [enableTeamMode]);
   const [saving, setSaving] = useState(false);
   const [message, setMessage] = useState<{ type: "ok" | "error"; text: string } | null>(null);
   const [dirty, setDirty] = useState(false);

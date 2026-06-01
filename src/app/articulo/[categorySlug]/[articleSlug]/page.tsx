@@ -1,14 +1,13 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import { ArticleContent } from "@/components/ArticleContent";
 import { ArticleFeedback } from "@/components/ArticleFeedback";
 import { ArticleSupport } from "@/components/ArticleSupport";
-import { ArticleToc } from "@/components/ArticleToc";
 import { Breadcrumbs } from "@/components/Breadcrumbs";
 import { ContentPanel } from "@/components/FaqLayout";
 import { JsonLd } from "@/components/FaqUi";
-import { RemesasCalculator } from "@/components/RemesasCalculator";
+import { LocalizedArticle } from "@/components/LocalizedArticle";
+import { T } from "@/components/T";
 import { parseArticleContent } from "@/lib/content";
 import {
   articlePath,
@@ -17,6 +16,7 @@ import {
 } from "@/lib/faq";
 import { getArticleBreadcrumbs, getSectionArticles } from "@/lib/navigation";
 import { articleJsonLd, breadcrumbJsonLd } from "@/lib/seo";
+import { getArticleTranslation } from "@/lib/translations";
 
 /** Normaliza texto para comparar la descripción con el inicio del contenido. */
 function normalize(text: string): string {
@@ -93,6 +93,32 @@ export default async function ArticlePage({ params }: Props) {
   const showLead =
     descNorm.length > 0 && !contentStart.startsWith(descNorm.slice(0, 40));
 
+  const esRendered = {
+    title: article.title,
+    description: article.description ?? "",
+    html: parsed.html,
+    headings: parsed.headings,
+    readingMinutes: parsed.readingMinutes,
+  };
+  const esSource = {
+    title: article.title,
+    description: article.description ?? "",
+    content: article.content,
+  };
+  const ruTranslation = getArticleTranslation(categorySlug, articleSlug);
+  const ruRendered = ruTranslation
+    ? (() => {
+        const p = parseArticleContent(ruTranslation.content, ruTranslation.title);
+        return {
+          title: ruTranslation.title,
+          description: ruTranslation.description,
+          html: p.html,
+          headings: p.headings,
+          readingMinutes: p.readingMinutes,
+        };
+      })()
+    : null;
+
   return (
     <>
       <JsonLd
@@ -105,71 +131,17 @@ export default async function ArticlePage({ params }: Props) {
       <Breadcrumbs items={breadcrumbs} />
 
       <ContentPanel>
-        <article itemScope itemType="https://schema.org/Article">
-          <header className="mb-8 border-b border-slate-200 pb-6">
-            {eyebrow && (
-              <p className="mb-2 text-xs font-semibold uppercase tracking-[0.14em] text-[#4749B6]">
-                {eyebrow}
-              </p>
-            )}
-            <h1
-              itemProp="headline"
-              className="text-2xl font-bold tracking-tight text-[#0B0B13] sm:text-3xl"
-            >
-              {article.title}
-            </h1>
-            {showLead && (
-              <p className="mt-3 text-base leading-relaxed text-slate-600">
-                {article.description}
-              </p>
-            )}
-            <div className="mt-4 flex flex-wrap items-center gap-x-3 gap-y-1 text-sm text-slate-500">
-              <span className="inline-flex items-center gap-1.5">
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  stroke="currentColor"
-                  strokeWidth={1.6}
-                  className="h-4 w-4"
-                  aria-hidden
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    d="M12 6v6l4 2m6-2a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z"
-                  />
-                </svg>
-                {parsed.readingMinutes} min de lectura
-              </span>
-              {article.updatedAt && (
-                <>
-                  <span aria-hidden className="text-slate-300">
-                    ·
-                  </span>
-                  <span>
-                    Actualizado:{" "}
-                    <time itemProp="dateModified" dateTime={article.updatedAt}>
-                      {new Date(article.updatedAt).toLocaleDateString("es-PA", {
-                        year: "numeric",
-                        month: "long",
-                        day: "numeric",
-                      })}
-                    </time>
-                  </span>
-                </>
-              )}
-            </div>
-          </header>
-
-          {isRemesasArticle && <RemesasCalculator />}
-
-          <ArticleToc headings={parsed.headings} />
-
-          <div itemProp="articleBody">
-            <ArticleContent html={parsed.html} />
-          </div>
-        </article>
+        <LocalizedArticle
+          categorySlug={categorySlug}
+          articleSlug={articleSlug}
+          eyebrow={eyebrow}
+          updatedAt={article.updatedAt ?? null}
+          showLead={showLead}
+          isRemesas={isRemesasArticle}
+          es={esRendered}
+          esSource={esSource}
+          ru={ruRendered}
+        />
 
         <ArticleFeedback />
 
@@ -178,7 +150,7 @@ export default async function ArticlePage({ params }: Props) {
         {related.length > 0 && (
           <aside className="mt-10 border-t border-slate-200/80 pt-8">
             <h2 className="mb-3 text-xs font-semibold uppercase tracking-[0.12em] text-[#4749B6]">
-              En esta sección
+              <T>En esta sección</T>
             </h2>
             <ul className="space-y-2">
               {related.map((item) => (

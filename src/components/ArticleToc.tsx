@@ -1,11 +1,13 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import { useT } from "@/components/T";
 import type { ArticleHeading } from "@/lib/content";
 
 export function ArticleToc({ headings }: { headings: ArticleHeading[] }) {
   const items = headings.filter((h) => h.level === 2);
   const [activeId, setActiveId] = useState<string | null>(null);
+  const t = useT();
 
   useEffect(() => {
     if (items.length === 0) return;
@@ -40,8 +42,8 @@ export function ArticleToc({ headings }: { headings: ArticleHeading[] }) {
   };
 
   return (
-    <nav aria-label="Contenido de la guía" className="faq-toc">
-      <p className="faq-toc__title">En esta guía</p>
+    <nav aria-label={t("Contenido de la guía")} className="faq-toc">
+      <p className="faq-toc__title">{t("En esta guía")}</p>
       <ol className="faq-toc__list">
         {items.map((item) => (
           <li key={item.id}>

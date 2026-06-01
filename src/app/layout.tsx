@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Geist_Mono, Plus_Jakarta_Sans } from "next/font/google";
 import { FaqChrome } from "@/components/FaqChrome";
 import { JsonLd } from "@/components/FaqUi";
+import { LanguageProvider } from "@/components/LanguageProvider";
 import { SITE_DESCRIPTION, SITE_NAME, getSiteUrl } from "@/lib/faq";
 import { websiteJsonLd } from "@/lib/seo";
 import "./globals.css";
@@ -55,7 +56,9 @@ export default function RootLayout({
     <html lang="es-PA">
       <body className={`${plusJakarta.variable} ${geistMono.variable} font-sans antialiased`}>
         <JsonLd data={websiteJsonLd()} />
-        <FaqChrome>{children}</FaqChrome>
+        <LanguageProvider>
+          <FaqChrome>{children}</FaqChrome>
+        </LanguageProvider>
       </body>
     </html>
   );

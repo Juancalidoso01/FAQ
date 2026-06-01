@@ -1,8 +1,9 @@
 "use client";
 
 import Link from "next/link";
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { ArticleContent } from "@/components/ArticleContent";
+import { useLang } from "@/components/LanguageProvider";
 import { parseArticleContent } from "@/lib/content";
 
 type TaxonomyItem = { slug: string; title: string; audience: string };
@@ -42,6 +43,11 @@ export function RedactarClient({
   const [published, setPublished] = useState<{ path: string } | null>(null);
   const [clave, setClave] = useState("");
   const [unlocked, setUnlocked] = useState(!requiresPassword);
+
+  const { enableTeamMode } = useLang();
+  useEffect(() => {
+    enableTeamMode();
+  }, [enableTeamMode]);
 
   function authHeaders(): Record<string, string> {
     const headers: Record<string, string> = { "Content-Type": "application/json" };
