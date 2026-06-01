@@ -1,8 +1,8 @@
 import { T } from "@/components/T";
 
 const SUPPORT_PHONE = "+507 399-3999";
-const WHATSAPP_NUMBER = "+507 6825-2816";
-const WHATSAPP_LINK = "https://wa.me/50768252816";
+const WHATSAPP_NUMBER = "+507 6245-6852";
+const WHATSAPP_LINK = "https://wa.me/50762456852";
 
 export function ArticleSupport() {
   return (

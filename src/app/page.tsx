@@ -163,12 +163,12 @@ export default function HomePage() {
           {" · "}
           WhatsApp{" "}
           <a
-            href="https://wa.me/50768252816"
+            href="https://wa.me/50762456852"
             target="_blank"
             rel="noopener noreferrer"
             className="font-medium text-[#4749B6] hover:underline"
           >
-            +507 6825-2816
+            +507 6245-6852
           </a>
         </p>
         <p className="mt-3 border-t border-slate-100 pt-3">
