@@ -42,6 +42,7 @@ export function RedactarClient({
   const [error, setError] = useState<string | null>(null);
   const [draft, setDraft] = useState<Draft | null>(null);
   const [published, setPublished] = useState<{ path: string } | null>(null);
+  const [liveReady, setLiveReady] = useState(false);
   const [clave, setClave] = useState("");
   const [unlocked, setUnlocked] = useState(!requiresPassword);
 
@@ -49,6 +50,34 @@ export function RedactarClient({
   useEffect(() => {
     enableTeamMode();
   }, [enableTeamMode]);
+
+  // Tras publicar, la guía solo existe cuando Vercel termina de redesplegar.
+  // Comprobamos su URL cada pocos segundos y habilitamos "Ver" al estar lista.
+  useEffect(() => {
+    if (!published) return;
+    setLiveReady(false);
+    let active = true;
+    let tries = 0;
+    const check = async () => {
+      tries += 1;
+      try {
+        const res = await fetch(published.path, { method: "GET", cache: "no-store" });
+        if (active && res.ok) {
+          setLiveReady(true);
+          return;
+        }
+      } catch {
+        // sin conexión momentánea: reintentamos
+      }
+      if (active && tries < 60) {
+        window.setTimeout(check, 5000);
+      }
+    };
+    check();
+    return () => {
+      active = false;
+    };
+  }, [published]);
 
   function authHeaders(): Record<string, string> {
     const headers: Record<string, string> = { "Content-Type": "application/json" };
@@ -230,16 +259,36 @@ export function RedactarClient({
       ) : published ? (
         <div className="rounded-2xl border border-emerald-200 bg-emerald-50 p-6">
           <h2 className="text-lg font-bold text-emerald-900">¡Guía publicada!</h2>
-          <p className="mt-2 text-sm text-emerald-800">
-            La guía se guardó y se está publicando. En 1–2 minutos estará disponible en línea.
-          </p>
+          {liveReady ? (
+            <p className="mt-2 text-sm text-emerald-800">
+              Tu guía ya está disponible en línea. Puedes abrirla.
+            </p>
+          ) : (
+            <p className="mt-2 flex items-center gap-2 text-sm text-emerald-800">
+              <span
+                aria-hidden
+                className="inline-block h-3.5 w-3.5 animate-spin rounded-full border-2 border-emerald-600 border-t-transparent"
+              />
+              Estamos publicando tu guía. Tarda 1–2 minutos en aparecer; te avisamos aquí cuando
+              esté lista. No cierres esta página.
+            </p>
+          )}
           <div className="mt-4 flex flex-wrap gap-3">
-            <Link
-              href={published.path}
-              className="rounded-full bg-[#4749B6] px-4 py-2 text-sm font-semibold text-white hover:bg-[#3b3da6]"
-            >
-              Ver la guía
-            </Link>
+            {liveReady ? (
+              <Link
+                href={published.path}
+                className="rounded-full bg-[#4749B6] px-4 py-2 text-sm font-semibold text-white hover:bg-[#3b3da6]"
+              >
+                Ver la guía
+              </Link>
+            ) : (
+              <span
+                aria-disabled
+                className="cursor-not-allowed rounded-full bg-slate-300 px-4 py-2 text-sm font-semibold text-white"
+              >
+                Preparando la guía…
+              </span>
+            )}
             <button
               type="button"
               onClick={reset}
