@@ -8,8 +8,8 @@ export function SectionHeading({
   id,
 }: {
   eyebrow?: string;
-  title: string;
-  description?: string;
+  title: ReactNode;
+  description?: ReactNode;
   action?: ReactNode;
   id?: string;
 }) {

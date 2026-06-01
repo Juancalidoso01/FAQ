@@ -6,6 +6,7 @@ import { SectionHeading } from "@/components/FaqLayout";
 import { JsonLd } from "@/components/FaqUi";
 import { ProductCard } from "@/components/ProductCard";
 import { SearchBox } from "@/components/SearchBox";
+import { T } from "@/components/T";
 import {
   SITE_DESCRIPTION,
   SITE_NAME,
@@ -55,9 +56,11 @@ export default function HomePage() {
 
         <div className="mx-auto mt-10 max-w-2xl text-center">
           <h1 className="text-3xl font-bold tracking-tight text-[#0B0B13] sm:text-4xl">
-            ¿En qué te podemos ayudar?
+            <T>¿En qué te podemos ayudar?</T>
           </h1>
-          <p className="mt-3 text-base leading-relaxed text-slate-600">{SITE_DESCRIPTION}</p>
+          <p className="mt-3 text-base leading-relaxed text-slate-600">
+            <T>{SITE_DESCRIPTION}</T>
+          </p>
           <div className="mt-8">
             <SearchBox large placeholder="Ej: activar tarjeta, recargar, remesas…" />
           </div>
@@ -69,26 +72,30 @@ export default function HomePage() {
           href="/clientes"
           className="rounded-xl border border-slate-200 bg-white p-6 shadow-sm transition hover:border-[#4749B6]/30 hover:shadow-md"
         >
-          <h2 className="text-lg font-semibold text-[#0B0B13]">Soy cliente</h2>
+          <h2 className="text-lg font-semibold text-[#0B0B13]">
+            <T>Soy cliente</T>
+          </h2>
           <p className="mt-2 text-sm text-slate-600">
-            Tarjetas, recargas, Marketplace, remesas y soporte de la app.
+            <T>Tarjetas, recargas, Marketplace, remesas y soporte de la app.</T>
           </p>
         </Link>
         <Link
           href="/empresas"
           className="rounded-xl border border-slate-200 bg-white p-6 shadow-sm transition hover:border-[#4749B6]/30 hover:shadow-md"
         >
-          <h2 className="text-lg font-semibold text-[#0B0B13]">Soy empresa</h2>
+          <h2 className="text-lg font-semibold text-[#0B0B13]">
+            <T>Soy empresa</T>
+          </h2>
           <p className="mt-2 text-sm text-slate-600">
-            Cuotas en comercio, kioscos, corresponsales y soluciones B2B.
+            <T>Cuotas en comercio, kioscos, corresponsales y soluciones B2B.</T>
           </p>
         </Link>
       </section>
 
       <section aria-labelledby="populares-heading" className="mb-10">
         <SectionHeading
-          title="Temas populares"
-          description="Accesos directos a lo que más consultan nuestros clientes."
+          title={<T>Temas populares</T>}
+          description={<T>Accesos directos a lo que más consultan nuestros clientes.</T>}
           id="populares-heading"
         />
         <div className="flex flex-wrap gap-2">
@@ -98,7 +105,7 @@ export default function HomePage() {
               href={link.href}
               className="rounded-full border border-slate-200 bg-white px-4 py-2 text-sm font-medium text-[#4749B6] shadow-sm transition hover:border-[#4749B6]/30 hover:bg-[#4749B6]/5"
             >
-              {link.title}
+              <T>{link.title}</T>
             </Link>
           ))}
         </div>
@@ -106,11 +113,11 @@ export default function HomePage() {
 
       <section aria-labelledby="temas-heading" className="mb-12">
         <SectionHeading
-          title="Explorar por tema"
-          description="Elige una categoría para ver todas las guías disponibles."
+          title={<T>Explorar por tema</T>}
+          description={<T>Elige una categoría para ver todas las guías disponibles.</T>}
           action={
             <Link href="/clientes" className="pp-btn-ghost text-sm">
-              Ver hub clientes →
+              <T>Ver hub clientes →</T>
             </Link>
           }
           id="temas-heading"
@@ -129,12 +136,12 @@ export default function HomePage() {
       {faqPreview.length > 0 && (
         <section aria-labelledby="faq-heading" className="mb-8">
           <SectionHeading
-            title="Preguntas frecuentes"
-            description="Respuestas rápidas a dudas comunes."
+            title={<T>Preguntas frecuentes</T>}
+            description={<T>Respuestas rápidas a dudas comunes.</T>}
             action={
               faqCliente?.items[0] ? (
                 <Link href="/clientes#faq" className="pp-btn-ghost text-sm">
-                  Ver todas →
+                  <T>Ver todas →</T>
                 </Link>
               ) : undefined
             }
@@ -145,9 +152,11 @@ export default function HomePage() {
       )}
 
       <section className="rounded-2xl border border-slate-200 bg-white/90 px-6 py-5 text-sm text-slate-600 shadow-sm">
-        <p className="font-semibold text-[#0B0B13]">¿Necesitas más ayuda?</p>
+        <p className="font-semibold text-[#0B0B13]">
+          <T>¿Necesitas más ayuda?</T>
+        </p>
         <p className="mt-1">
-          Teléfono{" "}
+          <T>Teléfono</T>{" "}
           <a href="tel:+5073993999" className="font-medium text-[#4749B6] hover:underline">
             +507 399-3999
           </a>

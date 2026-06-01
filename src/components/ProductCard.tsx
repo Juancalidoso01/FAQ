@@ -35,7 +35,9 @@ export function ProductCard({
           </span>
         )}
       </div>
-      <p className="mt-2 flex-1 text-sm leading-relaxed text-slate-600">{product.description}</p>
+      <p className="mt-2 flex-1 text-sm leading-relaxed text-slate-600">
+        <T>{product.description}</T>
+      </p>
 
       {product.subgroups.length > 1 && (
         <ul className="mt-3 flex flex-wrap gap-1.5">

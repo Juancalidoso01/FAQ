@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { SearchBox } from "@/components/SearchBox";
+import { T } from "@/components/T";
 import { articlePath, excerpt, searchArticles } from "@/lib/faq";
 
 type Props = { searchParams: Promise<{ q?: string }> };
@@ -19,7 +20,7 @@ export default async function SearchPage({ searchParams }: Props) {
     <>
       <header className="mb-8 border-b border-slate-200 pb-6">
         <h1 className="text-2xl font-semibold tracking-tight text-slate-900 sm:text-3xl">
-          Buscar
+          <T>Buscar</T>
         </h1>
         <div className="mt-4">
           <SearchBox defaultValue={q} large />
@@ -30,12 +31,11 @@ export default async function SearchPage({ searchParams }: Props) {
         <>
           <p className="mb-4 text-sm text-slate-500">
             {results.length}{" "}
-            {results.length === 1 ? "resultado" : "resultados"} para &ldquo;{q}&rdquo;
+            <T>{results.length === 1 ? "resultado" : "resultados"}</T> <T>para</T> &ldquo;{q}&rdquo;
           </p>
           {results.length === 0 ? (
             <p className="text-slate-600">
-              No encontramos artículos con ese término. Prueba con otras palabras como
-              &ldquo;recarga&rdquo;, &ldquo;Mastercard&rdquo; o &ldquo;pago no reflejado&rdquo;.
+              <T>{`No encontramos artículos con ese término. Prueba con otras palabras como "recarga", "Mastercard" o "pago no reflejado".`}</T>
             </p>
           ) : (
             <ul className="divide-y divide-slate-200 border-y border-slate-200">
@@ -57,7 +57,9 @@ export default async function SearchPage({ searchParams }: Props) {
           )}
         </>
       ) : (
-        <p className="text-sm text-slate-500">Ingresa un término de búsqueda para comenzar.</p>
+        <p className="text-sm text-slate-500">
+          <T>Ingresa un término de búsqueda para comenzar.</T>
+        </p>
       )}
     </>
   );

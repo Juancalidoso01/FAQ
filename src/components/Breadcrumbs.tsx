@@ -1,11 +1,15 @@
+"use client";
+
 import Link from "next/link";
+import { useT } from "@/components/T";
 import type { BreadcrumbItem } from "@/lib/navigation";
 
 export function Breadcrumbs({ items }: { items: BreadcrumbItem[] }) {
+  const t = useT();
   if (items.length <= 1) return null;
 
   return (
-    <nav aria-label="Ruta de navegación" className="mb-6">
+    <nav aria-label={t("Ruta de navegación")} className="mb-6">
       <ol className="flex flex-wrap items-center gap-1.5 text-sm text-slate-500">
         {items.map((item, index) => {
           const isLast = index === items.length - 1;
@@ -18,11 +22,11 @@ export function Breadcrumbs({ items }: { items: BreadcrumbItem[] }) {
               )}
               {isLast ? (
                 <span className="font-medium text-slate-700" aria-current="page">
-                  {item.label}
+                  {t(item.label)}
                 </span>
               ) : (
                 <Link href={item.href} className="hover:text-[#4749B6] hover:underline">
-                  {item.label}
+                  {t(item.label)}
                 </Link>
               )}
             </li>

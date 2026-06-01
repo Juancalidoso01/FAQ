@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { ArticleListItem } from "@/components/CategoryCard";
 import { JsonLd } from "@/components/FaqUi";
+import { T } from "@/components/T";
 import { categoryPath, getAllCategories, getCategory } from "@/lib/faq";
 import { breadcrumbJsonLd, collectionPageJsonLd } from "@/lib/seo";
 
@@ -52,7 +53,9 @@ export default async function CategoryPage({ params }: Props) {
       </header>
 
       {category.articles.length === 0 ? (
-        <p className="text-slate-600">No hay artículos publicados en esta categoría por el momento.</p>
+        <p className="text-slate-600">
+          <T>No hay artículos publicados en esta categoría por el momento.</T>
+        </p>
       ) : (
         <ul className="space-y-1">
           {category.articles.map((article) => (
