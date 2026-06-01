@@ -190,6 +190,7 @@ export async function POST(request: Request) {
             title: es.titulo,
             description: es.descripcion,
             content: es.contenidoMarkdown,
+            sourceTitle: titulo,
             updatedAt: new Date().toISOString(),
           };
           await writeJsonFile(

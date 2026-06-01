@@ -16,6 +16,8 @@ export type ArticleTranslation = {
   description: string;
   /** Contenido en markdown traducido. */
   content: string;
+  /** Título original (idioma fuente), para localizar listas y menús. */
+  sourceTitle?: string;
   /** Fecha de la última edición/guardado de la traducción. */
   updatedAt?: string;
 };
@@ -42,4 +44,22 @@ export function getArticleTranslation(
 ): ArticleTranslation | null {
   const store = STORES[lang];
   return store[translationKey(categorySlug, articleSlug)] ?? null;
+}
+
+/**
+ * Mapas { títuloOriginal → títuloTraducido } por idioma destino, construidos a
+ * partir de las traducciones guardadas. Sirven para mostrar en ruso (o en
+ * español, para guías redactadas en ruso) los títulos en listas y menús.
+ * Es liviano: solo usa los archivos de traducción (artículos ya traducidos).
+ */
+export function buildTitleMaps(): Record<Lang, Record<string, string>> {
+  const maps: Record<Lang, Record<string, string>> = { es: {}, ru: {} };
+  (Object.keys(STORES) as Lang[]).forEach((lang) => {
+    for (const entry of Object.values(STORES[lang])) {
+      if (entry.sourceTitle && entry.title) {
+        maps[lang][entry.sourceTitle] = entry.title;
+      }
+    }
+  });
+  return maps;
 }

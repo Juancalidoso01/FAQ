@@ -45,8 +45,12 @@ export default async function SearchPage({ searchParams }: Props) {
                     href={articlePath(article.categorySlug, article.slug)}
                     className="block py-4 transition hover:bg-slate-50"
                   >
-                    <p className="text-xs font-medium text-slate-500">{article.categoryTitle}</p>
-                    <h2 className="mt-0.5 font-medium text-[#4749B6]">{article.title}</h2>
+                    <p className="text-xs font-medium text-slate-500">
+                      <T>{article.categoryTitle}</T>
+                    </p>
+                    <h2 className="mt-0.5 font-medium text-[#4749B6]">
+                      <T>{article.title}</T>
+                    </h2>
                     <p className="mt-1 text-sm text-slate-600">
                       {excerpt(article.description || article.content, 160)}
                     </p>

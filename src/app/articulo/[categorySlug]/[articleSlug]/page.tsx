@@ -163,7 +163,7 @@ export default async function ArticlePage({ params }: Props) {
                     className="group flex items-center justify-between gap-3 rounded-xl border border-slate-200/80 bg-white/60 px-4 py-3 transition hover:border-[#4749B6]/40 hover:bg-[#4749B6]/[0.04]"
                   >
                     <span className="text-sm font-semibold text-slate-700 group-hover:text-[#4749B6]">
-                      {item.title}
+                      <T>{item.title}</T>
                     </span>
                     <svg
                       xmlns="http://www.w3.org/2000/svg"

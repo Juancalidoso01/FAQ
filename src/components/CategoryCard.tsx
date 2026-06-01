@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { CategoryIcon } from "@/components/FaqUi";
+import { T } from "@/components/T";
 import { categoryPath, excerpt, type FaqCategory } from "@/lib/faq";
 
 export function CategoryCard({ category }: { category: FaqCategory }) {
@@ -30,7 +31,7 @@ export function CategoryCard({ category }: { category: FaqCategory }) {
                 href={`/articulo/${category.slug}/${article.slug}`}
                 className="block py-1.5 text-sm text-[#4749B6] underline-offset-2 hover:underline"
               >
-                {article.title}
+                <T>{article.title}</T>
               </Link>
             </li>
           ))}
@@ -57,7 +58,9 @@ export function ArticleListItem({
         href={`/articulo/${categorySlug}/${slug}`}
         className="group block rounded-lg px-2 py-3 transition hover:bg-slate-50"
       >
-        <h3 className="font-medium text-slate-900 group-hover:text-[#4749B6]">{title}</h3>
+        <h3 className="font-medium text-slate-900 group-hover:text-[#4749B6]">
+          <T>{title}</T>
+        </h3>
         <p className="mt-1 text-sm text-slate-600">{excerpt(description, 140)}</p>
       </Link>
     </li>

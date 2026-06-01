@@ -63,7 +63,7 @@ export function SectionAccordion({ sections }: { sections: SectionAccordionPanel
                       href={item.href}
                       className="block py-2.5 text-sm font-medium text-[#4749B6] hover:underline"
                     >
-                      {item.title}
+                      {t(item.title)}
                     </Link>
                   </li>
                 ))}

@@ -140,6 +140,7 @@ export const RU: Record<string, string> = {
   "Ver hub clientes →": "Открыть раздел для клиентов →",
   "Respuestas rápidas a dudas comunes.": "Быстрые ответы на частые вопросы.",
   "Ver todas →": "Смотреть все →",
+  "Leer guía completa →": "Читать полное руководство →",
   "Teléfono": "Телефон",
 
   // Temas populares (enlaces)

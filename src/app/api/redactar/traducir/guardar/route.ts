@@ -17,6 +17,8 @@ const bodySchema = z.object({
   titulo: z.string().min(1),
   descripcion: z.string().optional().default(""),
   contenidoMarkdown: z.string().min(1),
+  /** Título original (idioma fuente), para localizar listas y menús. */
+  sourceTitle: z.string().optional().default(""),
   /** Idioma al que pertenece la traducción que se guarda. Por defecto "ru". */
   lang: z.enum(["es", "ru"]).optional().default("ru"),
 });
@@ -46,7 +48,8 @@ export async function POST(request: Request) {
     return NextResponse.json({ error: "Datos de traducción inválidos." }, { status: 400 });
   }
 
-  const { categorySlug, articleSlug, titulo, descripcion, contenidoMarkdown, lang } = parsed.data;
+  const { categorySlug, articleSlug, titulo, descripcion, contenidoMarkdown, sourceTitle, lang } =
+    parsed.data;
   const file = TRANSLATIONS_FILES[lang];
 
   try {
@@ -57,6 +60,7 @@ export async function POST(request: Request) {
       title: titulo,
       description: descripcion,
       content: contenidoMarkdown,
+      sourceTitle: sourceTitle || undefined,
       updatedAt: new Date().toISOString(),
     };
 

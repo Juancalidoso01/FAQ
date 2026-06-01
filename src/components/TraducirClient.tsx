@@ -159,6 +159,7 @@ export function TraducirClient({
           titulo: targetTitle,
           descripcion: targetDescription,
           contenidoMarkdown: targetContent,
+          sourceTitle: source?.title ?? "",
         }),
       });
       const data = await res.json();

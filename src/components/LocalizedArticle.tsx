@@ -136,6 +136,7 @@ export function LocalizedArticle({
           titulo: draft.rendered.title,
           descripcion: draft.rendered.description,
           contenidoMarkdown: draft.markdown,
+          sourceTitle: original.source.title,
         }),
       });
       const data = await res.json();
@@ -146,7 +147,7 @@ export function LocalizedArticle({
     } finally {
       setBusy(null);
     }
-  }, [draft, categorySlug, articleSlug, otherLang]);
+  }, [draft, categorySlug, articleSlug, otherLang, original.source]);
 
   return (
     <article itemScope itemType="https://schema.org/Article">

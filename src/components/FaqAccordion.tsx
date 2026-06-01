@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import Link from "next/link";
+import { useT } from "@/components/T";
 
 export type FaqAccordionItem = {
   question: string;
@@ -11,6 +12,7 @@ export type FaqAccordionItem = {
 
 export function FaqAccordion({ items }: { items: FaqAccordionItem[] }) {
   const [openIndex, setOpenIndex] = useState<number | null>(0);
+  const t = useT();
 
   return (
     <div className="pp-faq-accordion divide-y divide-slate-200/90 overflow-hidden rounded-2xl border border-slate-200/80 bg-white/90 shadow-sm">
@@ -24,7 +26,7 @@ export function FaqAccordion({ items }: { items: FaqAccordionItem[] }) {
               className="flex w-full items-start justify-between gap-4 px-5 py-4 text-left transition hover:bg-slate-50/80"
               aria-expanded={isOpen}
             >
-              <span className="font-semibold text-[#0B0B13]">{item.question}</span>
+              <span className="font-semibold text-[#0B0B13]">{t(item.question)}</span>
               <span
                 className={`mt-0.5 shrink-0 text-[#4749B6] transition-transform ${isOpen ? "rotate-45" : ""}`}
                 aria-hidden
@@ -40,7 +42,7 @@ export function FaqAccordion({ items }: { items: FaqAccordionItem[] }) {
                     href={item.href}
                     className="mt-3 inline-flex text-sm font-semibold text-[#4749B6] hover:underline"
                   >
-                    Leer guía completa →
+                    {t("Leer guía completa →")}
                   </Link>
                 )}
               </div>
